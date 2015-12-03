@@ -1,3 +1,65 @@
 <resources>
     <string name="app_name">Buket.Club</string>
+
+    <string name="text_chose_bouquet">Выберите букет</string>
+
+    <string name="text_flowers_type">Тип цветов</string>
+    <string name="text_overall_tone_bouquet">Общий тон букета</string>
+    <string name="text_overall_event">Событие</string>
+
+    <string name="text_little">Маленький</string>
+    <string name="text_middle">Средний</string>
+    <string name="text_great">Большой</string>
+
+    <string name="text_delivery">Доставка</string>
+    <string name="text_time">Время</string>
+
+    <string name="text_address_delivery">Выберите адрес доставки</string>
+    <string name="text_select_address_delivery">Адрес доставки</string>
+    <string name="text_bay">Купить</string>
+
+    <string name="text_begin">Начать</string>
+
+    <string name="text_continue">Купить</string>
+
+    <string name="text_select_artist_bouquet">Выберите исполнителя букета</string>
+
+    <string name="text_sort_by">Отсортировать по:</string>
+
+    <string name="text_by_price">Цене</string>
+    <string name="text_by_rating">Рейтингу</string>
+    <string name="text_by_distance">Расстоянию</string>
+
+    <string name="text_delivery_time">Время доставки</string>
+
+    <string name="text_recipient">Получатель</string>
+    <string name="text_contact_telephone_of_recipient">Контактный телефон получателя</string>
+    <string name="text_contact_comment_to_order">Коментарий к заказу</string>
+    <string name="text_select_payment_method">Выберите способ оплаты</string>
+    <string name="text_in_cash">Наличными</string>
+    <string name="text_courier">Курьеру</string>
+    <string name="text_in_credit_card">Банковской картой</string>
+    <string name="text_visa_master_card">VISA/MASTER CARD</string>
+    <string name="text_uniform_purse">Единый кошелек</string>
+    <string name="text_w1">Wallet One</string>
+
+    <string name="text_cardholders_name">Имя владельца карты</string>
+    <string name="text_card_number">Номер карты</string>
+    <string name="text_validity">Срок действия</string>
+    <string name="text_CVV">CVV</string>
+    <string name="text_pay">Оплатить</string>
+
+    <string name="text_successful_pay_exc">Успешная оплата!</string>
+    <string name="text_thank_exc">Спасибо!</string>
+    <string name="text_invite_friend_and_exc">Пригласи друга и получи 500 рублей на следующий букет!</string>
+
+
+    <string name="text_your_order">Ваш заказ</string>
+    <string name="text_cost">Стоимость</string>
+    <string name="text_delivery_is_carried_out">Осуществляется доставка</string>
+    <string name="text_ready">Готово</string>
+    <string name="text_shop_phone">Телефон магазина</string>
+
+    <string name="text_rate_bouquet_exp">Оцените букет!</string>
+    <string name="text_leave_a_comment">Оставьте комментарий</string>
 </resources>
