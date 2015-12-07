@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/filter_container">
+
+    <TextView
+        style="@style/small_text.text_black"
+        android:hint="@string/text_flowers_type"/>
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/i_bf_spinner_flowers_type"
+        style="@style/spinner"
+        app:ms_hint="@string/text_flowers_chose_type" />
+
+    <TextView
+        style="@style/small_text.text_black"
+        android:layout_marginTop="@dimen/margin_small"
+        android:hint="@string/text_overall_tone_bouquet"/>
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/i_bf_spinner_tone_bouquet"
+        style="@style/spinner"
+        app:ms_hint="@string/text_overall_chose_tone_bouquet" />
+
+    <TextView
+        android:layout_marginTop="@dimen/margin_small"
+        style="@style/small_text.text_black"
+        android:hint="@string/text_overall_event"/>
+
+    <fr.ganfra.materialspinner.MaterialSpinner
+        android:id="@+id/i_bf_spinner_chose_event"
+        style="@style/spinner"
+        app:ms_hint="@string/text_overall_chose_event" />
+
+</LinearLayout>

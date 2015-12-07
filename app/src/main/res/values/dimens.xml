@@ -3,6 +3,14 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="margin_super_larger">60dp</dimen>
+    <dimen name="margin_super_large">40dp</dimen>
+    <dimen name="margin_larger">30dp</dimen>
+    <dimen name="margin_large">20dp</dimen>
+    <dimen name="margin_normal">15dp</dimen>
+    <dimen name="margin_small">10dp</dimen>
+    <dimen name="margin_smaller">5dp</dimen>
+
     <dimen name="text_size_larger">40sp</dimen>
     <dimen name="text_size_large">30sp</dimen>
     <dimen name="text_size_normal">20sp</dimen>
@@ -11,4 +19,20 @@
 
     <dimen name="margin_screen_content_normal">10dp</dimen>
 
+    <dimen name="round_size_action_bar_width">600dp</dimen>
+    <dimen name="round_size_action_bar_height">200dp</dimen>
+
+    <dimen name="margin_action_bar">@dimen/margin_small</dimen>
+
+    <dimen name="margin_action_bar_bellow_text">@dimen/margin_normal</dimen>
+
+    <dimen name="margin_filter_content">@dimen/margin_normal</dimen>
+
+    <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
+    <dimen name="margin_top_action_bar_a_b_close">-420dp</dimen>
+
+    <dimen name="margin_left_right_action_bar">-90dp</dimen>
+
+    <dimen name="margin_left_right_spinner">30dp</dimen>
+    <dimen name="margin_top_spinner">5dp</dimen>
 </resources>

@@ -7,6 +7,11 @@
     <string name="text_overall_tone_bouquet">Общий тон букета</string>
     <string name="text_overall_event">Событие</string>
 
+    <string name="text_flowers_chose_type">Выберите тип цветов</string>
+    <string name="text_overall_chose_tone_bouquet">Выберите общий тон букета</string>
+    <string name="text_overall_chose_event">Выьерите событие</string>
+
+
     <string name="text_little">Маленький</string>
     <string name="text_middle">Средний</string>
     <string name="text_great">Большой</string>
@@ -62,4 +67,6 @@
 
     <string name="text_rate_bouquet_exp">Оцените букет!</string>
     <string name="text_leave_a_comment">Оставьте комментарий</string>
+
+    <string name="text_prefix_ruble">₽</string>
 </resources>

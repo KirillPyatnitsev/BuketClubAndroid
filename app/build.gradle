@@ -41,6 +41,8 @@ dependencies {
     compile 'com.octo.android.robospice:robospice-google-http-client:1.4.14'
     compile 'com.android.support:support-v4:23.1.1'
     compile 'com.mikhaellopez:circularimageview:2.0.2'
+    compile 'com.github.ganfra:material-spinner:1.1.1'
+    compile 'org.florescu.android.rangeseekbar:rangeseekbar-library:0.3.0'
     compile('com.google.http-client:google-http-client-jackson2:1.20.0') {
         exclude module: 'xpp3'
         exclude group: 'stax'

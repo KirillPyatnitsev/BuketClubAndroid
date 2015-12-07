@@ -19,6 +19,10 @@
 
     <color name="button_color_background_default">@color/yellow</color>
 
+    <color name="round_color_action_bar">@color/yellow</color>
+
     <color name="drawable_color_round_done">@color/green</color>
     <color name="drawable_color_round_menu_icon">@color/black</color>
+
+
 </resources>

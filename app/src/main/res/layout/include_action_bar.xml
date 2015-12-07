@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/margin_action_bar">
+
+    <ImageView
+        android:id="@+id/i_ab_image_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo_mini"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:id="@+id/i_ab_image_settings_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/settings_ico"
+
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/i_ab_image_settings_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/settings_close_ico"
+
+        android:layout_alignParentRight="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/i_ab_image_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/settings_close_ico"
+        android:visibility="gone"/>
+
+</RelativeLayout>

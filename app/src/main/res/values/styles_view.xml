@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <style name="spinner">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="ms_multiline">false</item>
+        <item name="ms_enableFloatingLabel">false</item>
+        <item name="ms_enableErrorLabel">false</item>
+        <item name="ms_baseColor">@color/black</item>
+        <item name="ms_highlightColor">@color/black</item>
+        <item name="ms_thickness">1dp</item>
+        <item name="ms_arrowSize">16dp</item>
+        <item name="ms_arrowColor">@color/black</item>
+    </style>
+
+    <style name="small_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textColor">@color/text_color_default</item>
+    </style>
+
+    <style name="small_text.text_black" parent="small_text">
+        <item name="android:textColor">@color/text_color_default</item>
+    </style>
+
+    <style name="small_text.text_grey" parent="small_text">
+        <item name="android:textColor">@color/text_color_grey</item>
+    </style>
+
+    <style name="filter_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/margin_filter_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+</resources>
