@@ -17,6 +17,8 @@
         </activity>
         <activity android:name=".view.activitys.BucketsActivity" >
         </activity>
+        <activity android:name=".view.activitys.BucketDetalisActivity" >
+        </activity>
     </application>
 
 </manifest>

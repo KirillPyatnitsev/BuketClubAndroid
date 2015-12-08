@@ -43,6 +43,8 @@
     <string name="text_select_payment_method">Выберите способ оплаты</string>
     <string name="text_in_cash">Наличными</string>
     <string name="text_courier">Курьеру</string>
+    <string name="text_delivery_type_courier">Курьером</string>
+    <string name="text_delivery_type_pickup">Самовывоз</string>
     <string name="text_in_credit_card">Банковской картой</string>
     <string name="text_visa_master_card">VISA/MASTER CARD</string>
     <string name="text_uniform_purse">Единый кошелек</string>
@@ -69,4 +71,7 @@
     <string name="text_leave_a_comment">Оставьте комментарий</string>
 
     <string name="text_prefix_ruble">₽</string>
+
+    <string name="text_time_soon">Ближайшее</string>
+
 </resources>

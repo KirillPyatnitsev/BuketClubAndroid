@@ -30,9 +30,21 @@
 
     <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
     <dimen name="margin_top_action_bar_a_b_close">-420dp</dimen>
+    <dimen name="margin_top_action_bar_a_bd_close">-450dp</dimen>
 
     <dimen name="margin_left_right_action_bar">-90dp</dimen>
 
     <dimen name="margin_left_right_spinner">30dp</dimen>
     <dimen name="margin_top_spinner">5dp</dimen>
+
+    <dimen name="text_size_bouquet_type_unselected">@dimen/text_size_small</dimen>
+    <dimen name="text_size_bouquet_type_selected">@dimen/text_size_normal</dimen>
+
+    <dimen name="margin_top_bouquet_type_text_unselected">40dp</dimen>
+    <dimen name="margin_top_bouquet_type_text_selected">30dp</dimen>
+
+    <dimen name="margin_left_right_bouquet_size_relative">-10dp</dimen>
+
+    <integer name="weight_bouquet_type_relative_unselected">1000</integer>
+    <integer name="weight_bouquet_type_relative_selected">800</integer>
 </resources>

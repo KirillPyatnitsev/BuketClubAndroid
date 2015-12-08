@@ -2,6 +2,7 @@
 <resources>
     <color name="yellow">#FFEB3B</color>
     <color name="pink">#FF4081</color>
+
     <color name="gray">#9E9E9E</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
@@ -24,5 +25,9 @@
     <color name="drawable_color_round_done">@color/green</color>
     <color name="drawable_color_round_menu_icon">@color/black</color>
 
+    <color name="pink_alpha_80">#80FF4081</color>
+    <color name="white_alpha_80">#80ffffff</color>
 
+    <color name="text_color_bouquet_size_unselected">@color/pink</color>
+    <color name="text_color_bouquet_size_selected">@color/white</color>
 </resources>
