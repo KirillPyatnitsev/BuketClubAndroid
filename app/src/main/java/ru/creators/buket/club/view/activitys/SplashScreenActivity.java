@@ -14,7 +14,7 @@ public class SplashScreenActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        startActivity(new Intent(this,  BucketDetalisActivity.class));
+        startActivity(new Intent(this,  MapActivity.class));
     }
 
     @Override

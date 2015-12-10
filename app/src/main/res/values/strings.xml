@@ -1,4 +1,7 @@
 <resources>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAi1YDYVXFkMdt2QshcOJXG1i80yv8X9tU</string>
+
     <string name="app_name">Buket.Club</string>
 
     <string name="text_chose_bouquet">Выберите букет</string>
@@ -25,7 +28,7 @@
 
     <string name="text_begin">Начать</string>
 
-    <string name="text_continue">Купить</string>
+    <string name="text_continue">Продолжить</string>
 
     <string name="text_select_artist_bouquet">Выберите исполнителя букета</string>
 
