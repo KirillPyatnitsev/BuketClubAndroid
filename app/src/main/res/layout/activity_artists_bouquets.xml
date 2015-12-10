@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:rsb="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/a_ab_coordinator_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ru.creators.buket.club.view.activitys.ArtistsBouquetsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/a_b_blur_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/a_b_relative_action_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/a_b_image_action_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
+                android:layout_marginRight="@dimen/margin_left_right_action_bar"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_b_close"
+                android:src="@drawable/round_action_bar" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/a_b_action_bar"
+                    layout="@layout/include_action_bar" />
+
+                <TextView
+                    android:id="@+id/a_b_text_action_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_b_action_bar"
+                    android:layout_centerHorizontal="true"
+
+                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+
+                    android:text="@string/text_chose_bouquet"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="visible" />
+
+                <include
+                    android:id="@+id/a_b_view_filter"
+                    style="@style/filter_container"
+                    layout="@layout/include_bucket_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_b_action_bar"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/a_b_relative_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/a_b_relative_action_bar_container"
+            android:layout_marginTop="-37dp">
+
+            <LinearLayout
+                android:id="@+id/a_b_current_costs_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/a_b_text_current_cost_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="1500P"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textColor="@color/pink"
+                    />
+                <TextView
+                    android:id="@+id/a_b_text_current_cost_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="99999P"
+                    android:textSize="@dimen/text_size_normal"
+                    android:textColor="@color/pink"/>
+            </LinearLayout>
+
+            <org.florescu.android.rangeseekbar.RangeSeekBar
+                android:id="@+id/a_b_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/a_b_current_costs_container"
+                android:layout_marginLeft="@dimen/margin_left_right_spinner"
+                android:layout_marginRight="@dimen/margin_left_right_spinner"
+                android:layout_marginTop="@dimen/margin_top_spinner"
+                rsb:alwaysActive="true"
+                rsb:barHeight="5dp"
+                rsb:defaultColor="@color/gray"
+                rsb:activeColor="@color/pink"
+                rsb:absoluteMaxValue="7890"
+                rsb:absoluteMinValue="650"
+                rsb:thumbDisabled="@drawable/round_seeckbar"
+                rsb:thumbNormal="@drawable/round_seeckbar"
+                rsb:thumbPressed="@drawable/round_seeckbar"
+                rsb:textAboveThumbsColor="@color/pink"
+                rsb:showLabels = "false"
+                rsb:valuesAboveThumbs = "false"/>
+
+            <LinearLayout
+                android:id="@+id/a_b_costs_container"
+                android:layout_below="@id/a_b_seek_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/a_b_text_cost_min"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1500P"
+                    android:layout_marginLeft="@dimen/margin_left_right_spinner"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:textColor="@color/gray"/>
+                <TextView
+                    android:id="@+id/a_b_text_cost_max"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="4500P"
+                    android:layout_marginRight="@dimen/margin_left_right_spinner"
+                    android:textSize="@dimen/text_size_smaller"
+                    android:textColor="@color/gray"/>
+            </LinearLayout>
+
+            <GridView
+                android:id="@+id/a_b_grid_view_buckets"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/a_b_costs_container"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>

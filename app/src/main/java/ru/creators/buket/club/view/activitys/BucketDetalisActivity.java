@@ -145,11 +145,11 @@ public class BucketDetalisActivity extends BaseActivity {
         private int textSizeSelected = R.dimen.text_size_bouquet_type_selected;
         private int textSizeUnselected = R.dimen.text_size_bouquet_type_unselected;
 
-        private int imageBigSelected = R.drawable.round_bouqet_type_big_selected;
-        private int imageBigUnselected = R.drawable.round_bouqet_type_big_unselected;
+        private int imageBigSelected = R.drawable.round_bouquet_type_big_selected;
+        private int imageBigUnselected = R.drawable.round_bouquet_type_big_unselected;
 
         private int imageMinSelected = R.drawable.round_bouquet_type_selected;
-        private int imageMinUnselected = R.drawable.round_buqet_type_unselected;
+        private int imageMinUnselected = R.drawable.round_bouquet_type_unselected;
 
         private int imageMarginTopTextSelected = R.dimen.margin_top_bouquet_type_text_selected;
         private int imageMarginTopTextUnselected = R.dimen.margin_top_bouquet_type_text_unselected;

@@ -44,7 +44,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/round_bouqet_type_big_unselected" />
+                        android:src="@drawable/round_bouquet_type_big_unselected" />
 
                     <View
                         android:id="@+id/a_bd_view_line_pink_1"
@@ -74,7 +74,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/round_buqet_type_unselected" />
+                        android:src="@drawable/round_bouquet_type_unselected" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -90,7 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/round_bouqet_type_big_selected" />
+                        android:src="@drawable/round_bouquet_type_big_selected" />
 
                     <View
                         android:id="@+id/a_bd_view_line_pink_2"
@@ -136,7 +136,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/round_bouqet_type_big_unselected" />
+                        android:src="@drawable/round_bouquet_type_big_unselected" />
 
                     <View
                         android:id="@+id/a_bd_view_line_pink_3"
@@ -166,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:src="@drawable/round_buqet_type_unselected" />
+                        android:src="@drawable/round_bouquet_type_unselected" />
                 </RelativeLayout>
 
             </LinearLayout>

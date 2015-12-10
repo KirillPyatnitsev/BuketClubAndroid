@@ -135,6 +135,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         imageCloseFilter.setVisibility(View.GONE);
     }
 
+    @Override
+    protected int getContentContainerId() {
+        return R.id.a_m_relative_content_container;
+    }
+
+    @Override
+    protected int getImageBlurId() {
+        return R.id.a_m_blur_image;
+    }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
