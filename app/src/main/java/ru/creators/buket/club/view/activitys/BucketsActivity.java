@@ -35,8 +35,6 @@ public class BucketsActivity extends BaseActivity {
 
     private RangeSeekBar rangeSeekBarCost;
 
-    private ImageView imageBlur;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
