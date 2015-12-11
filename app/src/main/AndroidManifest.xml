@@ -35,7 +35,8 @@
             android:label="@string/title_activity_payment_type"
             android:theme="@style/AppTheme" />
         <activity android:name=".view.activitys.CardInfoFillingActivity" />
-        <activity android:name=".view.activitys.PayDoneActivity"></activity>
+        <activity android:name=".view.activitys.PayDoneActivity" />
+        <activity android:name=".view.activitys.BouquetDeliveryStatusDetalisActivity"></activity>
     </application>
 
 </manifest>
