@@ -34,6 +34,8 @@
             android:name=".view.activitys.PaymentTypeActivity"
             android:label="@string/title_activity_payment_type"
             android:theme="@style/AppTheme" />
+        <activity android:name=".view.activitys.CardInfoFillingActivity" />
+        <activity android:name=".view.activitys.PayDoneActivity"></activity>
     </application>
 
 </manifest>

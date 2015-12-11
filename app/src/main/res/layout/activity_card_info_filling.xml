@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/a_cif_coordinator_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/a_cif_blur_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/a_cif_relative_action_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/a_cif_image_action_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
+                android:layout_marginRight="@dimen/margin_left_right_action_bar"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_b_close"
+                android:src="@drawable/round_action_bar" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/a_cif_action_bar"
+                    layout="@layout/include_action_bar" />
+
+                <TextView
+                    android:id="@+id/a_cif_text_action_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_cif_action_bar"
+                    android:layout_centerHorizontal="true"
+
+                    android:text="2 500P"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_larger"
+                    android:visibility="visible" />
+
+                <TextView
+                    android:id="@+id/a_cif_text_action_bar_second"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_cif_text_action_bar_title"
+                    android:layout_centerHorizontal="true"
+
+                    android:text="Букет из 26 пионов 40 см."
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_small"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/a_cif_relative_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/a_cif_relative_action_bar_container"
+            android:layout_marginTop="-37dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_normal">
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_cardholders_name"/>
+
+                <EditText
+                    android:id="@+id/a_cif_edit_cardholder_name"
+                    style="@style/text_view_normal"/>
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_card_number"/>
+
+                <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                    android:id="@+id/a_cif_edit_card_number"
+                    style="@style/text_view_normal"
+                    custom_edit:mask="####-####-####-####"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginRight="@dimen/margin_larger">
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:text="@string/text_validity"/>
+
+                        <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                            android:id="@+id/a_cif_edit_validity"
+                            style="@style/text_view_normal"
+                            custom_edit:mask="##/##"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/margin_larger">
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:layout_marginTop="@dimen/margin_small"
+                            android:text="@string/text_CVV"/>
+
+                        <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                            android:id="@+id/a_cif_edit_cvv"
+                            style="@style/text_view_normal"
+                            custom_edit:mask="###"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+
+
+
+            </LinearLayout>
+
+            <Button
+                style="@style/button_default"
+                android:text="@string/text_continue"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
