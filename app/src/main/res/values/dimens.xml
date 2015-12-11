@@ -34,6 +34,7 @@
     <dimen name="margin_top_action_bar_a_dif_close">-450dp</dimen>
     <dimen name="margin_top_action_bar_a_bd_close">-450dp</dimen>
     <dimen name="margin_top_action_bar_a_ab_close">-400dp</dimen>
+    <dimen name="margin_top_action_bar_a_f_close">-330dp</dimen>
 
     <dimen name="margin_left_right_action_bar">-90dp</dimen>
 
@@ -51,7 +52,7 @@
     <integer name="weight_bouquet_type_relative_unselected">1000</integer>
     <integer name="weight_bouquet_type_relative_selected">800</integer>
 
-    <dimen name="rating_large_bar_size">38dp</dimen>
+    <dimen name="rating_large_bar_size">45dp</dimen>
     <dimen name="rating_min_bar_size">9dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 </resources>
