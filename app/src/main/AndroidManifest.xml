@@ -25,10 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activitys.BucketsActivity"></activity>
-        <activity android:name=".view.activitys.BucketDetalisActivity"></activity>
-        <activity android:name=".view.activitys.MapActivity"></activity>
-        <activity android:name=".view.activitys.ArtistsBouquetsActivity"></activity>
+        <activity android:name=".view.activitys.BucketsActivity" />
+        <activity android:name=".view.activitys.BucketDetalisActivity" />
+        <activity android:name=".view.activitys.MapActivity" />
+        <activity android:name=".view.activitys.ArtistsBouquetsActivity" />
+        <activity android:name=".view.activitys.DeliveryInfoFillingActivity"></activity>
     </application>
 
 </manifest>

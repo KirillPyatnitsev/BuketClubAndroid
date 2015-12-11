@@ -30,6 +30,7 @@
 
     <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
     <dimen name="margin_top_action_bar_a_b_close">-420dp</dimen>
+    <dimen name="margin_top_action_bar_a_dif_close">-450dp</dimen>
     <dimen name="margin_top_action_bar_a_bd_close">-450dp</dimen>
     <dimen name="margin_top_action_bar_a_ab_close">-400dp</dimen>
 

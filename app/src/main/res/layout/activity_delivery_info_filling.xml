@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/a_dif_coordinator_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity"
+    xmlns:app="http://schemas.android.com/apk/res/ru.creators.buket.club">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/a_dif_blur_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/a_dif_relative_action_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/a_dif_image_action_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
+                android:layout_marginRight="@dimen/margin_left_right_action_bar"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_dif_close"
+                android:src="@drawable/round_action_bar" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/a_dif_action_bar"
+                    layout="@layout/include_action_bar" />
+
+                <TextView
+                    android:id="@+id/a_dif_text_action_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_dif_action_bar"
+                    android:layout_centerHorizontal="true"
+
+                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+
+                    android:text="@string/text_delivery"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/a_dif_relative_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/a_dif_relative_action_bar_container"
+            android:layout_marginTop="-37dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="@dimen/margin_normal">
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:text="@string/text_delivery_time"/>
+
+                <fr.ganfra.materialspinner.MaterialSpinner
+                    android:id="@+id/a_dif_spinner_delivery_type"
+                    style="@style/spinner"
+                    app:ms_hint="@string/text_flowers_chose_type" />
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_address_delivery"/>
+
+                <EditText
+                    android:id="@+id/a_dif_edit_delivery_address"
+                    style="@style/text_view_normal"/>
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_recipient"/>
+
+                <EditText
+                    android:id="@+id/a_dif_edit_recipient"
+                    style="@style/text_view_normal"/>
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_contact_telephone_of_recipient"/>
+
+                <br.com.sapereaude.maskedEditText.MaskedEditText
+                    android:id="@+id/a_dif_edit_phone"
+                    style="@style/text_view_normal"
+                    custom_edit:mask="+7 (###) ###-##-##"/>
+
+                <TextView
+                    style="@style/small_text.text_black"
+                    android:layout_marginTop="@dimen/margin_small"
+                    android:text="@string/text_contact_comment_to_order"/>
+
+                <EditText
+                    android:id="@+id/a_dif_edit_comment"
+                    style="@style/text_view_normal"/>
+
+            </LinearLayout>
+
+            <Button
+                style="@style/button_default"
+                android:text="@string/text_continue"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
