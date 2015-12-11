@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/a_dif_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity"
-    xmlns:app="http://schemas.android.com/apk/res/ru.creators.buket.club">
+    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -47,8 +46,6 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/a_dif_action_bar"
                     android:layout_centerHorizontal="true"
-
-                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
 
                     android:text="@string/text_delivery"
                     android:textColor="@color/text_color_default"
@@ -104,7 +101,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/text_contact_telephone_of_recipient"/>
 
-                <br.com.sapereaude.maskedEditText.MaskedEditText
+                <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
                     android:id="@+id/a_dif_edit_phone"
                     style="@style/text_view_normal"
                     custom_edit:mask="+7 (###) ###-##-##"/>

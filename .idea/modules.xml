@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Buket.Club.iml" filepath="$PROJECT_DIR$/Buket.Club.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maskedEditText/maskedEditText.iml" filepath="$PROJECT_DIR$/maskedEditText/maskedEditText.iml" />
     </modules>
   </component>
 </project>

@@ -1,4 +1,4 @@
-package br.com.sapereaude.maskedEditText;
+package ru.creators.buket.club.view.custom.maskededittext;
 
 public class Range {
 	private int start;

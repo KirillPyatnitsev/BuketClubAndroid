@@ -1,4 +1,4 @@
-package br.com.sapereaude.maskedEditText;
+package ru.creators.buket.club.view.custom.maskededittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import ru.creators.buket.club.R;
 
 public class MaskedEditText extends EditText implements TextWatcher {
 
