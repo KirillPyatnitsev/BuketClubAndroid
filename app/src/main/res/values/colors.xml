@@ -6,7 +6,7 @@
     <color name="gray">#9E9E9E</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="green">#4CAF50</color>
+    <color name="green">#7BCB23</color>
 
     <color name="colorPrimary">@color/yellow</color>
     <color name="colorPrimaryDark">@color/yellow</color>

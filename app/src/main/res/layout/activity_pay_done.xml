@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/a_pd_coordinator_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include
+                    android:id="@+id/a_pd_action_bar"
+                    layout="@layout/include_action_bar" />
+
+                <TextView
+                    android:id="@+id/a_pd_text_action_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_pd_action_bar"
+                    android:layout_centerHorizontal="true"
+
+                    android:layout_marginTop="@dimen/margin_larger"
+
+                    android:text="@string/text_successful_pay_exc"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_normal"
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_done"
+                    android:layout_centerInParent="true">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/done"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:text="@string/text_thank_exc"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_larger"
+                    android:layout_marginBottom="@dimen/margin_larger"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+    
+    
+</android.support.design.widget.CoordinatorLayout>
