@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:rsb="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/a_pt_coordinator_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/a_pt_blur_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/a_pt_relative_action_bar_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/a_pt_image_action_bar_background"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
+                android:layout_marginRight="@dimen/margin_left_right_action_bar"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_pt_close"
+                android:src="@drawable/round_action_bar" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include
+                    android:id="@+id/a_pt_action_bar"
+                    layout="@layout/include_action_bar" />
+
+                <TextView
+                    android:id="@+id/a_pt_text_action_bar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_pt_action_bar"
+                    android:layout_centerHorizontal="true"
+
+                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+
+                    android:gravity="center"
+
+                    android:text="@string/text_select_payment_method"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_large"
+                    android:visibility="visible" />
+
+                <include
+                    android:id="@+id/a_pt_view_filter"
+                    style="@style/filter_container"
+                    layout="@layout/include_bucket_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/a_pt_action_bar"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/a_pt_relative_content_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="50dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_larger">
+
+                  <LinearLayout
+                      android:id="@+id/a_pt_linear_pay_cash"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+
+                          <ImageView
+                              android:id="@+id/a_pt_image_pay_cash"
+                              style="@style/image_pay_type_selector"/>
+
+                          <LinearLayout
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical">
+                              <TextView
+                                  style="@style/text_pay_type_normal"
+                                  android:text="@string/text_in_cash"/>
+                              <TextView
+                                  style="@style/text_pay_type_small"
+                                  android:text="@string/text_courier"/>
+
+                              <View
+                                  style="@style/view_pay_type_bottom_line"/>
+
+                          </LinearLayout>
+
+                      </LinearLayout>
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:id="@+id/a_pt_linear_pay_card"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+
+                          <ImageView
+                              android:id="@+id/a_pt_image_pay_card"
+                              style="@style/image_pay_type_selector"/>
+
+                          <LinearLayout
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical">
+                              <TextView
+                                  style="@style/text_pay_type_normal"
+                                  android:text="@string/text_in_credit_card"/>
+                              <TextView
+                                  style="@style/text_pay_type_small"
+                                  android:text="@string/text_visa_master_card"/>
+
+                              <View
+                                  style="@style/view_pay_type_bottom_line"/>
+
+                          </LinearLayout>
+
+                      </LinearLayout>
+                  </LinearLayout>
+
+                  <LinearLayout
+                      android:id="@+id/a_pt_linear_pay_w1"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent">
+                      <LinearLayout
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="horizontal">
+
+                          <ImageView
+                              android:id="@+id/a_pt_image_pay_w1"
+                              style="@style/image_pay_type_selector"/>
+
+                          <LinearLayout
+                              android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:orientation="vertical">
+                              <TextView
+                                  style="@style/text_pay_type_normal"
+                                  android:text="@string/text_uniform_purse"/>
+                              <TextView
+                                  style="@style/text_pay_type_small"
+                                  android:text="@string/text_w1"/>
+
+                              <View
+                                  style="@style/view_pay_type_bottom_line"/>
+
+                          </LinearLayout>
+
+                      </LinearLayout>
+                  </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                style="@style/button_default"
+                android:text="@string/text_continue"
+                android:textSize="@dimen/text_size_normal"
+                android:layout_alignParentBottom="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>

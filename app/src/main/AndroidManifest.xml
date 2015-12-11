@@ -29,7 +29,11 @@
         <activity android:name=".view.activitys.BucketDetalisActivity" />
         <activity android:name=".view.activitys.MapActivity" />
         <activity android:name=".view.activitys.ArtistsBouquetsActivity" />
-        <activity android:name=".view.activitys.DeliveryInfoFillingActivity"></activity>
+        <activity android:name=".view.activitys.DeliveryInfoFillingActivity" />
+        <activity
+            android:name=".view.activitys.PaymentTypeActivity"
+            android:label="@string/title_activity_payment_type"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
