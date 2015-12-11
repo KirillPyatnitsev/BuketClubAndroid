@@ -7,19 +7,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
+import com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService;
+import com.octo.android.robospice.SpiceManager;
 import com.transitionseverywhere.TransitionManager;
 
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.tools.Helper;
+import ru.creators.buket.club.web.WebMethods;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected CoordinatorLayout coordinatorLayout;
 
+    private SpiceManager spiceManager = new SpiceManager(Jackson2GoogleHttpClientSpiceService.class);
+
+    private RelativeLayout relativeLoading;
+    private int runnigProcessCount = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WebMethods.getInstance().setSpiceManager(spiceManager);
     }
 
     protected <T extends View> T getViewById(int id){
@@ -75,5 +85,38 @@ public abstract class BaseActivity extends AppCompatActivity {
             imageViewBlur.setVisibility(View.GONE);
 
         }
+    }
+
+    private RelativeLayout getRelativeLoading(){
+        if (relativeLoading == null){
+            relativeLoading = getViewById(R.id.i_p_progress);
+        }
+        return relativeLoading;
+    }
+
+    protected void startLoading(){
+        if (runnigProcessCount == 0){
+            getRelativeLoading().setVisibility(View.VISIBLE);
+        }
+        runnigProcessCount++;
+    }
+
+    protected void stopLoading(){
+        if (runnigProcessCount != 0) runnigProcessCount--;
+        if (runnigProcessCount == 0){
+            getRelativeLoading().setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        spiceManager.start(this);
+    }
+
+    @Override
+    protected void onStop() {
+        spiceManager.shouldStop();
+        super.onStop();
     }
 }

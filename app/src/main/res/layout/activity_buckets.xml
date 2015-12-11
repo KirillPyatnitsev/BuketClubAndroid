@@ -153,8 +153,8 @@
 
         </RelativeLayout>
 
+        <include layout="@layout/include_progress"/>
+
     </RelativeLayout>
-
-
 
 </android.support.design.widget.CoordinatorLayout>

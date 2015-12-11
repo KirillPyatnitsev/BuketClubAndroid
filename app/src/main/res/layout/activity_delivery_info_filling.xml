@@ -124,6 +124,8 @@
 
         </RelativeLayout>
 
+        <include layout="@layout/include_progress"/>
+
     </RelativeLayout>
 
 
