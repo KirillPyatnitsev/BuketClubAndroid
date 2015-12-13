@@ -7,14 +7,18 @@ import android.view.View;
 import android.widget.BaseAdapter;
 
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.model.Profile;
+import ru.creators.buket.club.model.Session;
 
 public class SplashScreenActivity extends BaseActivity {
+
+    private Session session;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        startActivity(new Intent(this,  BouquetDeliveryStatusDetalisActivity.class));
     }
 
     @Override

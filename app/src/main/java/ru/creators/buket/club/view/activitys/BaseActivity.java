@@ -1,6 +1,8 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.graphics.Bitmap;
+import android.media.Image;
+import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     private SpiceManager spiceManager = new SpiceManager(Jackson2GoogleHttpClientSpiceService.class);
 
     private RelativeLayout relativeLoading;
+    private ImageView imageLoadingBlur;
     private int runnigProcessCount = 0;
 
     @Override
@@ -94,9 +97,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         return relativeLoading;
     }
 
-    protected void startLoading(){
+    private ImageView getImageLoadingBlur(){
+        if (imageLoadingBlur == null){
+            imageLoadingBlur = getViewById(R.id.i_p_image_blur);
+        }
+        return imageLoadingBlur;
+    }
+
+    protected void startLoading(boolean showBlur){
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.VISIBLE);
+            if (showBlur) getImageLoadingBlur().setImageBitmap(Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20));
         }
         runnigProcessCount++;
     }
@@ -106,6 +117,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.GONE);
         }
+    }
+
+    protected String getUniqueDeviceId(){
+        return Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
     }
 
     @Override

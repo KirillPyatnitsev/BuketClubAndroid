@@ -77,4 +77,56 @@ public class Fields {
     public static final String TOTAL_PAGES = "total_pages";
     public static final String TOTAL_COUNT = "total_count";
 
+    public static final String FLOWER_TYPES = "flower_types";
+    public static final String FLOWER_COLORS = "flower_colors";
+    public static final String DAY_EVENTS = "day_events";
+
+    public static final String FLOWER_TYPE = "flower_type";
+    public static final String FLOWER_COLOR = "flower_color";
+    public static final String DAY_EVENT = "day_event";
+
+    public static final String UUID = "uuid";
+    public static final String TYPE_PRICE = "type_price";
+    public static final String TYPE_PRICE_INDEX = "type_price_index";
+    public static final String PROFILE = "profile";
+
+    public static final String SMALL_SIZE_PRICE = "small_size_price";
+    public static final String MIDDLE_SIZE_PRICE = "middle_size_price";
+    public static final String LARGE_SIZE_PRICE = "large_size_price";
+
+    public static final String SMALL_SIZE_NAME = "small_size_name";
+    public static final String MIDDLE_SIZE_NAME = "middle_size_name";
+    public static final String LARGE_SIZE_NAME = "large_size_name";
+
+    public static final String IMAGE_URL = "image_url";
+    public static final String VALUE = "value";
+
+    public static final String USER_ID = "user_id";
+    public static final String SIZE = "size";
+    public static final String SIZE_INDEX = "size_index";
+    public static final String ADDRESS = "address";
+    public static final String ADDRESS_LAT = "address_lat";
+    public static final String ADDRESS_LNG = "address_lng";
+    public static final String RECIPIENT_NAME = "recipient_name";
+    public static final String RECIPIENT_PHONE = "recipient_phone";
+    public static final String BOUQUET_ITEM = "bouquet_item";
+    public static final String SHOP = "shop";
+    public static final String TIME_DELIVERY = "time_delivery";
+    public static final String COMMENT = "comment";
+
+    public static final String NAME = "name";
+    public static final String PHONE = "phone";
+    public static final String CACHED_RATING = "cached_rating";
+    public static final String ORDERS = "orders";
+    public static final String ORDER = "order";
+
+    public static final String BOUQUET_ITEMS = "bouquet_items";
+
+    public static final String PRICE_RANGE = "price_range";
+    public static final String MAX_PRICE = "max_price";
+    public static final String MIN_PRICE = "min_price";
+
+    public static final String RATING = "rating";
+    public static final String REVIEW = "review";
+
 }

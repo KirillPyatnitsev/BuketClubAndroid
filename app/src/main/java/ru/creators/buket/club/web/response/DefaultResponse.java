@@ -1,6 +1,7 @@
 package ru.creators.buket.club.web.response;
 
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import ru.creators.buket.club.consts.Fields;
 import ru.creators.buket.club.model.Error;
@@ -8,6 +9,7 @@ import ru.creators.buket.club.model.Error;
 /**
  * Created by mifkamaz on 19/11/15.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class DefaultResponse {
 
     @JsonProperty(Fields.ERROR)

@@ -55,15 +55,34 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return ByteArrayContent.fromString("application/json", jsonString);
     }
 
-    protected HttpRequest getPostHttpRequest(HttpContent content) throws IOException {
+    private HttpContent objectToHttpContent(Object content){
+        HttpContent httpContent = null;
+        if (content instanceof HttpContent){
+            httpContent = (HttpContent) content;
+        }else{
+            try {
+                httpContent = getHttpContentFromJsonString(toJson(content));
+            }catch (Exception err){
+                err.printStackTrace();
+            }
+        }
+        return httpContent;
+    }
+
+    protected HttpRequest getPostHttpRequest(Object object) throws IOException {
+
         Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildPostRequest(new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), content);
+        HttpRequest request
+                = getHttpRequestFactory().buildPostRequest(
+                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), objectToHttpContent(object));
         return fillHeader(request);
     }
 
-    protected HttpRequest getPathHttpRequest(HttpContent content) throws IOException {
+    protected HttpRequest getPathHttpRequest(Object object) throws IOException {
         Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildPostRequest(new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), content);
+        HttpRequest request
+                = getHttpRequestFactory().buildPostRequest(
+                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), objectToHttpContent(object));
 
         request.getHeaders().set("X-HTTP-Method-Override", "PATCH");
 
