@@ -3,6 +3,7 @@ package ru.creators.buket.club.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.Fields;
 
 /**
@@ -10,6 +11,22 @@ import ru.creators.buket.club.consts.Fields;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Order {
+
+    public static final int STATUS_FILLING_SHOP_INDEX = 0;
+    public static final int STATUS_IN_PROCESS_INDEX = 1;
+    public static final int STATUS_DELIVERED_INDEX = 2;
+    public static final int STATUS_DONE_INDEX = 3;
+
+
+    private static final String STATUS_FILLING_SHOP = "finding_shop";
+    private static final String STATUS_IN_PROCESS = "in_progress";
+    private static final String STATUS_DELIVERED = "delivered";
+    private static final String STATUS_DONE = "done";
+
+    private static final int STATUS_FILLING_SHOP_DESC = R.string.text_finding_shop;
+    private static final int STATUS_IN_PROCESS_DESC =  R.string.text_in_process;
+    private static final int STATUS_DELIVERED_DESC =  R.string.text_delivered;
+    private static final int STATUS_DONE_DESC =  R.string.text_order_done;
 
     @JsonProperty(Fields.ID)
     private int id;
@@ -42,10 +59,10 @@ public class Order {
     private String address;
 
     @JsonProperty(Fields.ADDRESS_LAT)
-    private float addressLat;
+    private double addressLat;
 
     @JsonProperty(Fields.ADDRESS_LNG)
-    private float addressLng;
+    private double addressLng;
 
     @JsonProperty(Fields.TIME_DELIVERY)
     private String timeDelivery;
@@ -55,6 +72,9 @@ public class Order {
 
     @JsonProperty(Fields.BOUQUET_ITEM)
     private Bouquet bouquetItem;
+
+    @JsonProperty(Fields.BOUQUET_ITEM_ID)
+    private int bouquetItemId;
 
     @JsonProperty(Fields.SHOP)
     private Shop shop;
@@ -145,19 +165,19 @@ public class Order {
         this.address = address;
     }
 
-    public float getAddressLat() {
+    public double getAddressLat() {
         return addressLat;
     }
 
-    public void setAddressLat(float addressLat) {
+    public void setAddressLat(double addressLat) {
         this.addressLat = addressLat;
     }
 
-    public float getAddressLng() {
+    public double getAddressLng() {
         return addressLng;
     }
 
-    public void setAddressLng(float addressLng) {
+    public void setAddressLng(double addressLng) {
         this.addressLng = addressLng;
     }
 
@@ -207,5 +227,28 @@ public class Order {
 
     public void setUpadtedAt(String upadtedAt) {
         this.upadtedAt = upadtedAt;
+    }
+
+    public int getBouquetItemId() {
+        return bouquetItemId;
+    }
+
+    public void setBouquetItemId(int bouquetItemId) {
+        this.bouquetItemId = bouquetItemId;
+    }
+
+    public int getStatusDescRes(){
+        switch (statusIndex){
+            case STATUS_FILLING_SHOP_INDEX:
+                return STATUS_FILLING_SHOP_DESC;
+            case STATUS_IN_PROCESS_INDEX:
+                return STATUS_IN_PROCESS_DESC;
+            case STATUS_DELIVERED_INDEX:
+                return STATUS_DELIVERED_DESC;
+            case STATUS_DONE_INDEX:
+                return STATUS_DONE_DESC;
+            default:
+                return STATUS_DONE_DESC;
+        }
     }
 }

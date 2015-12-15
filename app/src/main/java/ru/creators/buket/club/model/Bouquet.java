@@ -3,7 +3,6 @@ package ru.creators.buket.club.model;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import ru.creators.buket.club.consts.DictionaryItem;
 import ru.creators.buket.club.consts.Fields;
 
 /**
@@ -14,6 +13,10 @@ public class Bouquet {
     public static final int SIZE_LITTLE = 0;
     public static final int SIZE_MEDIUM = 1;
     public static final int SIZE_GREAT = 2;
+
+    public static final String SIZE_LITTLE_DESC = "small";
+    public static final String SIZE_MEDIUM_DESC = "middle";
+    public static final String SIZE_GREAT_DESC = "large";
 
     @JsonProperty(Fields.ID)
     private int id;
@@ -179,6 +182,19 @@ public class Bouquet {
                 return getMiddleSizeName();
             case SIZE_GREAT:
                 return getLargeSizeName();
+            default:
+                return "";
+        }
+    }
+
+    public static String getSizeDesc(int sizeId){
+        switch (sizeId){
+            case SIZE_LITTLE:
+                return SIZE_LITTLE_DESC;
+            case SIZE_MEDIUM:
+                return SIZE_MEDIUM_DESC;
+            case SIZE_GREAT:
+                return SIZE_GREAT_DESC;
             default:
                 return "";
         }

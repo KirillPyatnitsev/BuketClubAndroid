@@ -149,7 +149,8 @@
                 android:id="@+id/a_b_grid_view_buckets"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/a_b_costs_container"/>
+                android:layout_below="@id/a_b_costs_container"
+                android:numColumns="2"/>
 
         </RelativeLayout>
 

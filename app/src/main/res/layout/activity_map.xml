@@ -28,6 +28,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
             <Button
+                android:id="@+id/a_m_button_next"
                 style="@style/button_default"
                 android:text="@string/text_continue"
                 android:textSize="@dimen/text_size_normal"
@@ -46,13 +47,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_left_right_action_bar"
                 android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_bd_close"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_m_close"
                 android:src="@drawable/round_action_bar" />
 
 
             <include
                 android:id="@+id/a_m_action_bar"
                 layout="@layout/include_action_bar" />
+
+            <TextView
+                android:id="@+id/a_m_text_action_bar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/a_m_action_bar"
+                android:layout_centerHorizontal="true"
+
+                android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+
+                android:text="@string/text_chose_address_delivery"
+                android:textColor="@color/text_color_default"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_large"
+                android:visibility="visible" />
 
             <include
                 android:id="@+id/a_m_view_filter"

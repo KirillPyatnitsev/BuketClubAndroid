@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="round_size_action_bar_width">1200dp</dimen>
+    <dimen name="round_size_action_bar_height">670dp</dimen>
+
+    <dimen name="round_size_bouquet_size_selector">400dp</dimen>
+
+    <dimen name="margin_top_bouquet_size_selector">-380dp</dimen>
+
+    <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
+    <dimen name="margin_top_action_bar_a_b_close">-420dp</dimen>
+    <dimen name="margin_top_action_bar_a_pt_close">-400dp</dimen>
+    <dimen name="margin_top_action_bar_a_o_close">-450dp</dimen>
+    <dimen name="margin_top_action_bar_a_dif_close">-450dp</dimen>
+    <dimen name="margin_top_action_bar_a_bd_close">-420dp</dimen>
+    <dimen name="margin_top_action_bar_a_m_close">-400dp</dimen>
+    <dimen name="margin_top_action_bar_a_ab_close">-400dp</dimen>
+    <dimen name="margin_top_action_bar_a_f_close">-330dp</dimen>
+
+    <dimen name="margin_top_bouquet_type_text_unselected">140dp</dimen>
+    <dimen name="margin_top_bouquet_type_text_selected">100dp</dimen>
+</resources>

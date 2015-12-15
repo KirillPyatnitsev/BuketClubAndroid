@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import ru.creators.buket.club.consts.Fields;
 import ru.creators.buket.club.model.Error;
+import ru.creators.buket.club.model.Meta;
 
 /**
  * Created by mifkamaz on 19/11/15.
@@ -14,6 +15,9 @@ public class DefaultResponse {
 
     @JsonProperty(Fields.ERROR)
     private Error error;
+
+    @JsonProperty(Fields.META)
+    private Meta meta;
 
     private boolean isDone(){
         return error==null;
@@ -35,5 +39,9 @@ public class DefaultResponse {
 
     public boolean isStatusDone(){
         return status.isStatusDone();
+    }
+
+    public Meta getMeta() {
+        return meta;
     }
 }

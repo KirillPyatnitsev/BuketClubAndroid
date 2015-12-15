@@ -54,7 +54,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void showSnackBar(int stringResId){
-        Snackbar.make(getCoordinatorLayout(), getString(stringResId), Snackbar.LENGTH_LONG).show();
+        showSnackBar(getString(stringResId));
+    }
+
+    protected void showSnackBar(String message){
+        Snackbar.make(getCoordinatorLayout(), message, Snackbar.LENGTH_LONG).show();
     }
 
     protected int getImageBlurId(){
@@ -112,12 +116,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         runnigProcessCount++;
     }
 
+    protected boolean noRunnigProcess(){
+        return runnigProcessCount == 0;
+    }
+
     protected void stopLoading(){
         if (runnigProcessCount != 0) runnigProcessCount--;
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.GONE);
+            allProcessDone();
         }
     }
+
+    protected void allProcessDone(){
+
+    };
 
     protected String getUniqueDeviceId(){
         return Settings.Secure.getString(getContentResolver(),

@@ -1,18 +1,32 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
+import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.transitionseverywhere.TransitionManager;
 
+import org.codehaus.jackson.map.util.ISO8601Utils;
+
+import java.util.Date;
+
+import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Bouquet;
+import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.tools.Helper;
+import ru.creators.buket.club.web.WebMethods;
 
 public class BucketDetalisActivity extends BaseActivity {
 
@@ -40,14 +54,36 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private ImageView imageBack;
 
+    private ImageView imageBouquet;
+    private TextView textPrice;
+
+    private TextView textTimeSoon;
+    private TextView textTime;
+
+    private Bouquet bouquet = DataController.getInstance().getBouquet();
+
+    private Button buttonBay;
+
+    private String timeSoon;
+    private String time;
+
+    private SpannableString spannableStringTimeSoon;
+    private SpannableString spannableStringTime;
+
+    private String currentDoliveryTime = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bucket_detalis);
         assignView();
         assignListener();
-
+        initView();
         imageBack.setVisibility(View.VISIBLE);
+
+        spannableStringTimeSoon.setSpan(new UnderlineSpan(), 0, timeSoon.length(), 0);
+        spannableStringTime.setSpan(new UnderlineSpan(), 0, time.length(), 0);
+
     }
 
     @Override
@@ -56,6 +92,9 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void assignView() {
+
+        buttonBay = getViewById(R.id.a_bd_button_bay);
+
         textBouquetSizeLittle = getViewById(R.id.a_bd_text_bouquet_size_little);
         imageBouquetSizeLittleBig = getViewById(R.id.a_bd_image_big_bouquet_size_little);
         imageBouquetSizeLittleMin = getViewById(R.id.a_bd_image_min_bouquet_size_little);
@@ -71,6 +110,12 @@ public class BucketDetalisActivity extends BaseActivity {
         imageBouquetSizeGreatMin = getViewById(R.id.a_bd_image_min_bouquet_size_great);
         relativeBouquetSizeGreat = getViewById(R.id.a_bd_relative_bouquet_great);
 
+        textTime = getViewById(R.id.a_bd_text_time);
+        textTimeSoon = getViewById(R.id.a_bd_text_time_soon);
+
+        textPrice = getViewById(R.id.a_ab_text_cost);
+        imageBouquet = getViewById(R.id.a_bd_image_bouquet);
+
         little = new SizeViewHolder(textBouquetSizeLittle, imageBouquetSizeLittleBig, imageBouquetSizeLittleMin, relativeBouquetSizeLittle);
         medium = new SizeViewHolder(textBouquetSizeMedium, imageBouquetSizeMediumBig, imageBouquetSizeMediumMin, relativeBouquetSizeMedium);
         great = new SizeViewHolder(textBouquetSizeGreat, imageBouquetSizeGreatBig, imageBouquetSizeGreatMin, relativeBouquetSizeGreat);
@@ -79,6 +124,15 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void assignListener() {
+
+        buttonBay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buildOrder();
+                goToMapActivity();
+            }
+        });
+
         little.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,13 +160,79 @@ public class BucketDetalisActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        textTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textTime.setText(spannableStringTime);
+                textTimeSoon.setText(timeSoon);
+
+                new SlideDateTimePicker.Builder(getSupportFragmentManager())
+                        .setListener(slideDateTimeListener)
+                        .setInitialDate(new Date())
+                        .setIs24HourTime(true)
+                        .setMinDate(new Date())
+                        .setIndicatorColor(getResources().getColor(R.color.yellow))
+                        .build()
+                        .show();
+            }
+        });
+
+        textTimeSoon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                textTime.setText(time);
+                currentDoliveryTime = null;
+                textTimeSoon.setText(spannableStringTimeSoon);
+            }
+        });
     }
+
+    private void initView(){
+        WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
+        textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
+
+        timeSoon = getString(R.string.text_time_soon);
+        time = getString(R.string.text_time);
+
+        spannableStringTimeSoon = new SpannableString(timeSoon);
+        spannableStringTime = new SpannableString(time);
+
+        textTime.setText(time);
+        textTimeSoon.setText(spannableStringTimeSoon);
+    }
+
+    private SlideDateTimeListener slideDateTimeListener = new SlideDateTimeListener() {
+
+        @Override
+        public void onDateTimeSet(Date date)
+        {
+            currentDoliveryTime = ISO8601Utils.format(date);
+        }
+
+        @Override
+        public void onDateTimeCancel()
+        {
+            currentDoliveryTime = null;
+        }
+    };
 
     private void selectSize(int sizeId) {
         if (sizeId != currentSize) {
             getSizeHolder(currentSize).setSelection(SizeViewHolder.UNSELECTED);
             getSizeHolder(sizeId).setSelection(SizeViewHolder.SELECTED);
             currentSize = sizeId;
+            switch (sizeId){
+                case Bouquet.SIZE_LITTLE:
+                    textPrice.setText(Helper.intToPriceString(bouquet.getSmallSizePrice()));
+                    break;
+                case Bouquet.SIZE_MEDIUM:
+                    textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
+                    break;
+                case Bouquet.SIZE_GREAT:
+                    textPrice.setText(Helper.intToPriceString(bouquet.getLargeSizePrice()));
+                    break;
+            }
         }
     }
 
@@ -222,4 +342,22 @@ public class BucketDetalisActivity extends BaseActivity {
             }
         }
     }
+
+    private void buildOrder(){
+        Order order = new Order();
+
+        order.setSizeIndex(currentSize);
+        order.setSize(Bouquet.getSizeDesc(currentSize));
+        order.setBouquetItemId(bouquet.getId());
+        order.setTimeDelivery(currentDoliveryTime);
+        order.setBouquetItem(bouquet);
+        order.setPrice(bouquet.getBouquetPriceBySize(currentSize));
+
+        DataController.getInstance().setOrder(order);
+    }
+
+    private void goToMapActivity(){
+        startActivity(new Intent(this, MapActivity.class));
+    }
+
 }

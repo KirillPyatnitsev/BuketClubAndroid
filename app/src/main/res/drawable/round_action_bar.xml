@@ -4,7 +4,7 @@
 
     <size
         android:width="@dimen/round_size_action_bar_width"
-        android:height="@dimen/round_size_action_bar_width"/>
+        android:height="@dimen/round_size_action_bar_height"/>
 
     <solid
         android:color="@color/round_color_action_bar"/>

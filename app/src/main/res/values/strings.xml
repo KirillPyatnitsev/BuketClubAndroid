@@ -3,6 +3,7 @@
     <string name="app_name">Buket.Club</string>
 
     <string name="text_chose_bouquet">Выберите букет</string>
+    <string name="text_chose_address_delivery">Выберите адресс доставки</string>
 
     <string name="text_flowers_type">Тип цветов</string>
     <string name="text_overall_tone_bouquet">Общий тон букета</string>
@@ -21,6 +22,7 @@
     <string name="text_time">Время</string>
 
     <string name="text_address_delivery">Выберите адрес доставки</string>
+    <string name="text_address_delivery_1">Адрес доставки</string>
     <string name="text_select_address_delivery">Адрес доставки</string>
     <string name="text_bay">Купить</string>
 
@@ -30,6 +32,7 @@
     <string name="text_send">Отправить</string>
 
     <string name="text_select_artist_bouquet">Выберите\nисполнителя букета</string>
+    <string name="text_my_orders">Мои заказы</string>
 
     <string name="text_sort_by">Отсортировать по:</string>
 
@@ -54,6 +57,7 @@
     <string name="text_w1">Wallet One</string>
 
     <string name="text_cardholders_name">Имя владельца карты</string>
+    <string name="text_input_address">Введите адрес</string>
     <string name="text_card_number">Номер карты</string>
     <string name="text_validity">Срок действия</string>
     <string name="text_CVV">CVV</string>
@@ -77,5 +81,10 @@
 
     <string name="text_time_soon">Ближайшее</string>
     <string name="title_activity_payment_type">PaymentTypeActivity</string>
+
+    <string name="text_finding_shop">Поиск магазина</string>
+    <string name="text_in_process">Осуществляется доставка</string>
+    <string name="text_delivered">Доставлено</string>
+    <string name="text_order_done">Заказ выполенен</string>
 
 </resources>

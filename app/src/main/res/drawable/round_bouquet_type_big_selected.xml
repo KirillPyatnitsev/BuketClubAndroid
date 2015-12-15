@@ -3,8 +3,8 @@
     android:shape="oval">
 
     <size
-        android:width="150dp"
-        android:height="150dp"/>
+        android:width="@dimen/round_size_bouquet_size_selector"
+        android:height="@dimen/round_size_bouquet_size_selector"/>
 
     <solid
         android:color="@color/pink_alpha_80" />

@@ -75,17 +75,17 @@
 
                 <fr.ganfra.materialspinner.MaterialSpinner
                     android:id="@+id/a_dif_spinner_delivery_type"
-                    style="@style/spinner"
-                    app:ms_hint="@string/text_flowers_chose_type" />
+                    style="@style/spinner" />
 
                 <TextView
                     style="@style/small_text.text_black"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_address_delivery"/>
+                    android:text="@string/text_address_delivery_1"/>
 
                 <EditText
                     android:id="@+id/a_dif_edit_delivery_address"
-                    style="@style/text_view_normal"/>
+                    style="@style/text_view_normal"
+                    android:enabled="false"/>
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -104,7 +104,8 @@
                 <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
                     android:id="@+id/a_dif_edit_phone"
                     style="@style/text_view_normal"
-                    custom_edit:mask="+7 (###) ###-##-##"/>
+                    custom_edit:mask="+7 (###) ###-##-##"
+                    android:inputType="phone"/>
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -118,6 +119,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/a_dif_button_next"
                 style="@style/button_default"
                 android:text="@string/text_continue"
                 android:layout_alignParentBottom="true"/>

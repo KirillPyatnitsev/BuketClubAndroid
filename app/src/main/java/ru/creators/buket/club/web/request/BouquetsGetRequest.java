@@ -73,6 +73,6 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
             request.getUrl().put(Rest.PER_PAGE, perPage);
         }
 
-        return (BouquetsResponse) getResponse(request.execute(), BouquetsResponse.class);
+        return (BouquetsResponse) getResponse(request.execute(), BouquetsResponse.class, new BouquetsResponse());
     }
 }

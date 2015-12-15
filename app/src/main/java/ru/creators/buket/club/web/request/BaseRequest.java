@@ -132,7 +132,8 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
 
         if (status.isStatusDone()){
             try {
-                response = toObject(httpResponse.parseAsString(), clazz);
+                String responseString = httpResponse.parseAsString();
+                response = toObject(responseString, clazz);
             }catch (IOException ex){
                 status.setMessage(ex.toString());
             }
@@ -154,7 +155,8 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
 
         if (status.isStatusDone()){
             try {
-                response = toObject(httpResponse.parseAsString(), clazz);
+                String responseString = httpResponse.parseAsString();
+                response = toObject(responseString, clazz);
             }catch (IOException ex){
                 status.setMessage(ex.toString());
             }

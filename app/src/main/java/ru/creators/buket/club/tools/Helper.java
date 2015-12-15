@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 
 /**
  * Created by mifkamaz on 07/12/15.
@@ -16,6 +17,28 @@ import ru.creators.buket.club.R;
 public class Helper {
     public static String getStringWithCostPrefix(int cost, Context context){
         return String.valueOf(cost).concat(context.getString(R.string.text_prefix_ruble));
+    }
+
+    public static final String RUBLE_SUFFIX = "\u20BD";
+
+    public static String intToPriceString(int price){
+        String priceString = new String();
+
+        String priceReverse = new StringBuilder(Integer.toString(price)).reverse().toString();
+
+        String space = " ";
+        for (int i = 0; i < priceReverse.length(); i++) {
+            priceString += priceReverse.charAt(i);
+            if ((i+1) % 3 == 0 && priceReverse.length() != i+1){
+                priceString += space;
+            }
+        }
+
+        priceString = new StringBuilder(priceString).reverse().toString();
+
+        priceString += RUBLE_SUFFIX;
+
+        return priceString;
     }
 
     public static Bitmap getBitmapFromView(View view) {
@@ -269,4 +292,7 @@ public class Helper {
         return (bitmap);
     }
 
+    public static String addServerPrefix(String url){
+        return ServerConfig.SERVER_ADRESS + url;
+    }
 }

@@ -1,30 +1,42 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.vision.barcode.Barcode;
 import com.transitionseverywhere.TransitionManager;
 
 import java.io.IOException;
 import java.util.List;
 
+import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 
-public class MapActivity extends BaseActivity implements OnMapReadyCallback {
+public class MapActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private LatLng latLng;
@@ -36,6 +48,16 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     private ImageView imageCloseFilter;
     private ImageView imageActionBarBackground;
 
+    private EditText editAddress;
+    private String address = null;
+
+    private Button buttonNext;
+
+    private TextView textActionBar;
+
+
+    private LatLng currentLatLng = null;
+    GeocoderTask geocoderTask = new GeocoderTask();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +70,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         assignView();
         initView();
         assignListener();
-
-        GeocoderTask geocoderTask = new GeocoderTask();
-
-        geocoderTask.execute("Рогова 6");
     }
 
     @Override
@@ -65,6 +83,12 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
         imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
         imageActionBarBackground = getViewById(R.id.a_m_image_action_bar_background);
         viewActonBarFilter = getViewById(R.id.a_m_view_filter);
+
+        textActionBar = getViewById(R.id.a_m_text_action_bar_title);
+
+        buttonNext = getViewById(R.id.a_m_button_next);
+
+        editAddress = getViewById(R.id.i_mf_edit_address);
     }
 
     private void assignListener(){
@@ -72,6 +96,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 openFilter();
+                editAddress.setText(address);
             }
         });
 
@@ -79,6 +104,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 closeFilter();
+                String newAddress = editAddress.getText().toString();
+                if (newAddress != null && !newAddress.isEmpty() && !newAddress.equals(address)) {
+                    address = newAddress;
+                    geocoderTask.execute(address);
+                }
             }
         });
 
@@ -88,11 +118,64 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 onBackPressed();
             }
         });
+
+        buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (address != null) {
+                    appendOrderInfo();
+                    goToDeliveryInfoFillingAct();
+                }else{
+                    showSnackBar("Сначала выберите адрес доставки");
+                }
+            }
+        });
     }
 
-    private void initView(){
+    private void initView() {
         imageBack.setVisibility(View.VISIBLE);
         imageOpenFilter.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onMapClick(LatLng latLng) {
+        mMap.clear();
+
+        MarkerOptions options = new MarkerOptions().position( latLng );
+
+        address = getAddressFromLatLng(latLng);
+
+        textActionBar.setText(address);
+
+        currentLatLng = latLng;
+
+        options.title(address);
+        options.icon(BitmapDescriptorFactory.defaultMarker());
+        mMap.addMarker(options);
+    }
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        marker.showInfoWindow();
+        address = getAddressFromLatLng(marker.getPosition());
+        textActionBar.setText(address);
+        currentLatLng = marker.getPosition();
+        Log.d("Logging", "Lat: " + currentLatLng.latitude + " lng: " + currentLatLng.longitude);
+        return true;
+    }
+
+    private String getAddressFromLatLng( LatLng latLng ) {
+        Geocoder geocoder = new Geocoder( this );
+
+        String address = "";
+        try {
+            address = geocoder
+                    .getFromLocation( latLng.latitude, latLng.longitude, 1 )
+                    .get( 0 ).getAddressLine( 0 );
+        } catch (IOException e ) {
+        }
+
+        return address;
     }
 
     private void openFilter(){
@@ -122,7 +205,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         backgroundImageLayoutParams.setMargins(
                 getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_close),
+                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_m_close),
                 getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
                 0
         );
@@ -157,11 +240,23 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMyLocationEnabled(true);
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMarkerClickListener(this);
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    private void appendOrderInfo(){
+        DataController.getInstance().getOrder().setAddress(address);
+        DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
+        DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
+    }
+
+    private void goToDeliveryInfoFillingAct(){
+        startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
     }
 
     private class GeocoderTask extends AsyncTask<String, Void, List >{

@@ -180,6 +180,7 @@
             </LinearLayout>
 
             <Button
+                android:id="@+id/a_pt_button_next"
                 style="@style/button_default"
                 android:text="@string/text_continue"
                 android:textSize="@dimen/text_size_normal"

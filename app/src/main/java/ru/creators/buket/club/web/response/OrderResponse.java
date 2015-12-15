@@ -19,6 +19,9 @@ public class OrderResponse extends DefaultResponse {
         this.order = order;
     }
 
+    public OrderResponse() {
+    }
+
     public Order getOrder() {
         return order;
     }

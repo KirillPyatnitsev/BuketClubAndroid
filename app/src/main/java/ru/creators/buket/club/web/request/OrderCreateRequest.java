@@ -6,6 +6,7 @@ import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.web.model.OrderContent;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.OrdersResponse;
 
@@ -32,10 +33,10 @@ public class OrderCreateRequest extends BaseRequest<OrderResponse> {
 
     @Override
     public OrderResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(getHttpContentFromJsonString(toJson(new OrderResponse(order))));
+        HttpRequest request = getPostHttpRequest(getHttpContentFromJsonString(toJson(new OrderContent(order))));
 
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
 
-        return (OrderResponse) getResponse(request.execute(), OrderResponse.class);
+        return (OrderResponse) getResponse(request.execute(), OrderResponse.class, new OrderResponse());
     }
 }

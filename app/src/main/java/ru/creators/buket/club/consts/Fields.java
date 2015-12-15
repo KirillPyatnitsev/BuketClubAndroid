@@ -110,6 +110,7 @@ public class Fields {
     public static final String RECIPIENT_NAME = "recipient_name";
     public static final String RECIPIENT_PHONE = "recipient_phone";
     public static final String BOUQUET_ITEM = "bouquet_item";
+    public static final String BOUQUET_ITEM_ID = "bouquet_item_id";
     public static final String SHOP = "shop";
     public static final String TIME_DELIVERY = "time_delivery";
     public static final String COMMENT = "comment";
