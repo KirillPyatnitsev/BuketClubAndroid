@@ -357,7 +357,7 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void goToMapActivity(){
-        startActivity(new Intent(this, MapActivity.class));
+        startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
     }
 
 }

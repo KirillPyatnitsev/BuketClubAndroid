@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -23,6 +24,8 @@ public class OrdersActivity extends BaseActivity {
     private ListOrderAdapter listOrderAdapter;
 
     private ListView listView;
+
+    private ImageView imageBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +38,7 @@ public class OrdersActivity extends BaseActivity {
 
     private void assignView(){
         listView = getViewById(R.id.a_o_list_view_orders);
+        imageBack = getViewById(R.id.i_ab_image_back);
     }
 
     private void assignListener(){
@@ -45,9 +49,17 @@ public class OrdersActivity extends BaseActivity {
                 goToOrderDetalisActivity();
             }
         });
+
+        imageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initView(){
+        imageBack.setVisibility(View.VISIBLE);
         listOrderAdapter = new ListOrderAdapter(this, listOrder);
         listView.setAdapter(listOrderAdapter);
     }

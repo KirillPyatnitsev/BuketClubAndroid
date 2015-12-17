@@ -192,7 +192,6 @@ public class MaskedEditText extends EditText implements TextWatcher {
 	
 	private void init() {
 		addTextChangedListener(this);
-        this.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 	}
 	
 	@Override

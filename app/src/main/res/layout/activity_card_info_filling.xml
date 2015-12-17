@@ -98,7 +98,8 @@
                 <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
                     android:id="@+id/a_cif_edit_card_number"
                     style="@style/text_view_normal"
-                    custom_edit:mask="####-####-####-####"/>
+                    custom_edit:mask="####-####-####-####"
+                    android:inputType="number"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -102,6 +102,7 @@ public class Fields {
     public static final String VALUE = "value";
 
     public static final String USER_ID = "user_id";
+    public static final String USER = "user";
     public static final String SIZE = "size";
     public static final String SIZE_INDEX = "size_index";
     public static final String ADDRESS = "address";

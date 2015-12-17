@@ -12,12 +12,14 @@ import com.squareup.picasso.Picasso;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
+import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
 import ru.creators.buket.club.web.request.OrderCreateRequest;
 import ru.creators.buket.club.web.request.OrdersGetRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
 import ru.creators.buket.club.web.request.SessionCreateRequest;
 import ru.creators.buket.club.web.response.BouquetsResponse;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.OrdersResponse;
@@ -118,6 +120,12 @@ public class WebMethods {
 
     public void getOrders(String accessToken, RequestListener<OrdersResponse> listener){
         OrdersGetRequest request = new OrdersGetRequest(accessToken);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener){
+        GenerateTypePriceRequest request = new GenerateTypePriceRequest(accessToken);
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
     }

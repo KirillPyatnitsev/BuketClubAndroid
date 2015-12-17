@@ -150,6 +150,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/a_b_costs_container"
+                android:horizontalSpacing="@dimen/margin_small"
+                android:verticalSpacing="@dimen/margin_smaller"
                 android:numColumns="2"/>
 
         </RelativeLayout>

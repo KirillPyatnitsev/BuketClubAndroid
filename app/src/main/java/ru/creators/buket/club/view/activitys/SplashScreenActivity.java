@@ -17,6 +17,7 @@ import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.BouquetsResponse;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
 import ru.creators.buket.club.web.response.ProfileResponse;
 import ru.creators.buket.club.web.response.SessionResponse;
@@ -114,7 +115,7 @@ public class SplashScreenActivity extends BaseActivity {
         });
     }
 
-    private void getProfile(String accessToken){
+    private void getProfile(final String accessToken){
         startLoading(true);
         WebMethods.getInstance().getProfile(accessToken, new RequestListener<ProfileResponse>() {
             @Override
@@ -127,7 +128,36 @@ public class SplashScreenActivity extends BaseActivity {
             public void onRequestSuccess(ProfileResponse profileResponse) {
                 profile = profileResponse.getProfile();
                 stopLoading();
+                if (profile == null){
+                    createSession();
+                    return;
+                }
+
+                if (profile.getTypePriceIndex() == Profile.TYPE_PRICE_FLIXIBLE){
+                    generateTypePrice(accessToken);
+                    return;
+                }
+
                 showSnackBar("Load profile done");
+            }
+        });
+    }
+
+    private void generateTypePrice(final String accessToken){
+        startLoading(false);
+        WebMethods.getInstance().generateTypePrice(accessToken, new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+                showSnackBar("Generate type price error");
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                getProfile(accessToken);
+                loadBouquets(accessToken);
+                stopLoading();
+                showSnackBar("Generate type price done");
             }
         });
     }
@@ -140,7 +170,8 @@ public class SplashScreenActivity extends BaseActivity {
             DataController.getInstance().setPriceRange(priceRange);
             DataController.getInstance().setProfile(profile);
 
-            startActivity(new Intent(this, BucketsActivity.class));
+            if (profile!=null && profile.getTypePriceIndex() !=Profile.TYPE_PRICE_FLIXIBLE)
+                startActivity(new Intent(this, BucketsActivity.class));
         }
     }
 }

@@ -45,6 +45,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
 
     Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+    private boolean reseliction = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,14 +97,18 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
                 if (position == 0){
                     currentDate = null;
                 }else{
-                    new SlideDateTimePicker.Builder(getSupportFragmentManager())
-                            .setListener(slideDateTimeListener)
-                            .setInitialDate(new Date())
-                            .setIs24HourTime(true)
-                            .setMinDate(new Date())
-                            .setIndicatorColor(getResources().getColor(R.color.yellow))
-                            .build()
-                            .show();
+                    if (!reseliction) {
+                        new SlideDateTimePicker.Builder(getSupportFragmentManager())
+                                .setListener(slideDateTimeListener)
+                                .setInitialDate(new Date())
+                                .setIs24HourTime(true)
+                                .setMinDate(new Date())
+                                .setIndicatorColor(getResources().getColor(R.color.yellow))
+                                .build()
+                                .show();
+                    }else{
+                        reseliction = false;
+                    }
                 }
             }
 
@@ -127,7 +133,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
             deliveryTime.add("Выбрать время");
         }
 
-        editAddress.setText(DataController.getInstance().getOrder().getAddress());
+//        editAddress.setText(DataController.getInstance().getOrder().getAddress());
 
         delivetyTimeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, deliveryTime);
 
@@ -141,9 +147,11 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
 
         @Override
         public void onDateTimeSet(Date date) {
+            reseliction = true;
             currentDate = date;
             deliveryTime.set(1, formatter.format(currentDate));
-            delivetyTimeAdapter.notifyDataSetChanged();
+            spinnerDeliveryTime.setAdapter(delivetyTimeAdapter);
+            spinnerDeliveryTime.setSelection(1);
         }
 
         @Override
@@ -156,6 +164,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
         DataController.getInstance().getOrder().setComment(editComment.getText().toString());
         DataController.getInstance().getOrder().setRecipientPhone(editPhoneNumber.getText().toString());
         DataController.getInstance().getOrder().setRecipientName(editRecipientName.getText().toString());
+        DataController.getInstance().getOrder().setAddress(editAddress.getText().toString());
         DataController.getInstance().getOrder().setTimeDelivery(
                 currentDate != null? ISO8601Utils.format(currentDate) : null
         );

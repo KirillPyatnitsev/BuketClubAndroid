@@ -125,7 +125,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 if (address != null) {
                     appendOrderInfo();
                     goToDeliveryInfoFillingAct();
-                }else{
+                } else {
                     showSnackBar("Сначала выберите адрес доставки");
                 }
             }
@@ -166,12 +166,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
     private String getAddressFromLatLng( LatLng latLng ) {
         Geocoder geocoder = new Geocoder( this );
-
         String address = "";
         try {
-            address = geocoder
-                    .getFromLocation( latLng.latitude, latLng.longitude, 1 )
-                    .get( 0 ).getAddressLine( 0 );
+            List<Address> addresses = geocoder
+                    .getFromLocation( latLng.latitude, latLng.longitude, 1);
+            if (addresses.get( 0 ).getAddressLine( 0 ) != null){
+                address = addresses.get( 0 ).getAddressLine(0);
+            }else if (addresses.get( 0 ).getThoroughfare() != null){
+                address = addresses.get( 0 ).getThoroughfare();
+            }else{
+                address = addresses.get( 0 ).getAdminArea();
+            }
         } catch (IOException e ) {
         }
 

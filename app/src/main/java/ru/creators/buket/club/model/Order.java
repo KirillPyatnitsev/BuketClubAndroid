@@ -1,5 +1,6 @@
 package ru.creators.buket.club.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -10,6 +11,7 @@ import ru.creators.buket.club.consts.Fields;
  * Created by mifkamaz on 13/12/15.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
 
     public static final int STATUS_FILLING_SHOP_INDEX = 0;
@@ -84,6 +86,9 @@ public class Order {
 
     @JsonProperty(Fields.UPDATED_AT)
     private String upadtedAt;
+
+    @JsonProperty(Fields.USER)
+    private Profile user;
 
     public int getId() {
         return id;
@@ -250,5 +255,13 @@ public class Order {
             default:
                 return STATUS_DONE_DESC;
         }
+    }
+
+    public Profile getUser() {
+        return user;
+    }
+
+    public void setUser(Profile user) {
+        this.user = user;
     }
 }

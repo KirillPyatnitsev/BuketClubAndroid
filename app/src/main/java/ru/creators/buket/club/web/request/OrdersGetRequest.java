@@ -32,6 +32,6 @@ public class OrdersGetRequest extends BaseRequest<OrdersResponse> {
 
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
 
-        return (OrdersResponse) getResponse(request.execute(), OrdersResponse.class);
+        return (OrdersResponse) getResponse(request.execute(), OrdersResponse.class, new OrdersResponse());
     }
 }

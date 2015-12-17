@@ -35,7 +35,8 @@ public class GridAdapterBouquet extends BaseAdapter {
 
         imageMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_smaller);
 
-        imageSize = screenWidth/2 - imageMargin;
+        imageSize = screenWidth / 2;
+//        imageSize = screenWidth/2 - imageMargin;
     }
 
     @Override
@@ -63,11 +64,7 @@ public class GridAdapterBouquet extends BaseAdapter {
 
             imageView.setLayoutParams(new GridView.LayoutParams(imageSize, imageSize));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            if (position + 1 % 2 == 0) {
-                imageView.setPadding(imageMargin, 0, 0, imageMargin);
-            } else {
-                imageView.setPadding(0, 0, imageMargin, imageMargin);
-            }
+
         } else {
             imageView = (ImageView) convertView;
         }

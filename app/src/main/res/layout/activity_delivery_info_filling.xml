@@ -85,7 +85,7 @@
                 <EditText
                     android:id="@+id/a_dif_edit_delivery_address"
                     style="@style/text_view_normal"
-                    android:enabled="false"/>
+                    android:singleLine="true"/>
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -94,7 +94,8 @@
 
                 <EditText
                     android:id="@+id/a_dif_edit_recipient"
-                    style="@style/text_view_normal"/>
+                    style="@style/text_view_normal"
+                    android:singleLine="true"/>
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -105,7 +106,7 @@
                     android:id="@+id/a_dif_edit_phone"
                     style="@style/text_view_normal"
                     custom_edit:mask="+7 (###) ###-##-##"
-                    android:inputType="phone"/>
+                    android:inputType="number"/>
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -114,7 +115,8 @@
 
                 <EditText
                     android:id="@+id/a_dif_edit_comment"
-                    style="@style/text_view_normal"/>
+                    style="@style/text_view_normal"
+                    android:singleLine="true"/>
 
             </LinearLayout>
 
@@ -129,7 +131,5 @@
         <include layout="@layout/include_progress"/>
 
     </RelativeLayout>
-
-
 
 </android.support.design.widget.CoordinatorLayout>

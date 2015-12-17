@@ -1,5 +1,6 @@
 package ru.creators.buket.club.model;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
@@ -9,6 +10,7 @@ import ru.creators.buket.club.consts.Fields;
  * Created by mifkamaz on 07/12/15.
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Bouquet {
     public static final int SIZE_LITTLE = 0;
     public static final int SIZE_MEDIUM = 1;

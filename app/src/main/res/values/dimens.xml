@@ -20,7 +20,7 @@
     <dimen name="margin_screen_content_normal">10dp</dimen>
 
     <dimen name="round_size_action_bar_width">600dp</dimen>
-    <dimen name="round_size_action_bar_height">200dp</dimen>
+    <dimen name="round_size_action_bar_height">600dp</dimen>
 
     <dimen name="round_size_bouquet_size_selector">150dp</dimen>
 
@@ -28,12 +28,12 @@
 
     <dimen name="margin_action_bar">@dimen/margin_small</dimen>
 
-    <dimen name="margin_action_bar_bellow_text">@dimen/margin_normal</dimen>
+    <dimen name="margin_action_bar_bellow_text">0dp</dimen>
 
     <dimen name="margin_filter_content">@dimen/margin_normal</dimen>
 
     <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
-    <dimen name="margin_top_action_bar_a_b_close">-420dp</dimen>
+    <dimen name="margin_top_action_bar_a_b_close">-430dp</dimen>
     <dimen name="margin_top_action_bar_a_pt_close">-400dp</dimen>
     <dimen name="margin_top_action_bar_a_o_close">-450dp</dimen>
     <dimen name="margin_top_action_bar_a_dif_close">-450dp</dimen>

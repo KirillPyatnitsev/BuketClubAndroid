@@ -18,26 +18,47 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.activitys.SplashScreenActivity">
+        <activity
+            android:name=".view.activitys.SplashScreenActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activitys.BucketsActivity" />
-        <activity android:name=".view.activitys.BucketDetalisActivity" />
-        <activity android:name=".view.activitys.MapActivity" />
-        <activity android:name=".view.activitys.ArtistsBouquetsActivity" />
-        <activity android:name=".view.activitys.DeliveryInfoFillingActivity" />
+        <activity
+            android:name=".view.activitys.BucketsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.BucketDetalisActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.MapActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.ArtistsBouquetsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.DeliveryInfoFillingActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activitys.PaymentTypeActivity"
             android:label="@string/title_activity_payment_type"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".view.activitys.CardInfoFillingActivity" />
-        <activity android:name=".view.activitys.PayDoneActivity" />
-        <activity android:name=".view.activitys.BouquetDeliveryStatusDetalisActivity" />
-        <activity android:name=".view.activitys.ReviewActivity" />
+        <activity
+            android:name=".view.activitys.CardInfoFillingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.PayDoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.BouquetDeliveryStatusDetalisActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activitys.ReviewActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService"

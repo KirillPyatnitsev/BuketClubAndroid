@@ -24,7 +24,6 @@ import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.model.PriceRange;
-import ru.creators.buket.club.model.Session;
 import ru.creators.buket.club.model.lists.ListBouquet;
 import ru.creators.buket.club.model.lists.ListDictionaryItem;
 import ru.creators.buket.club.tools.Helper;
@@ -63,8 +62,8 @@ public class BucketsActivity extends BaseActivity {
     private ListBouquet listBouquet = DataController.getInstance().getListBouquet();
 
     private ListDictionaryItem dictonaryFlowerTypes = new ListDictionaryItem();
-    private ListDictionaryItem dictonaryFloverColors =  new ListDictionaryItem();
-    private ListDictionaryItem dictonaryDayEvents =  new ListDictionaryItem();
+    private ListDictionaryItem dictonaryFloverColors = new ListDictionaryItem();
+    private ListDictionaryItem dictonaryDayEvents = new ListDictionaryItem();
 
     ArrayAdapter<String> adapterFlowerTypes;
     ArrayAdapter<String> adapterFloverColors;
@@ -92,7 +91,7 @@ public class BucketsActivity extends BaseActivity {
         return R.id.a_b_coordinator_root;
     }
 
-    private void assignView(){
+    private void assignView() {
         imageOpenFilter = getViewById(R.id.i_ab_image_settings_open);
         imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
         imageActionBarBackground = getViewById(R.id.a_b_image_action_bar_background);
@@ -115,7 +114,7 @@ public class BucketsActivity extends BaseActivity {
         spinnerDayEvent = getViewById(R.id.i_bf_spinner_chose_event);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         imageOpenFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,12 +145,12 @@ public class BucketsActivity extends BaseActivity {
         spinnerFlowerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentFlowerTypeId = position;
+                    currentFlowerTypeId = position;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                currentFlowerTypeId = -1;
+
             }
         });
 
@@ -159,24 +158,24 @@ public class BucketsActivity extends BaseActivity {
         spinnerFlowerClor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentFlowerClorId = position;
+                    currentFlowerClorId = position;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                    currentFlowerClorId = -1;
+
             }
         });
 
         spinnerDayEvent.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                currentDayEventId = position;
+                    currentDayEventId = position;
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-//                currentDayEventId = -1;
+
             }
         });
 
@@ -196,15 +195,15 @@ public class BucketsActivity extends BaseActivity {
         });
     }
 
-    private void goToOrdersActivity(){
+    private void goToOrdersActivity() {
         startActivity(new Intent(this, OrdersActivity.class));
     }
 
-    private void goToBouquetDetalisActivity(){
+    private void goToBouquetDetalisActivity() {
         startActivity(new Intent(this, BucketDetalisActivity.class));
     }
 
-    private void initView(){
+    private void initView() {
         imageOpenFilter.setVisibility(View.VISIBLE);
         imageOrders.setVisibility(View.VISIBLE);
         setSpinnerData(priceRange.getMinPrice(), priceRange.getMaxPrice());
@@ -217,7 +216,7 @@ public class BucketsActivity extends BaseActivity {
         loadAllDictioay();
     }
 
-    private void openFilter(){
+    private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
@@ -236,13 +235,9 @@ public class BucketsActivity extends BaseActivity {
 
         imageOpenFilter.setVisibility(View.GONE);
         imageCloseFilter.setVisibility(View.VISIBLE);
-
-        if (currentFlowerTypeId!=-1) spinnerFlowerType.setSelection(currentFlowerTypeId);
-        if (currentFlowerClorId!=-1) spinnerFlowerClor.setSelection(currentFlowerClorId);
-        if (currentDayEventId!=-1) spinnerDayEvent.setSelection(currentDayEventId);
     }
 
-    private void closeFilter(){
+    private void closeFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
@@ -265,7 +260,7 @@ public class BucketsActivity extends BaseActivity {
         updateListBouquet();
     }
 
-    private void setSpinnerData(int min, int max){
+    private void setSpinnerData(int min, int max) {
         rangeSeekBarCost.setRangeValues(min, max);
         rangeSeekBarCost.setSelectedMinValue(min);
         rangeSeekBarCost.setSelectedMaxValue(max);
@@ -277,7 +272,7 @@ public class BucketsActivity extends BaseActivity {
         textCurrentCostMax.setText(Helper.intToPriceString(max));
     }
 
-    private Context getContext(){
+    private Context getContext() {
         return this;
     }
 
@@ -291,7 +286,7 @@ public class BucketsActivity extends BaseActivity {
         return R.id.a_b_blur_image;
     }
 
-    private void getDictionary(String accessToken, final String dictionaryType){
+    private void getDictionary(String accessToken, final String dictionaryType) {
         startLoading(false);
         WebMethods.getInstance().getDictionary(accessToken, dictionaryType, new RequestListener<DictionaryResponse>() {
             @Override
@@ -301,15 +296,13 @@ public class BucketsActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(DictionaryResponse dictonaryResponse) {
-                if (dictionaryType.equals(Rest.FLOWER_TYPES)){
+                if (dictionaryType.equals(Rest.FLOWER_TYPES)) {
                     dictonaryFlowerTypes.clear();
                     dictonaryFlowerTypes.addAll(dictonaryResponse.getDictonaryFlowerTypes());
-                }else
-                if (dictionaryType.equals(Rest.FLOWER_COLORS)){
+                } else if (dictionaryType.equals(Rest.FLOWER_COLORS)) {
                     dictonaryFloverColors.clear();
                     dictonaryFloverColors.addAll(dictonaryResponse.getDictonaryFloverClors());
-                }else
-                if (dictionaryType.equals(Rest.DAY_EVENTS)){
+                } else if (dictionaryType.equals(Rest.DAY_EVENTS)) {
                     dictonaryDayEvents.clear();
                     dictonaryDayEvents.addAll(dictonaryResponse.getDictonaryDayEvents());
                 }
@@ -318,7 +311,7 @@ public class BucketsActivity extends BaseActivity {
         });
     }
 
-    private void loadAllDictioay(){
+    private void loadAllDictioay() {
         String accessToken = DataController.getInstance().getSession().getAccessToken();
         getDictionary(accessToken, Rest.FLOWER_TYPES);
         getDictionary(accessToken, Rest.FLOWER_COLORS);
@@ -327,20 +320,23 @@ public class BucketsActivity extends BaseActivity {
 
     @Override
     protected void allProcessDone() {
-        if (dictonaryFlowerTypes.size()!=0){
-            spinnerFlowerType.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFlowerTypes.getValuesArray()));
+        if (dictonaryFlowerTypes.size() != 0 && adapterFlowerTypes == null) {
+            adapterFlowerTypes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFlowerTypes.getValuesArray());
+            spinnerFlowerType.setAdapter(adapterFlowerTypes);
         }
 
-        if (dictonaryFloverColors.size()!=0){
-            spinnerFlowerClor.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFloverColors.getValuesArray()));
+        if (dictonaryFloverColors.size() != 0 && adapterFloverColors == null) {
+            adapterFloverColors = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFloverColors.getValuesArray());
+            spinnerFlowerClor.setAdapter(adapterFloverColors);
         }
 
-        if (dictonaryDayEvents.size()!=0){
-            spinnerDayEvent.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryDayEvents.getValuesArray()));
+        if (dictonaryDayEvents.size() != 0 && adapterDayEvents == null) {
+            adapterDayEvents = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryDayEvents.getValuesArray());
+            spinnerDayEvent.setAdapter(adapterDayEvents);
         }
     }
 
-    private void updateListBouquet(){
+    private void updateListBouquet() {
         startLoading(false);
         WebMethods.getInstance().loadBouquets(DataController.getInstance().getSession().getAccessToken(),
                 currentFlowerTypeId == -1 ? currentFlowerTypeId : dictonaryFlowerTypes.getItemId(currentFlowerTypeId),
@@ -358,8 +354,14 @@ public class BucketsActivity extends BaseActivity {
                     public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
                         listBouquet.clear();
                         listBouquet.addAll(bouquetsResponse.getListBouquet());
+                        gridAdapterBouquet.notifyDataSetChanged();
                         stopLoading();
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 }
