@@ -5,7 +5,7 @@ package ru.creators.buket.club.consts;
  */
 public class Rest {
 
-    public static final String DEVICE_TYPE_ANDROID = "ANDROID";
+    public static final String DEVICE_TYPE_ANDROID = "android";
 
     public static final String ACCESS_TOKEN = "access_token";
 

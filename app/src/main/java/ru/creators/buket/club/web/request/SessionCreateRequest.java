@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.web.response.SessionResponse;
 
 /**
@@ -42,7 +43,7 @@ public class SessionCreateRequest extends BaseRequest<SessionResponse> {
         if (deviceToken!=null) {
             request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
         }
-        request.getUrl().put(Rest.DEVICE_TYPE, Rest.DEVICE_TYPE);
+        request.getUrl().put(Rest.DEVICE_TYPE, Rest.DEVICE_TYPE_ANDROID);
 
         return (SessionResponse) getResponse(request.execute(), SessionResponse.class);
     }
