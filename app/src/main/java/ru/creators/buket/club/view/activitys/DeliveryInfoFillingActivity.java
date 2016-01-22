@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 
-import org.codehaus.jackson.map.util.ISO8601DateFormat;
 import org.codehaus.jackson.map.util.ISO8601Utils;
 
 import java.text.Format;
@@ -23,6 +22,7 @@ import java.util.Date;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ApplicationMode;
 
 public class DeliveryInfoFillingActivity extends BaseActivity {
 
@@ -87,7 +87,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 addDataToOrder();
-                goToPaymentActivity();
+                goToNextActivity();
             }
         });
 
@@ -170,7 +170,14 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
         );
     }
 
-    private void goToPaymentActivity() {
-        startActivity(new Intent(this, PaymentTypeActivity.class));
+    private void goToNextActivity() {
+        switch (DataController.getInstance().getSession().getAppMode()){
+            case ApplicationMode.COST_FIXED:
+                startActivity(new Intent(this, PaymentTypeActivity.class));
+                break;
+            case ApplicationMode.COST_FLOATING:
+                startActivity(new Intent(this, ChoseShopActivity.class));
+                break;
+        }
     }
 }

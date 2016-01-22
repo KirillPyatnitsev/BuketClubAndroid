@@ -13,6 +13,7 @@ import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.OrderResponse;
 
@@ -47,22 +48,31 @@ public class PayDoneActivity extends BaseActivity {
     private void sendOrder(){
         startLoading(false);
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                DataController.getInstance().getOrder(),
-                new RequestListener<OrderResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        showSnackBar("Ошибка создания заказа");
-                        stopLoading();
-                    }
+        RequestListener<OrderResponse> listener = new RequestListener<OrderResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                showSnackBar("Ошибка создания заказа");
+                stopLoading();
+            }
 
-                    @Override
-                    public void onRequestSuccess(OrderResponse orderResponse) {
-                        showSnackBar("Заказ создан");
-                        startClosingTimer();
-                        stopLoading();
-                    }
-                });
+            @Override
+            public void onRequestSuccess(OrderResponse orderResponse) {
+                showSnackBar("Заказ создан");
+                stopLoading();
+            }
+        };
+
+        switch (DataController.getInstance().getSession().getAppMode()){
+            case ApplicationMode.COST_FIXED:
+                WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
+                        DataController.getInstance().getOrder(),
+                        listener);
+                break;
+            case ApplicationMode.COST_FLOATING:
+                WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
+                        DataController.getInstance().getOrder(), listener);
+                break;
+        }
     }
 
     @Override

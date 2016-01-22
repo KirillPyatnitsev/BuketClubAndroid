@@ -23,6 +23,7 @@ import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.view.adapters.ListAnswerFlexAdapter;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
+import ru.creators.buket.club.web.response.OrderResponse;
 
 public class ChoseShopActivity extends BaseActivity {
 
@@ -48,8 +49,7 @@ public class ChoseShopActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
-        updateArtistsList();
-
+        sendOrder();
         initFaye();
     }
 
@@ -129,6 +129,26 @@ public class ChoseShopActivity extends BaseActivity {
         startActivity(new Intent(this, PaymentTypeActivity.class));
     }
 
+    private void sendOrder(){
+        startLoading(false);
+
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
+                DataController.getInstance().getOrder(),
+                new RequestListener<OrderResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        showSnackBar("Ошибка создания заказа");
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(OrderResponse orderResponse) {
+                        showSnackBar("Заказ создан");
+                        updateArtistsList();
+                        stopLoading();
+                    }
+                });
+    }
 
     private void updateArtistsList(){
         if (!swipeRefreshLayout.isRefreshing())
