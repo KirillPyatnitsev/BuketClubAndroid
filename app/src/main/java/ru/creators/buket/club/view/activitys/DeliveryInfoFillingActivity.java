@@ -23,6 +23,7 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
+import ru.creators.buket.club.model.Profile;
 
 public class DeliveryInfoFillingActivity extends BaseActivity {
 
@@ -172,10 +173,10 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
 
     private void goToNextActivity() {
         switch (DataController.getInstance().getSession().getAppMode()){
-            case ApplicationMode.COST_FIXED:
+            case Profile.TYPE_PRICE_FIX:
                 startActivity(new Intent(this, PaymentTypeActivity.class));
                 break;
-            case ApplicationMode.COST_FLOATING:
+            case Profile.TYPE_PRICE_FLIXIBLE:
                 startActivity(new Intent(this, ChoseShopActivity.class));
                 break;
         }

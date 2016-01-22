@@ -14,6 +14,7 @@ import java.util.TimerTask;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
+import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.OrderResponse;
 
@@ -63,12 +64,12 @@ public class PayDoneActivity extends BaseActivity {
         };
 
         switch (DataController.getInstance().getSession().getAppMode()){
-            case ApplicationMode.COST_FIXED:
+            case Profile.TYPE_PRICE_FIX:
                 WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
                         DataController.getInstance().getOrder(),
                         listener);
                 break;
-            case ApplicationMode.COST_FLOATING:
+            case Profile.TYPE_PRICE_FLIXIBLE:
                 WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
                         DataController.getInstance().getOrder(), listener);
                 break;
