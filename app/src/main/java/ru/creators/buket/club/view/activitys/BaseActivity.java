@@ -109,6 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void startLoading(boolean showBlur){
+        showBlur = false;
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.VISIBLE);
             if (showBlur) getImageLoadingBlur().setImageBitmap(Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20));

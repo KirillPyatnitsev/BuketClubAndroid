@@ -3,6 +3,7 @@ package ru.creators.buket.club.view.activitys;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -29,17 +30,21 @@ public class SplashScreenActivity extends BaseActivity {
     private PriceRange priceRange;
     private ListBouquet listBouquet;
 
+    private int currentAppMode = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
-        if (session == null){
-            createSession();
-        }else{
-            loadingAllData();
-        }
+//        session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
+//        if (session == null){
+//            createSession();
+//        }else{
+//            loadingAllData();
+//        }
+
+        assignListener();
     }
 
     @Override
@@ -63,15 +68,35 @@ public class SplashScreenActivity extends BaseActivity {
                 stopLoading();
                 showSnackBar("Create session done!!!");
 
-                loadingAllData();
+                getProfile(session.getAccessToken());
             }
         });
     }
 
-    private void loadingAllData(){
-        loadBouquets(session.getAccessToken());
-        loadPriceRange(session.getAccessToken());
-        getProfile(session.getAccessToken());
+    private void assignListener(){
+        getViewById(R.id.a_ss_button_fix).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startApp(Profile.TYPE_PRICE_FIX);
+            }
+        });
+
+        getViewById(R.id.a_ss_button_flex).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startApp(Profile.TYPE_PRICE_FLIXIBLE);
+            }
+        });
+    }
+
+    private void startApp(int profileType){
+        currentAppMode = profileType;
+        session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
+        if (session == null){
+            createSession();
+        }else{
+            getProfile(session.getAccessToken());
+        }
     }
 
     private void saveSession(Session session){
@@ -98,7 +123,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void loadPriceRange(String accessToken){
-        startLoading(true);
+        startLoading(false);
         WebMethods.getInstance().loadPriceRange(accessToken, new RequestListener<PriceRangeResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -116,7 +141,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void getProfile(final String accessToken){
-        startLoading(true);
+        startLoading(false);
         WebMethods.getInstance().getProfile(accessToken, new RequestListener<ProfileResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -126,16 +151,15 @@ public class SplashScreenActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(ProfileResponse profileResponse) {
-                profile = profileResponse.getProfile();
                 stopLoading();
-                if (profile == null){
-                    createSession();
-                    return;
-                }
 
-                if (profile.getTypePriceIndex() == Profile.TYPE_PRICE_FLIXIBLE){
+                profile = profileResponse.getProfile();
+
+                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode){
                     generateTypePrice(accessToken);
-                    return;
+                }else{
+                    loadBouquets(accessToken);
+                    loadPriceRange(accessToken);
                 }
 
                 showSnackBar("Load profile done");
@@ -155,7 +179,6 @@ public class SplashScreenActivity extends BaseActivity {
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
                 getProfile(accessToken);
-                loadBouquets(accessToken);
                 stopLoading();
                 showSnackBar("Generate type price done");
             }
@@ -170,8 +193,7 @@ public class SplashScreenActivity extends BaseActivity {
             DataController.getInstance().setPriceRange(priceRange);
             DataController.getInstance().setProfile(profile);
 
-            if (profile!=null && profile.getTypePriceIndex() !=Profile.TYPE_PRICE_FLIXIBLE)
-                startActivity(new Intent(this, BucketsActivity.class));
+            startActivity(new Intent(this, BucketsActivity.class));
         }
     }
 }

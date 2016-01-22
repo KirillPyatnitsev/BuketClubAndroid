@@ -84,6 +84,8 @@ public class BucketsActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+
+        showSnackBar("TYPE_PRICE:" + DataController.getInstance().getProfile().getTypePrice());
     }
 
     @Override
@@ -134,7 +136,7 @@ public class BucketsActivity extends BaseActivity {
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
                 textCurrentCostMin.setText(Helper.intToPriceString((int) minValue));
                 textCurrentCostMax.setText(Helper.intToPriceString((int) maxValue));
-                if (currentMaxPrice != maxValue || currentMinPrice != minValue) {
+                if (currentMaxPrice != (int) maxValue || currentMinPrice != (int) minValue) {
                     currentMaxPrice = (int) maxValue;
                     currentMinPrice = (int) minValue;
                     updateListBouquet();
