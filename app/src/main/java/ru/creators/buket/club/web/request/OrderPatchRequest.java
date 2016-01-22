@@ -17,11 +17,11 @@ public class OrderPatchRequest extends BaseRequest<OrderResponse> {
     private Order order;
     private int orderId;
 
-    public OrderPatchRequest(String accessToken, Order order, int orderId) {
+    public OrderPatchRequest(String accessToken, Order order) {
         super(OrderResponse.class);
         this.accessToken = accessToken;
         this.order = order;
-        this.orderId = orderId;
+        this.orderId = order.getId();
     }
 
 

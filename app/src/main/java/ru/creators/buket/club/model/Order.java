@@ -81,6 +81,9 @@ public class Order {
     @JsonProperty(Fields.SHOP)
     private Shop shop;
 
+    @JsonProperty(Fields.SHOP_ID)
+    private int shopId;
+
     @JsonProperty(Fields.CREATED_AT)
     private String createdAt;
 
@@ -89,6 +92,14 @@ public class Order {
 
     @JsonProperty(Fields.USER)
     private Profile user;
+
+    public int getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(int shopId) {
+        this.shopId = shopId;
+    }
 
     public int getId() {
         return id;

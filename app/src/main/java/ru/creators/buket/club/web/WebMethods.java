@@ -14,6 +14,8 @@ import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
 import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
 import ru.creators.buket.club.web.request.OrderCreateRequest;
+import ru.creators.buket.club.web.request.OrderGetFlexibleAnswersRequest;
+import ru.creators.buket.club.web.request.OrderPatchRequest;
 import ru.creators.buket.club.web.request.OrdersGetRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
@@ -21,6 +23,7 @@ import ru.creators.buket.club.web.request.SessionCreateRequest;
 import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
+import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.OrdersResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
@@ -126,6 +129,18 @@ public class WebMethods {
 
     public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener){
         GenerateTypePriceRequest request = new GenerateTypePriceRequest(accessToken);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    public void getFlexAnswers(String accessToken, int orderId,RequestListener<ListAnswerFlexResponse> listener){
+        OrderGetFlexibleAnswersRequest request = new OrderGetFlexibleAnswersRequest(accessToken, orderId);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    public void orderPathRequest(String accessToken, Order order, RequestListener<OrderResponse> listener){
+        OrderPatchRequest request = new OrderPatchRequest(accessToken, order);
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
     }

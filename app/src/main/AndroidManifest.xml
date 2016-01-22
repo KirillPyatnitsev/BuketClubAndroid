@@ -65,7 +65,8 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".view.activitys.OrdersActivity"></activity>
+        <activity android:name=".view.activitys.OrdersActivity" />
+        <activity android:name=".view.activitys.ChoseShopActivity"></activity>
     </application>
 
 </manifest>

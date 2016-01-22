@@ -9,4 +9,8 @@ public class ServerConfig {
     public static final String SERVER_API_PREFIX = "api";
     public static final String SERVER_API_VERSION = "client";
     public static final String SERVER_API_VERSION_V1 = "v1";
+
+
+    public static final String SERVER_FAYE = "http://176.112.199.34:6840/faye";
+    public static final String SERVER_FAYE_ORDER = "/client/orders/:";
 }

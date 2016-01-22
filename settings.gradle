@@ -1,2 +1,2 @@
-include ':app', ':slideDateTimePicker'
+include ':app', ':slideDateTimePicker', ':fayeclient'
 include ':maskedEditText'

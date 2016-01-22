@@ -18,7 +18,9 @@
             android:textSize="@dimen/text_size_large"
             android:textColor="@color/black"
             android:text="2300"/>
+
         <TextView
+            android:id="@+id/i_ab_text_artist_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
@@ -26,19 +28,22 @@
             android:text="Цветочка"/>
 
         <RatingBar
+            android:id="@+id/i_ab_rating_bar"
             style="@style/rating_bar_min"/>
 
         <TextView
+            android:id="@+id/i_ab_text_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
             android:textColor="@color/black"
-            android:text="300m"/>
+            android:text="300m"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/i_ab_image_open"
+        android:id="@+id/i_ab_image_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/select_ico"
@@ -50,11 +55,9 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/i_ab_image_open"
+        android:layout_toLeftOf="@id/i_ab_image_artist"
         android:layout_marginRight="@dimen/margin_normal"
         android:layout_centerVertical="true"
         android:src="@drawable/logo_mini"/>
-
-
 
 </RelativeLayout>
