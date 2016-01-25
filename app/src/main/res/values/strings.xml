@@ -87,5 +87,7 @@
     <string name="text_in_process">Осуществляется доставка</string>
     <string name="text_delivered">Доставлено</string>
     <string name="text_order_done">Заказ выполенен</string>
+    <string name="phone_mask">+7 (###) ###-##-##</string>
+    <string name="telephone">Телефон</string>
 
 </resources>

@@ -79,74 +79,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_normal">
+                android:layout_margin="@dimen/margin_larger">
 
                 <TextView
                     style="@style/small_text.text_black"
                     android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_cardholders_name"/>
-
-                <EditText
-                    android:id="@+id/a_cif_edit_cardholder_name"
-                    style="@style/text_view_normal"/>
-
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_card_number"/>
+                    android:text="@string/telephone"/>
 
                 <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
-                    android:id="@+id/a_cif_edit_card_number"
+                    android:id="@+id/a_cif_edit_phone"
                     style="@style/text_view_normal"
-                    custom_edit:mask="####-####-####-####"
+                    custom_edit:mask="@string/phone_mask"
                     android:inputType="number"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginRight="@dimen/margin_larger">
-                        <TextView
-                            style="@style/small_text.text_black"
-                            android:layout_marginTop="@dimen/margin_small"
-                            android:text="@string/text_validity"/>
-
-                        <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
-                            android:id="@+id/a_cif_edit_validity"
-                            style="@style/text_view_normal"
-                            custom_edit:mask="##/##"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginLeft="@dimen/margin_larger">
-                        <TextView
-                            style="@style/small_text.text_black"
-                            android:layout_marginTop="@dimen/margin_small"
-                            android:text="@string/text_CVV"/>
-
-                        <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
-                            android:id="@+id/a_cif_edit_cvv"
-                            style="@style/text_view_normal"
-                            custom_edit:mask="###"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-
-
 
 
             </LinearLayout>
 
             <Button
+                android:id="@+id/a_cif_button_next"
                 style="@style/button_default"
                 android:text="@string/text_continue"
                 android:layout_alignParentBottom="true"/>

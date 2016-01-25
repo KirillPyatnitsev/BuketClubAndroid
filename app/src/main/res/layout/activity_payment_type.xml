@@ -148,7 +148,8 @@
                   <LinearLayout
                       android:id="@+id/a_pt_linear_pay_w1"
                       android:layout_width="match_parent"
-                      android:layout_height="match_parent">
+                      android:layout_height="match_parent"
+                      android:visibility="gone">
                       <LinearLayout
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"

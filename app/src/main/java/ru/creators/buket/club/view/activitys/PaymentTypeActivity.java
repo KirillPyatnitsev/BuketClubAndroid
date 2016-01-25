@@ -8,10 +8,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.transitionseverywhere.TransitionManager;
+import com.yandex.money.api.methods.params.P2pTransferParams;
+import com.yandex.money.api.methods.params.PaymentParams;
 
+import java.math.BigDecimal;
+
+import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.model.Order;
+import ru.yandex.money.android.PaymentActivity;
 
 public class PaymentTypeActivity extends BaseActivity {
+
+    private static final String CLIENT_ID = "CF81271080DB5D1AC2C1659FA16962AAD09FCEEBF3D3DF88DF32B7FD243EE77D";
+    private static final String P2P = "410013897372739";
+    private static final int REQUEST_CODE_YA_MONEY = 1488;
 
     public static final int PAY_CASH = 0;
     public static final int PAY_CARD = 1;
@@ -31,6 +42,8 @@ public class PaymentTypeActivity extends BaseActivity {
 
     private Button buttonNext;
 
+    private Order order = DataController.getInstance().getOrder();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +52,13 @@ public class PaymentTypeActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_YA_MONEY && resultCode == RESULT_OK) {
+            startActivity(new Intent(this, PayDoneActivity.class));
+        }
     }
 
     private void assignView() {
@@ -122,9 +142,10 @@ public class PaymentTypeActivity extends BaseActivity {
     private void goToNextAct() {
         switch (currentPayType) {
             case PAY_CARD:
-                startActivity(PayDoneActivity.class);
+                pay();
                 break;
             case PAY_CASH:
+//                DataController.getInstance().getOrder().set
                 startActivity(PayDoneActivity.class);
                 break;
             case PAY_W1:
@@ -136,6 +157,19 @@ public class PaymentTypeActivity extends BaseActivity {
 
     private void startActivity(Class<?> c) {
         startActivity(new Intent(this, c));
+    }
+
+    private void pay(){
+//        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
+        PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
+                .setAmount(new BigDecimal(order.getPrice()))
+                .setMessage("Оплата за " + order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()) + ". Android.")
+                .create();
+        Intent intent = PaymentActivity.getBuilder(this)
+                .setPaymentParams(phoneParams)
+                .setClientId(CLIENT_ID)
+                .build();
+        startActivityForResult(intent, REQUEST_CODE_YA_MONEY);
     }
 
     @Override
