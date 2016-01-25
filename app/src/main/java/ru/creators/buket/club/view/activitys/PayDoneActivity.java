@@ -1,9 +1,7 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -13,7 +11,6 @@ import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
-import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.OrderResponse;
@@ -69,7 +66,7 @@ public class PayDoneActivity extends BaseActivity {
                         DataController.getInstance().getOrder(),
                         listener);
                 break;
-            case Profile.TYPE_PRICE_FLIXIBLE:
+            case Profile.TYPE_PRICE_FLEXIBLE:
                 WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
                         DataController.getInstance().getOrder(), listener);
                 break;

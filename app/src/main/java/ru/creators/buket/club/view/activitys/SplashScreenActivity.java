@@ -2,7 +2,6 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -14,7 +13,6 @@ import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.Session;
 import ru.creators.buket.club.model.lists.ListBouquet;
-import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.BouquetsResponse;
@@ -84,7 +82,7 @@ public class SplashScreenActivity extends BaseActivity {
         getViewById(R.id.a_ss_button_flex).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startApp(Profile.TYPE_PRICE_FLIXIBLE);
+                startApp(Profile.TYPE_PRICE_FLEXIBLE);
             }
         });
     }
@@ -188,6 +186,8 @@ public class SplashScreenActivity extends BaseActivity {
     @Override
     protected void allProcessDone() {
         if (session!=null && profile != null && priceRange != null && listBouquet !=null){
+            session.setAppMode(profile.getTypePriceIndex());
+            saveSession(session);
             DataController.getInstance().setSession(session);
             DataController.getInstance().setListBouquet(listBouquet);
             DataController.getInstance().setPriceRange(priceRange);

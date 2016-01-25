@@ -10,7 +10,7 @@ import ru.creators.buket.club.consts.Fields;
  */
 public class Profile {
 
-    public final static int TYPE_PRICE_FLIXIBLE = 1;
+    public final static int TYPE_PRICE_FLEXIBLE = 1;
     public final static int TYPE_PRICE_FIX = 0;
 
     @JsonProperty(Fields.ID)
