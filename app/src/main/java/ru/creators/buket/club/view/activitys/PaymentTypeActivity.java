@@ -57,6 +57,8 @@ public class PaymentTypeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_YA_MONEY && resultCode == RESULT_OK) {
+            DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CARD);
+            DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CARD);
             startActivity(new Intent(this, PayDoneActivity.class));
         }
     }
@@ -146,6 +148,8 @@ public class PaymentTypeActivity extends BaseActivity {
                 break;
             case PAY_CASH:
 //                DataController.getInstance().getOrder().set
+                DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CASH);
+                DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CASH);
                 startActivity(PayDoneActivity.class);
                 break;
             case PAY_W1:

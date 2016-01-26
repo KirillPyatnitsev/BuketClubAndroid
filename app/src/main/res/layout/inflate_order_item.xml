@@ -6,10 +6,31 @@
     android:layout_marginTop="@dimen/margin_normal"
     android:layout_marginBottom="@dimen/margin_normal">
 
+    <ImageView
+        android:id="@+id/i_oi_image_open"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/select_ico"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/margin_normal"
+        android:rotation="-90"/>
+
+    <ImageView
+        android:id="@+id/i_oi_image_artist"
+        android:layout_width="@dimen/image_artist_icon_width"
+        android:layout_height="@dimen/image_artist_icon_height"
+        android:layout_toLeftOf="@id/i_oi_image_open"
+        android:layout_marginRight="@dimen/margin_normal"
+        android:layout_centerVertical="true"
+        android:src="@drawable/logo_mini"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/i_oi_image_artist">
 
         <TextView
             android:id="@+id/i_oi_text_bouquet_name"
@@ -33,28 +54,9 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_normal"
             android:textColor="@color/black"
-            android:text="300m"/>
+            android:text="Ожидается     доставка"/>
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/i_oi_image_open"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/select_ico"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/margin_normal"
-        android:rotation="-90"/>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/i_oi_image_open"
-        android:layout_marginRight="@dimen/margin_normal"
-        android:layout_centerVertical="true"
-        android:src="@drawable/logo_mini"/>
-
 
 
 </RelativeLayout>

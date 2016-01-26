@@ -56,7 +56,7 @@ public class ListOrderAdapter extends BaseAdapter {
             holder.textBouquetName = getViewById(R.id.i_oi_text_bouquet_name, convertView);
             holder.textBouquetCost = getViewById(R.id.i_oi_text_bouquet_cost, convertView);
             holder.textOrderStatus = getViewById(R.id.i_oi_text_order_status, convertView);
-            holder.imageArtistLogo = getViewById(R.id.i_oi_image_open, convertView);
+            holder.imageArtistLogo = getViewById(R.id.i_oi_image_artist, convertView);
 
         }else{
             holder = (ViewHolder) convertView.getTag();

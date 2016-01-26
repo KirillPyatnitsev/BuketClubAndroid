@@ -51,7 +51,6 @@ public class ChoseShopActivity extends BaseActivity {
         assignListener();
         initView();
         sendOrder();
-        initFaye();
     }
 
     @Override
@@ -106,7 +105,9 @@ public class ChoseShopActivity extends BaseActivity {
         fayeClientOrder.setListener(new FayeClientListener() {
             @Override
             public void onConnectedServer(FayeClient fc) {
-                fc.subscribeChannel(ServerConfig.SERVER_FAYE_ORDER + Integer.toString(order.getId()));
+                String channel = ServerConfig.SERVER_FAYE_ORDER;
+                channel = channel.replace(ServerConfig.SERVER_FAYE_ORDER_REPLACEMENT, Integer.toString(order.getId()));
+                fc.subscribeChannel(channel);
             }
 
             @Override
@@ -116,13 +117,21 @@ public class ChoseShopActivity extends BaseActivity {
 
             @Override
             public void onReceivedMessage(FayeClient fc, String msg) {
-                updateArtistsList();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateArtistsList();
+                    }
+                });
             }
         });
+        fayeClientOrder.connectServer();
     }
 
     private void choseShop(int shopPosition){
-        DataController.getInstance().getOrder().setShopId(listAnswerFlex.get(shopPosition).getShop().getId());
+        order.setShopId(Integer.toString(listAnswerFlex.get(shopPosition).getShop().getId()));
+        order.setPrice(listAnswerFlex.get(shopPosition).getPrice());
+        DataController.getInstance().setOrder(order);
         goToPaymentActivity();
     }
 
@@ -134,7 +143,7 @@ public class ChoseShopActivity extends BaseActivity {
         startLoading(false);
 
         WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                DataController.getInstance().getOrder(),
+                order.getOrderForServer(),
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -145,7 +154,9 @@ public class ChoseShopActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(OrderResponse orderResponse) {
                         showSnackBar("Заказ создан");
-                        updateArtistsList();
+                        order = orderResponse.getOrder();
+                        order.setBouquetItemId(order.getBouquetItem().getId());
+                        initFaye();
                         stopLoading();
                     }
                 });

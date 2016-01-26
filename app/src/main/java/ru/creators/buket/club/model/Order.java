@@ -1,5 +1,6 @@
 package ru.creators.buket.club.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -12,6 +13,7 @@ import ru.creators.buket.club.consts.Fields;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
 
     public static final int STATUS_FILLING_SHOP_INDEX = 0;
@@ -19,6 +21,10 @@ public class Order {
     public static final int STATUS_DELIVERED_INDEX = 2;
     public static final int STATUS_DONE_INDEX = 3;
 
+    public static final String TYPE_PAYMENT_CASH = "cash";
+    public static final String TYPE_PAYMENT_CARD = "credit_card";
+    public static final String TYPE_PAYMENT_INDEX_CASH = "0";
+    public static final String TYPE_PAYMENT_INDEX_CARD = "1";
 
     private static final String STATUS_FILLING_SHOP = "finding_shop";
     private static final String STATUS_IN_PROCESS = "in_progress";
@@ -82,7 +88,7 @@ public class Order {
     private Shop shop;
 
     @JsonProperty(Fields.SHOP_ID)
-    private int shopId;
+    private String shopId;
 
     @JsonProperty(Fields.CREATED_AT)
     private String createdAt;
@@ -93,11 +99,33 @@ public class Order {
     @JsonProperty(Fields.USER)
     private Profile user;
 
-    public int getShopId() {
+    @JsonProperty(Fields.TYPE_PAYMENT)
+    private String typePayment;
+
+    @JsonProperty(Fields.TYPE_PAYMENT_INDEX)
+    private String typePaymentIndex;
+
+    public String getShopId() {
         return shopId;
     }
 
-    public void setShopId(int shopId) {
+    public String getTypePayment() {
+        return typePayment;
+    }
+
+    public void setTypePayment(String typePayment) {
+        this.typePayment = typePayment;
+    }
+
+    public String getTypePaymentIndex() {
+        return typePaymentIndex;
+    }
+
+    public void setTypePaymentIndex(String typePaymentIndex) {
+        this.typePaymentIndex = typePaymentIndex;
+    }
+
+    public void setShopId(String shopId) {
         this.shopId = shopId;
     }
 
@@ -253,6 +281,7 @@ public class Order {
         this.bouquetItemId = bouquetItemId;
     }
 
+    @JsonIgnore
     public int getStatusDescRes(){
         switch (statusIndex){
             case STATUS_FILLING_SHOP_INDEX:
@@ -264,8 +293,30 @@ public class Order {
             case STATUS_DONE_INDEX:
                 return STATUS_DONE_DESC;
             default:
-                return STATUS_DONE_DESC;
+                return 0;
         }
+    }
+
+    @JsonIgnore
+    public Order getOrderForServer(){
+        Order order = new Order();
+
+        order.setPrice(this.getPrice());
+        order.setSize(this.getSize());
+        order.setSizeIndex(this.getSizeIndex());
+        order.setTypePayment(this.getTypePayment());
+        order.setTypePaymentIndex(this.getTypePaymentIndex());
+        order.setBouquetItemId(this.getBouquetItemId());
+        order.setAddress(this.getAddress());
+        order.setAddressLat(this.getAddressLat());
+        order.setAddressLng(this.getAddressLng());
+        order.setRecipientName(this.getRecipientName());
+        order.setRecipientPhone(this.getRecipientPhone());
+        order.setTimeDelivery(this.getTimeDelivery());
+        order.setComment(this.getComment());
+        order.setShopId(this.getShopId());
+
+        return order;
     }
 
     public Profile getUser() {

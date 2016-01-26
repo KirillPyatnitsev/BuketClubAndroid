@@ -23,7 +23,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected CoordinatorLayout coordinatorLayout;
 
-    private SpiceManager spiceManager = new SpiceManager(Jackson2GoogleHttpClientSpiceService.class);
+//    private SpiceManager spiceManager = new SpiceManager(Jackson2GoogleHttpClientSpiceService.class);
 
     private RelativeLayout relativeLoading;
     private ImageView imageLoadingBlur;
@@ -32,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        WebMethods.getInstance().setSpiceManager(spiceManager);
+//        WebMethods.getInstance().setSpiceManager(spiceManager);
     }
 
     protected <T extends View> T getViewById(int id){
@@ -141,12 +141,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        spiceManager.start(this);
+//        spiceManager.start(this);
     }
 
     @Override
     protected void onStop() {
-        spiceManager.shouldStop();
+//        spiceManager.shouldStop();
         super.onStop();
     }
 }

@@ -13,6 +13,7 @@ import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.WebMethods;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 
 public class PayDoneActivity extends BaseActivity {
@@ -46,7 +47,7 @@ public class PayDoneActivity extends BaseActivity {
     private void sendOrder(){
         startLoading(false);
 
-        RequestListener<OrderResponse> listener = new RequestListener<OrderResponse>() {
+        RequestListener<OrderResponse> listenerPost = new RequestListener<OrderResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 showSnackBar("Ошибка создания заказа");
@@ -57,18 +58,34 @@ public class PayDoneActivity extends BaseActivity {
             public void onRequestSuccess(OrderResponse orderResponse) {
                 showSnackBar("Заказ создан");
                 stopLoading();
+                startClosingTimer();
+            }
+        };
+
+        RequestListener<DefaultResponse> listenerPath = new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                showSnackBar("Ошибка создания заказа");
+                stopLoading();
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                showSnackBar("Заказ создан");
+                stopLoading();
+                startClosingTimer();
             }
         };
 
         switch (DataController.getInstance().getSession().getAppMode()){
             case Profile.TYPE_PRICE_FIX:
                 WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                        DataController.getInstance().getOrder(),
-                        listener);
+                        DataController.getInstance().getOrder().getOrderForServer(), listenerPost);
                 break;
             case Profile.TYPE_PRICE_FLEXIBLE:
                 WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
-                        DataController.getInstance().getOrder(), listener);
+                        DataController.getInstance().getOrder().getOrderForServer(),
+                        DataController.getInstance().getOrder().getId(), listenerPath);
                 break;
         }
     }

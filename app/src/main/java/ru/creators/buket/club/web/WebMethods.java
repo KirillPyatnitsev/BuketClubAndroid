@@ -139,8 +139,8 @@ public class WebMethods {
         mSpiceManager.execute(request, listener);
     }
 
-    public void orderPathRequest(String accessToken, Order order, RequestListener<OrderResponse> listener){
-        OrderPatchRequest request = new OrderPatchRequest(accessToken, order);
+    public void orderPathRequest(String accessToken, Order order, int orderId, RequestListener<DefaultResponse> listener){
+        OrderPatchRequest request = new OrderPatchRequest(accessToken, order, orderId);
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
     }

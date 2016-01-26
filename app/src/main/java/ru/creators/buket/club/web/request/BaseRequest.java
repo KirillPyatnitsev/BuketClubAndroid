@@ -78,11 +78,11 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return fillHeader(request);
     }
 
-    protected HttpRequest getPathHttpRequest(Object object) throws IOException {
+    protected HttpRequest getPathHttpRequest(String json) throws IOException {
         Uri uri = getUri();
         HttpRequest request
                 = getHttpRequestFactory().buildPostRequest(
-                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), objectToHttpContent(object));
+                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), getHttpContentFromJsonString(json));
 
         request.getHeaders().set("X-HTTP-Method-Override", "PATCH");
 

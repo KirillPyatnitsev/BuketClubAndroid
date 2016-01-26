@@ -61,4 +61,7 @@
     <dimen name="rating_large_bar_size">45dp</dimen>
     <dimen name="rating_min_bar_size">9dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
+    <dimen name="image_artist_icon_width">100dp</dimen>
+    <dimen name="image_artist_icon_height">80dp</dimen>
 </resources>

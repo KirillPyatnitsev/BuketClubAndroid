@@ -64,6 +64,8 @@ public class Fields {
     public static final String CODE = "code";
     public static final String TYPE = "type";
     public static final String MESSAGE = "message";
+    public static final String TYPE_PAYMENT = "type_payment";
+    public static final String TYPE_PAYMENT_INDEX = "type_payment_index";
 
     public static final String ERRORS = "errors";
     public static final String ERROR = "error";
