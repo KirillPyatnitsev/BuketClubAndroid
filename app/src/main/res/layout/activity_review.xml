@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/a_f_coordinator_root"
+    android:id="@+id/a_r_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
@@ -13,23 +13,23 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/a_f_blur_image"
+            android:id="@+id/a_r_blur_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"/>
 
         <RelativeLayout
-            android:id="@+id/a_f_relative_action_bar_container"
+            android:id="@+id/a_r_relative_action_bar_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/a_f_image_action_bar_background"
+                android:id="@+id/a_r_image_action_bar_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_left_right_action_bar"
                 android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_f_close"
+                android:layout_marginTop="@dimen/margin_top_action_bar_a_r_close"
                 android:src="@drawable/round_action_bar" />
 
             <RelativeLayout
@@ -37,14 +37,14 @@
                 android:layout_height="wrap_content">
 
                 <include
-                    android:id="@+id/a_f_action_bar"
+                    android:id="@+id/a_r_action_bar"
                     layout="@layout/include_action_bar" />
 
                 <TextView
-                    android:id="@+id/a_f_text_action_bar_title"
+                    android:id="@+id/a_r_text_action_bar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/a_f_action_bar"
+                    android:layout_below="@id/a_r_action_bar"
                     android:layout_centerHorizontal="true"
 
                     android:text="@string/text_rate_bouquet_exp"
@@ -54,30 +54,31 @@
                     android:layout_marginBottom="@dimen/margin_larger"/>
 
                 <RatingBar
-                    android:id="@+id/a_f_rating_bar"
+                    android:id="@+id/a_r_rating_bar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/rating_bar_large"
-                    android:layout_below="@id/a_f_text_action_bar_title"
+                    android:layout_below="@id/a_r_text_action_bar_title"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/margin_normal"/>
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/a_r_image_artist_icon"
+                    android:layout_width="@dimen/image_artist_icon_width"
+                    android:layout_height="@dimen/image_artist_icon_height"
                     android:src="@drawable/logo_splash"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/a_f_rating_bar"/>
+                    android:layout_below="@id/a_r_rating_bar"/>
 
             </RelativeLayout>
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/a_f_relative_content_container"
+            android:id="@+id/a_r_relative_content_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/a_f_relative_action_bar_container"
+            android:layout_below="@id/a_r_relative_action_bar_container"
             android:layout_marginTop="-37dp">
 
             <LinearLayout
@@ -92,8 +93,9 @@
                     android:text="@string/text_leave_a_comment"/>
 
                 <EditText
-                    android:id="@+id/a_f_edit_delivery_address"
-                    style="@style/text_view_normal"/>
+                    android:id="@+id/a_r_edit_comment"
+                    style="@style/text_view_normal"
+                    android:maxLines="2"/>
 
             </LinearLayout>
 
@@ -107,6 +109,7 @@
                 android:text="@string/text_thank_exc"/>
 
             <Button
+                android:id="@+id/a_r_button_send_review"
                 style="@style/button_default"
                 android:text="@string/text_send"
                 android:layout_alignParentBottom="true"/>

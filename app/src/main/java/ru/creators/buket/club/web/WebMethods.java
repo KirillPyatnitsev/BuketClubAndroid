@@ -10,15 +10,18 @@ import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
 
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.web.request.BaseRequest;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
 import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
 import ru.creators.buket.club.web.request.OrderCreateRequest;
 import ru.creators.buket.club.web.request.OrderGetFlexibleAnswersRequest;
+import ru.creators.buket.club.web.request.OrderGetRequest;
 import ru.creators.buket.club.web.request.OrderPatchRequest;
 import ru.creators.buket.club.web.request.OrdersGetRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
+import ru.creators.buket.club.web.request.ReviewRequest;
 import ru.creators.buket.club.web.request.SessionCreateRequest;
 import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
@@ -144,4 +147,17 @@ public class WebMethods {
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
     }
+
+    public void sendReviewRequest(String accessToken, int orderId, String comment, int rating, RequestListener<DefaultResponse> listener){
+        ReviewRequest request = new ReviewRequest(accessToken, orderId, comment, rating);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    public void orderGetRequest(String accessToken, int orderId, RequestListener<OrderResponse> listener){
+        OrderGetRequest request = new OrderGetRequest(accessToken, orderId);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
 }

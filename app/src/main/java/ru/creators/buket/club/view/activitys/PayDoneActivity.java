@@ -65,13 +65,13 @@ public class PayDoneActivity extends BaseActivity {
         RequestListener<DefaultResponse> listenerPath = new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-                showSnackBar("Ошибка создания заказа");
+//                showSnackBar("Ошибка создания заказа");
                 stopLoading();
             }
 
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
-                showSnackBar("Заказ создан");
+//                showSnackBar("Заказ создан");
                 stopLoading();
                 startClosingTimer();
             }
@@ -88,6 +88,11 @@ public class PayDoneActivity extends BaseActivity {
                         DataController.getInstance().getOrder().getId(), listenerPath);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        return;
     }
 
     @Override

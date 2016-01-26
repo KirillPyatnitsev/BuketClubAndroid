@@ -1,11 +1,15 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.Intent;
 import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
 import org.w3c.dom.Text;
@@ -18,6 +22,7 @@ import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
+import ru.creators.buket.club.web.response.OrderResponse;
 
 public class OrderDetalisActivity extends BaseActivity {
 
@@ -42,6 +47,7 @@ public class OrderDetalisActivity extends BaseActivity {
         assingnView();
         assignListener();
         initView();
+        updateOrder();
     }
 
     @Override
@@ -73,6 +79,11 @@ public class OrderDetalisActivity extends BaseActivity {
     }
 
     private void initView(){
+        fillView(order);
+
+    }
+
+    private void fillView(Order order){
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
 
         imageBack.setVisibility(View.VISIBLE);
@@ -97,6 +108,28 @@ public class OrderDetalisActivity extends BaseActivity {
         }
 
         textOrderStatus.setText(getString(order.getStatusDescRes()));
+    }
 
+    private void updateOrder(){
+        WebMethods.getInstance().orderGetRequest(DataController.getInstance().getSession().getAccessToken(),
+                order.getId(), new RequestListener<OrderResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+
+                    }
+
+                    @Override
+                    public void onRequestSuccess(OrderResponse orderResponse) {
+                        if (orderResponse.getOrder()!=null){
+                            order = orderResponse.getOrder();
+                            fillView(order);
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, OrdersActivity.class));
     }
 }

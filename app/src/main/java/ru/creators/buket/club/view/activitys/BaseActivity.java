@@ -108,6 +108,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         return imageLoadingBlur;
     }
 
+    protected void startLoading(){
+        startLoading(false);
+    }
+
+
     protected void startLoading(boolean showBlur){
         showBlur = false;
         if (runnigProcessCount == 0){

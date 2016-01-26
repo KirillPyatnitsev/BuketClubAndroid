@@ -1,7 +1,6 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,6 +12,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.lists.ListOrder;
 import ru.creators.buket.club.view.adapters.ListOrderAdapter;
 import ru.creators.buket.club.web.WebMethods;
@@ -33,7 +33,13 @@ public class OrdersActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
-        getOrder();
+        getOrders();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getOrders();
     }
 
     private void assignView(){
@@ -46,7 +52,12 @@ public class OrdersActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DataController.getInstance().setOrder(listOrder.get(position));
-                goToOrderDetalisActivity();
+
+                if (listOrder.get(position).getStatusIndex() == Order.STATUS_DELIVERED_INDEX)
+                    goToReviewActivity();
+                else
+                    goToOrderDetalisActivity();
+
             }
         });
 
@@ -69,7 +80,7 @@ public class OrdersActivity extends BaseActivity {
         return R.id.a_o_coordinator_root;
     }
 
-    private void getOrder(){
+    private void getOrders(){
         startLoading(false);
         WebMethods.getInstance().getOrders(
                 DataController.getInstance().getSession().getAccessToken(),
@@ -92,6 +103,10 @@ public class OrdersActivity extends BaseActivity {
     }
 
     private void goToOrderDetalisActivity(){
-        startActivity(new Intent(this, BouquetDeliveryStatusDetalisActivity.class));
+        startActivity(new Intent(this, OrderDetalisActivity.class));
+    }
+
+    private void goToReviewActivity(){
+        startActivity(new Intent(this, ReviewActivity.class));
     }
 }
