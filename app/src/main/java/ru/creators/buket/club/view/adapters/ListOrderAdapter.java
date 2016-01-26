@@ -62,9 +62,10 @@ public class ListOrderAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
+
         Order order = getItem(position);
 
-        if (order!=null){
+        if (order!=null && holder!=null){
             holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
             holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));

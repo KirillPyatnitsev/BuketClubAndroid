@@ -69,7 +69,6 @@
 
         <activity android:name=".view.activitys.OrdersActivity" />
         <activity android:name=".view.activitys.ChoseShopActivity" />
-        <activity android:name=".view.activitys.OrderRateActivity"></activity>
     </application>
 
 </manifest>

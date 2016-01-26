@@ -22,8 +22,7 @@
         android:layout_height="@dimen/image_artist_icon_height"
         android:layout_toLeftOf="@id/i_oi_image_open"
         android:layout_marginRight="@dimen/margin_normal"
-        android:layout_centerVertical="true"
-        android:src="@drawable/logo_mini"/>
+        android:layout_centerVertical="true"/>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -85,4 +85,8 @@ public class ReviewActivity extends BaseActivity {
         startActivity(new Intent(this, OrderDetalisActivity.class));
     }
 
+    @Override
+    public void onBackPressed() {
+        return;
+    }
 }

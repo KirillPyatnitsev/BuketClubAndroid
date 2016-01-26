@@ -90,4 +90,8 @@
     <string name="phone_mask">+7 (###) ###-##-##</string>
     <string name="telephone">Телефон</string>
 
+    <string name="marker_bid_price">Предложенная цена: </string>
+    <string name="marker_store">Магазин: </string>
+    <string name="delivery_info_error">Пожалуста заполните данные о заказе. </string>
+
 </resources>

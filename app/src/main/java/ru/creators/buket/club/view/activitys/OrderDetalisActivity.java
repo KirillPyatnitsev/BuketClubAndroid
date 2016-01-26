@@ -37,6 +37,7 @@ public class OrderDetalisActivity extends BaseActivity {
     private TextView textOrderStatus;
 
     private ImageView imageBouquet;
+    private ImageView imageArtistIcon;
 
     private Order order = DataController.getInstance().getOrder();
 
@@ -67,6 +68,7 @@ public class OrderDetalisActivity extends BaseActivity {
         imageBack = getViewById(R.id.i_ab_image_back);
 
         imageBouquet = getViewById(R.id.a_bdsd_image_bouquet);
+        imageArtistIcon = getViewById(R.id.a_bdsd_image_artist_icon);
     }
 
     private void assignListener(){
@@ -85,6 +87,8 @@ public class OrderDetalisActivity extends BaseActivity {
 
     private void fillView(Order order){
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+        if (order.getShop()!=null)
+            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
 
         imageBack.setVisibility(View.VISIBLE);
 

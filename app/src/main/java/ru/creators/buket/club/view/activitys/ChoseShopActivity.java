@@ -1,23 +1,41 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 
 import com.elirex.fayeclient.FayeClient;
 import com.elirex.fayeclient.FayeClientListener;
 import com.elirex.fayeclient.MetaMessage;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
+import ru.creators.buket.club.model.AnswerFlex;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.lists.ListAnswerFlex;
 import ru.creators.buket.club.tools.Helper;
@@ -26,7 +44,7 @@ import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 
-public class ChoseShopActivity extends BaseActivity {
+public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private ListAnswerFlex listAnswerFlex;
     private ListAnswerFlexAdapter listAnswerFlexAdapter;
@@ -34,6 +52,8 @@ public class ChoseShopActivity extends BaseActivity {
     private ListView listView;
 
     private ImageView imageBack;
+    private ImageView imageSettingsOpen;
+    private ImageView imageSettingsClose;
     private ImageView imageBouquet;
 
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -42,15 +62,77 @@ public class ChoseShopActivity extends BaseActivity {
 
     private FayeClient fayeClientOrder;
 
+    private RelativeLayout relativeContainerMap;
+    private GoogleMap googleMap;
+
+
+    private List<Marker> listMarker;
+
+    private String MARKER_BID_PRICE;
+    private String MARKER_STORE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chose_shop);
+
+        MARKER_BID_PRICE = getString(R.string.marker_bid_price);
+        MARKER_STORE = getString(R.string.marker_store);
+
         assignView();
         assignListener();
         initView();
+        initMap();
+        listMarker = new ArrayList<>();
+
         sendOrder();
+    }
+
+    private void initMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.a_cs_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            googleMap.setMyLocationEnabled(true);
+
+            // Getting LocationManager object from System Service LOCATION_SERVICE
+            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+            // Creating a criteria object to retrieve provider
+            Criteria criteria = new Criteria();
+
+            // Getting the name of the best provider
+            String provider = locationManager.getBestProvider(criteria, true);
+
+            // Getting Current Location
+            Location location = locationManager.getLastKnownLocation(provider);
+
+            if(location!=null) {
+                // Getting latitude of the current location
+                double latitude = location.getLatitude();
+
+                // Getting longitude of the current location
+                double longitude = location.getLongitude();
+
+                // Creating a LatLng object for the current location
+                LatLng latLng = new LatLng(latitude, longitude);
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
+            }
+        }
+
+        googleMap.setOnInfoWindowClickListener(this);
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        choseShop(listMarker.indexOf(marker));
     }
 
     @Override
@@ -58,10 +140,24 @@ public class ChoseShopActivity extends BaseActivity {
         return R.id.a_cs_coordinator_root;
     }
 
+    private void showShops(ListAnswerFlex listAnswerFlex){
+        googleMap.clear();
+        listMarker.clear();
+        for (AnswerFlex answerFlex : listAnswerFlex){
+            listMarker.add(googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
+                    .title(MARKER_BID_PRICE+" "+Helper.getStringWithCostPrefix(answerFlex.getPrice(), this))
+                    .snippet(MARKER_STORE + " "+answerFlex.getShop().getName())));
+        }
+    }
+
     private void assignView(){
         imageBouquet = getViewById(R.id.a_cs_image_bouquet);
         imageBack = getViewById(R.id.i_ab_image_back);
         listView = getViewById(R.id.a_cs_list_view_artists);
+        relativeContainerMap = getViewById(R.id.a_cs_relative_container_map);
+        imageSettingsOpen = getViewById(R.id.i_ab_image_settings_open);
+        imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
     }
@@ -87,10 +183,31 @@ public class ChoseShopActivity extends BaseActivity {
                 updateArtistsList();
             }
         });
+
+        imageSettingsOpen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                relativeContainerMap.setVisibility(View.VISIBLE);
+                swipeRefreshLayout.setVisibility(View.GONE);
+                imageSettingsClose.setVisibility(View.VISIBLE);
+                imageSettingsOpen.setVisibility(View.GONE);
+            }
+        });
+
+        imageSettingsClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                relativeContainerMap.setVisibility(View.GONE);
+                swipeRefreshLayout.setVisibility(View.VISIBLE);
+                imageSettingsClose.setVisibility(View.GONE);
+                imageSettingsOpen.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     private void initView(){
         imageBack.setVisibility(View.VISIBLE);
+        imageSettingsOpen.setVisibility(View.VISIBLE);
 
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
 
@@ -184,6 +301,7 @@ public class ChoseShopActivity extends BaseActivity {
                         listAnswerFlex.clear();
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
                         listAnswerFlexAdapter.notifyDataSetChanged();
+                        showShops(listAnswerFlex);
                     }
                 });
     }

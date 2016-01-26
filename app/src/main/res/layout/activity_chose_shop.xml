@@ -18,17 +18,40 @@
             android:background="@color/green"
             android:scaleType="centerCrop" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/a_cs_swipe_refresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="@dimen/margin_larger">
 
-            <ListView
-                android:id="@+id/a_cs_list_view_artists"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/a_cs_swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </android.support.v4.widget.SwipeRefreshLayout>
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/margin_larger">
+
+                <ListView
+                    android:id="@+id/a_cs_list_view_artists"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+            <RelativeLayout
+                android:id="@+id/a_cs_relative_container_map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+                <fragment
+                    android:id="@+id/a_cs_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:name="com.google.android.gms.maps.SupportMapFragment" />
+            </RelativeLayout>
+
+
+
+        </RelativeLayout>
+
+
     </LinearLayout>
 
 

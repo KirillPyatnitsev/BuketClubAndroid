@@ -86,17 +86,20 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addDataToOrder();
-                goToNextActivity();
+                if (addDataToOrder()){
+                    goToNextActivity();
+                }else{
+                    showSnackBar(getString(R.string.delivery_info_error));
+                }
             }
         });
 
         spinnerDeliveryTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0){
+                if (position == 0) {
                     currentDate = null;
-                }else{
+                } else {
                     if (!reseliction) {
                         new SlideDateTimePicker.Builder(getSupportFragmentManager())
                                 .setListener(slideDateTimeListener)
@@ -106,7 +109,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
                                 .setIndicatorColor(getResources().getColor(R.color.yellow))
                                 .build()
                                 .show();
-                    }else{
+                    } else {
                         reseliction = false;
                     }
                 }
@@ -160,18 +163,24 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
         }
     };
 
-    private void addDataToOrder() {
-        DataController.getInstance().getOrder().setComment(editComment.getText().toString());
+    private boolean addDataToOrder() {
         DataController.getInstance().getOrder().setRecipientPhone(editPhoneNumber.getText().toString());
         DataController.getInstance().getOrder().setRecipientName(editRecipientName.getText().toString());
         DataController.getInstance().getOrder().setAddress(editAddress.getText().toString());
+        DataController.getInstance().getOrder().setComment(editComment.getText().toString());
         DataController.getInstance().getOrder().setTimeDelivery(
-                currentDate != null? ISO8601Utils.format(currentDate) : null
+                currentDate != null ? ISO8601Utils.format(currentDate) : null
         );
+
+        return (!editPhoneNumber.getText().toString().isEmpty()
+                && editPhoneNumber.getText().toString().replaceAll("[^\\d.]", "").length() == 11
+                && !editRecipientName.getText().toString().isEmpty()
+                && !editAddress.getText().toString().isEmpty());
+
     }
 
     private void goToNextActivity() {
-        switch (DataController.getInstance().getSession().getAppMode()){
+        switch (DataController.getInstance().getSession().getAppMode()) {
             case Profile.TYPE_PRICE_FIX:
                 startActivity(new Intent(this, PaymentTypeActivity.class));
                 break;

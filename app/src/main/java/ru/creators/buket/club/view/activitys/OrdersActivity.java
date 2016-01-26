@@ -88,7 +88,6 @@ public class OrdersActivity extends BaseActivity {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         stopLoading();
-                        showSnackBar("Response fail");
                     }
 
                     @Override
@@ -97,7 +96,6 @@ public class OrdersActivity extends BaseActivity {
                         listOrder.clear();
                         listOrder.addAll(ordersResponse.getListOrder());
                         listOrderAdapter.notifyDataSetChanged();
-                        showSnackBar("Response done");
                     }
                 });
     }
