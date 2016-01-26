@@ -1,11 +1,14 @@
 package ru.creators.buket.club;
 
+import android.content.Context;
+
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.Session;
 import ru.creators.buket.club.model.lists.ListBouquet;
+import ru.creators.buket.club.view.activitys.BaseActivity;
 
 /**
  * Created by mifkamaz on 12/12/15.
@@ -27,7 +30,15 @@ public class DataController {
     private Bouquet bouquet;
     private Order order;
 
-    private int paymentType;
+    private BaseActivity baseActivity;
+
+    public BaseActivity getBaseActivity() {
+        return baseActivity;
+    }
+
+    public void setBaseActivity(BaseActivity baseActivity) {
+        this.baseActivity = baseActivity;
+    }
 
     public static DataController getOurInstance() {
         return ourInstance;

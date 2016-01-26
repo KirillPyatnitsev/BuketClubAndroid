@@ -1,14 +1,23 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.gcm.QuickstartPreferences;
+import ru.creators.buket.club.gcm.RegistrationIntentService;
 import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.Session;
@@ -23,6 +32,9 @@ import ru.creators.buket.club.web.response.SessionResponse;
 
 public class SplashScreenActivity extends BaseActivity {
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = "SplashScreenActivity";
+
     private Session session;
     private Profile profile;
     private PriceRange priceRange;
@@ -30,10 +42,34 @@ public class SplashScreenActivity extends BaseActivity {
 
     private int currentAppMode = 100;
 
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Log.d("Tag", "gcm_send_message");
+                } else {
+                    Log.d("Tag", "token eroor");
+                }
+            }
+        };
 
 //        session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
 //        if (session == null){
@@ -52,7 +88,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     private void createSession(){
         startLoading(false);
-        WebMethods.getInstance().createSession(getUniqueDeviceId(), null, new RequestListener<SessionResponse>() {
+        WebMethods.getInstance().createSession(getUniqueDeviceId(), PreferenceCache.getString(this, PreferenceCache.SHAREDPRED_GCM_TOKEN_KEY), new RequestListener<SessionResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
@@ -153,9 +189,9 @@ public class SplashScreenActivity extends BaseActivity {
 
                 profile = profileResponse.getProfile();
 
-                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode){
+                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode) {
                     generateTypePrice(accessToken);
-                }else{
+                } else {
                     loadBouquets(accessToken);
                     loadPriceRange(accessToken);
                 }
@@ -195,5 +231,21 @@ public class SplashScreenActivity extends BaseActivity {
 
             startActivity(new Intent(this, BucketsActivity.class));
         }
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 }

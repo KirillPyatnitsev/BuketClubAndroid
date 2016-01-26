@@ -36,6 +36,7 @@ public class BuketClubApplication  extends Application {
     @Override
     public void onTerminate() {
         spiceManager.shouldStop();
+        DataController.getInstance().setBaseActivity(null);
         super.onTerminate();
     }
 }

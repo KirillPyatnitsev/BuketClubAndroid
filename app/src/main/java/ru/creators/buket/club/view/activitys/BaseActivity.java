@@ -15,6 +15,7 @@ import com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService;
 import com.octo.android.robospice.SpiceManager;
 import com.transitionseverywhere.TransitionManager;
 
+import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
@@ -57,7 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         showSnackBar(getString(stringResId));
     }
 
-    protected void showSnackBar(String message){
+    public void showSnackBar(String message){
         Snackbar.make(getCoordinatorLayout(), message, Snackbar.LENGTH_LONG).show();
     }
 
@@ -136,7 +137,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void allProcessDone(){
 
-    };
+    }
 
     protected String getUniqueDeviceId(){
         return Settings.Secure.getString(getContentResolver(),
@@ -146,12 +147,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        spiceManager.start(this);
+        DataController.getInstance().setBaseActivity(this);
     }
 
     @Override
     protected void onStop() {
-//        spiceManager.shouldStop();
+        DataController.getInstance().setBaseActivity(null);
         super.onStop();
     }
 }
