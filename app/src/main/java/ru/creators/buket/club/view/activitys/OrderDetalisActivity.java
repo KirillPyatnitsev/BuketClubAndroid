@@ -19,7 +19,7 @@ import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 
-public class BouquetDeliveryStatusDetalisActivity extends BaseActivity {
+public class OrderDetalisActivity extends BaseActivity {
 
     private ImageView imageBack;
 
