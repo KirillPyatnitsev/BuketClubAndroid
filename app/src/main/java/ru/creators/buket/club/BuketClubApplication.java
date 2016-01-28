@@ -5,9 +5,11 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.crashlytics.android.Crashlytics;
 import com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService;
 import com.octo.android.robospice.SpiceManager;
 
+import io.fabric.sdk.android.Fabric;
 import ru.creators.buket.club.web.WebMethods;
 
 /**
@@ -27,6 +29,7 @@ public class BuketClubApplication  extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         WebMethods.getInstance().setSpiceManager(spiceManager);
         spiceManager.start(this);
     }

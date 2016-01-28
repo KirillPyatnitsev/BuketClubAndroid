@@ -96,5 +96,6 @@
     <string name="marker_bid_price">Предложенная цена: </string>
     <string name="marker_store">Магазин: </string>
     <string name="delivery_info_error">Пожалуста заполните данные о заказе. </string>
+    <string name="chose_shop_not_shop">Идёт поиск магазинов</string>
 
 </resources>

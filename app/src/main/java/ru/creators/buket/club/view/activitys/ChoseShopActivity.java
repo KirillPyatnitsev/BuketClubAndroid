@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 
 import com.elirex.fayeclient.FayeClient;
@@ -65,6 +66,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
     private RelativeLayout relativeContainerMap;
     private GoogleMap googleMap;
 
+    private TextView textShopNotFound;
 
     private List<Marker> listMarker;
 
@@ -84,6 +86,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         initView();
         initMap();
         listMarker = new ArrayList<>();
+
+
 
         sendOrder();
     }
@@ -159,6 +163,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         imageSettingsOpen = getViewById(R.id.i_ab_image_settings_open);
         imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
+        textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
+
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
     }
 
@@ -191,6 +197,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 swipeRefreshLayout.setVisibility(View.GONE);
                 imageSettingsClose.setVisibility(View.VISIBLE);
                 imageSettingsOpen.setVisibility(View.GONE);
+                textShopNotFound.setVisibility(View.GONE);
             }
         });
 
@@ -201,6 +208,11 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 imageSettingsClose.setVisibility(View.GONE);
                 imageSettingsOpen.setVisibility(View.VISIBLE);
+                if (listAnswerFlex.size()!=0){
+                    textShopNotFound.setVisibility(View.GONE);
+                }else{
+                    textShopNotFound.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -270,7 +282,6 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
 
                     @Override
                     public void onRequestSuccess(OrderResponse orderResponse) {
-                        showSnackBar("Заказ создан");
                         order = orderResponse.getOrder();
                         order.setBouquetItemId(order.getBouquetItem().getId());
                         initFaye();
@@ -301,6 +312,9 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                         listAnswerFlex.clear();
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
                         listAnswerFlexAdapter.notifyDataSetChanged();
+                        if (listAnswerFlex.size()!=0){
+                            textShopNotFound.setVisibility(View.GONE);
+                        }
                         showShops(listAnswerFlex);
                     }
                 });

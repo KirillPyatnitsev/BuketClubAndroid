@@ -3,9 +3,11 @@ package ru.creators.buket.club.view.activitys;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 
@@ -32,6 +34,8 @@ import ru.creators.buket.club.web.response.SessionResponse;
 
 public class SplashScreenActivity extends BaseActivity {
 
+    private boolean TEST_APPLICATION_MODE = true;
+
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "SplashScreenActivity";
 
@@ -42,7 +46,6 @@ public class SplashScreenActivity extends BaseActivity {
 
     private int currentAppMode = 100;
 
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,40 +53,48 @@ public class SplashScreenActivity extends BaseActivity {
         setContentView(R.layout.activity_splash_screen);
 
 
-        if (checkPlayServices()) {
+
+
+        SharedPreferences sharedPreferences =
+                PreferenceManager.getDefaultSharedPreferences(this);
+        boolean sentToken = sharedPreferences
+                .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
+
+        if (checkPlayServices() && !sentToken) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                boolean sentToken = sharedPreferences
-                        .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
-                if (sentToken) {
-                    Log.d("Tag", "gcm_send_message");
-                } else {
-                    Log.d("Tag", "token eroor");
-                }
-            }
-        };
+        if (TEST_APPLICATION_MODE) {
+            assignListener();
+        }else{
+            getViewById(R.id.a_ss_linear_buttons_container).setVisibility(View.GONE);
+            if (sentToken)
+                startApp(currentAppMode);
+        }
 
-//        session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
-//        if (session == null){
-//            createSession();
-//        }else{
-//            loadingAllData();
-//        }
-
-        assignListener();
+        LocalBroadcastManager.getInstance(this).registerReceiver(gcmRegistrationDone,
+                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
 
     @Override
     protected int getCoordinatorViewId() {
         return R.id.a_ss_coordinator_root;
+    }
+
+    private BroadcastReceiver gcmRegistrationDone = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (!TEST_APPLICATION_MODE)
+                startApp(currentAppMode);
+        }
+    };
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(gcmRegistrationDone);
+        super.onPause();
     }
 
     private void createSession(){
@@ -92,7 +103,6 @@ public class SplashScreenActivity extends BaseActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
-                showSnackBar("Create session error");
             }
 
             @Override
@@ -100,7 +110,6 @@ public class SplashScreenActivity extends BaseActivity {
                 saveSession(sessionResponse.getSession());
                 session = sessionResponse.getSession();
                 stopLoading();
-                showSnackBar("Create session done!!!");
 
                 getProfile(session.getAccessToken());
             }
@@ -144,14 +153,12 @@ public class SplashScreenActivity extends BaseActivity {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         stopLoading();
-                        showSnackBar("Load bouquets error");
                     }
 
                     @Override
                     public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
                         listBouquet = bouquetsResponse.getListBouquet();
                         stopLoading();
-                        showSnackBar("Load bouquets done");
                     }
                 });
     }
@@ -162,14 +169,12 @@ public class SplashScreenActivity extends BaseActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
-                showSnackBar("Load price range error");
             }
 
             @Override
             public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
                 priceRange = priceRangeResponse.getPriceRange();
                 stopLoading();
-                showSnackBar("Load price range done");
             }
         });
     }
@@ -180,7 +185,6 @@ public class SplashScreenActivity extends BaseActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
-                showSnackBar("Load profile error");
             }
 
             @Override
@@ -195,8 +199,6 @@ public class SplashScreenActivity extends BaseActivity {
                     loadBouquets(accessToken);
                     loadPriceRange(accessToken);
                 }
-
-                showSnackBar("Load profile done");
             }
         });
     }
@@ -207,14 +209,12 @@ public class SplashScreenActivity extends BaseActivity {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
-                showSnackBar("Generate type price error");
             }
 
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
                 getProfile(accessToken);
                 stopLoading();
-                showSnackBar("Generate type price done");
             }
         });
     }

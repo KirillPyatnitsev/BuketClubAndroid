@@ -152,7 +152,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        DataController.getInstance().setBaseActivity(null);
         super.onStop();
     }
 }

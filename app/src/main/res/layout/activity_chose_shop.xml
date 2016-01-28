@@ -47,6 +47,20 @@
                     android:name="com.google.android.gms.maps.SupportMapFragment" />
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/a_cs_text_shop_not_found"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+
+                android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+                android:gravity="center"
+                android:text="@string/chose_shop_not_shop"
+                android:textColor="@color/text_color_default"
+                android:textSize="@dimen/text_size_normal"
+                android:layout_marginLeft="@dimen/text_size_large"
+                android:layout_marginRight="@dimen/text_size_large"
+                android:visibility="visible" />
 
 
         </RelativeLayout>
@@ -72,6 +86,8 @@
         <include
             android:id="@+id/a_cs_action_bar"
             layout="@layout/include_action_bar" />
+
+
 
         <TextView
             android:id="@+id/a_o_text_action_bar_title"

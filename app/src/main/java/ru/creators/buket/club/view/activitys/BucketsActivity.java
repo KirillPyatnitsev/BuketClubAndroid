@@ -84,8 +84,6 @@ public class BucketsActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
-
-        showSnackBar("TYPE_PRICE:" + DataController.getInstance().getProfile().getTypePrice());
     }
 
     @Override

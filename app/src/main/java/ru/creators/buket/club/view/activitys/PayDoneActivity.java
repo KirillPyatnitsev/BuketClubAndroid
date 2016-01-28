@@ -56,7 +56,6 @@ public class PayDoneActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(OrderResponse orderResponse) {
-                showSnackBar("Заказ создан");
                 stopLoading();
                 startClosingTimer();
             }

@@ -23,6 +23,7 @@ import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
 import ru.creators.buket.club.web.request.ReviewRequest;
 import ru.creators.buket.club.web.request.SessionCreateRequest;
+import ru.creators.buket.club.web.request.SessionUpdateRequest;
 import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
@@ -160,4 +161,9 @@ public class WebMethods {
         mSpiceManager.execute(request, listener);
     }
 
+    public void sessionUpdateRequest(String accessToken, String deviceToken, RequestListener<DefaultResponse> listener){
+        SessionUpdateRequest request = new SessionUpdateRequest(accessToken, deviceToken);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
 }
