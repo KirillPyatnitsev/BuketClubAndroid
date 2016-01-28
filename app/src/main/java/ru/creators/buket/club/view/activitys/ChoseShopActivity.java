@@ -161,6 +161,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         listView = getViewById(R.id.a_cs_list_view_artists);
         relativeContainerMap = getViewById(R.id.a_cs_relative_container_map);
         imageSettingsOpen = getViewById(R.id.i_ab_image_settings_open);
+        imageSettingsOpen.setImageResource(R.drawable.searchmap_ico);
         imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
         textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
