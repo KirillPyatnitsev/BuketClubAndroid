@@ -25,6 +25,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -39,18 +40,23 @@ import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.AnswerFlex;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Pagination;
+import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.model.lists.ListAnswerFlex;
+import ru.creators.buket.club.model.lists.ListShop;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.view.adapters.ListAnswerFlexAdapter;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
+import ru.creators.buket.club.web.response.ShopListResponse;
 
 public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private ListAnswerFlex listAnswerFlex;
     private ListAnswerFlexAdapter listAnswerFlexAdapter;
+    private ListShop listShopAll;
 
     private ListView listView;
 
@@ -75,6 +81,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
     private String MARKER_BID_PRICE;
     private String MARKER_STORE;
 
+    private Pagination paginationShopGetList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +99,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
 
 
         sendOrder();
+        startLoadingShopList();
     }
 
     private void initMap() {
@@ -145,15 +154,24 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         return R.id.a_cs_coordinator_root;
     }
 
-    private void showShops(ListAnswerFlex listAnswerFlex) {
+    private void showShops(ListAnswerFlex listAnswerFlex, ListShop listShop) {
         googleMap.clear();
         listMarker.clear();
         for (AnswerFlex answerFlex : listAnswerFlex) {
+            listShop.removeByShopId(answerFlex.getShop().getId());
             listMarker.add(googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
                     .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this))
                     .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
         }
+        if (listShop != null)
+            for (Shop shop : listShop) {
+                if (shop != null)
+                    listMarker.add(googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(shop.getAddressLat(), shop.getAddressLng()))
+                            .title(MARKER_STORE + " " + shop.getName())
+                            .snippet("Test")));
+            }
     }
 
     private void assignView() {
@@ -335,12 +353,12 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                         if (listAnswerFlex.size() != 0) {
                             textShopNotFound.setVisibility(View.GONE);
                         }
-                        showShops(listAnswerFlex);
+                        showShops(listAnswerFlex, listShopAll);
                     }
                 });
     }
 
-    private void removeOrderRequest(int orderId){
+    private void removeOrderRequest(int orderId) {
         startLoading();
         WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
             @Override
@@ -355,5 +373,45 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 onBackPressed();
             }
         });
+    }
+
+    private void getShopListRequest(int page, int perPage) {
+        startLoading();
+        WebMethods.getInstance().listShopGetRequest(DataController.getInstance().getSession().getAccessToken(),
+                page, perPage, new RequestListener<ShopListResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(ShopListResponse shopListResponse) {
+                        stopLoading();
+                        loadAllShopList(shopListResponse.getListShop(), shopListResponse.getMeta().getPagination());
+                    }
+                });
+    }
+
+    private void startLoadingShopList() {
+        if (listShopAll == null)
+            listShopAll = new ListShop();
+        else
+            listShopAll.clear();
+
+        getShopListRequest(Pagination.FIRST_PAGE, Pagination.PER_PAGE);
+    }
+
+    private void loadAllShopList(ListShop listShop, Pagination pagination) {
+        listShopAll.addAll(listShop);
+        if (pagination.getNextPage() != 0) {
+            getShopListRequest(pagination.getNextPage(), Pagination.PER_PAGE);
+        } else {
+            showShops(listAnswerFlex, listShopAll);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
     }
 }

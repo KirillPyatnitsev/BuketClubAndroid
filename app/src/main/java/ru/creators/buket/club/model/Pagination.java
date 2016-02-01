@@ -8,6 +8,10 @@ import ru.creators.buket.club.consts.Fields;
  * Created by mifkamaz on 30/11/15.
  */
 public class Pagination {
+
+    public final static int FIRST_PAGE = 1;
+    public final static int PER_PAGE = 50;
+
     @JsonProperty(Fields.CURRENT_PAGE)
     private int currentPage;
 

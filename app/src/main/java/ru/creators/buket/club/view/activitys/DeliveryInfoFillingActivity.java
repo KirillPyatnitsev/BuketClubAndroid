@@ -2,6 +2,7 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -11,7 +12,12 @@ import android.widget.ImageView;
 
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.seatgeek.placesautocomplete.OnPlaceSelectedListener;
 import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
+import com.seatgeek.placesautocomplete.model.Place;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
 
@@ -47,6 +53,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
     Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private boolean reseliction = false;
+
+    private Place currentPlace = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +129,13 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
 
             }
         });
+
+        editAddress.setOnPlaceSelectedListener(new OnPlaceSelectedListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                currentPlace = place;
+            }
+        });
     }
 
     private void initView() {
@@ -172,6 +187,17 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
         DataController.getInstance().getOrder().setTimeDelivery(
                 currentDate != null ? ISO8601Utils.format(currentDate) : null
         );
+
+//        Places.GeoDataApi.getPlaceById(mGoogleApiClient, currentPlace.place_id)
+//                .setResultCallback(new ResultCallback<PlaceBuffer>() {
+//                    @Override
+//                    public void onResult(PlaceBuffer places) {
+//                        if (places.getStatus().isSuccess()) {
+//
+//                        }
+//                        places.release();
+//                    }
+//                });
 
         return (!editPhoneNumber.getText().toString().isEmpty()
                 && editPhoneNumber.getText().toString().replaceAll("[^\\d.]", "").length() == 11

@@ -116,6 +116,7 @@ public class Fields {
     public static final String BOUQUET_ITEM = "bouquet_item";
     public static final String BOUQUET_ITEM_ID = "bouquet_item_id";
     public static final String SHOP = "shop";
+    public static final String SHOPS = "shops";
     public static final String SHOP_ID = "shop_id";
     public static final String TIME_DELIVERY = "time_delivery";
     public static final String COMMENT = "comment";

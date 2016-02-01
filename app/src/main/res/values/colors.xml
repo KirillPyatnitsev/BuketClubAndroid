@@ -28,6 +28,8 @@
     <color name="pink_alpha_80">#80FF4081</color>
     <color name="white_alpha_80">#80ffffff</color>
 
+    <color name="blue_500">#2196F3</color>
+
     <color name="text_color_bouquet_size_unselected">@color/pink</color>
     <color name="text_color_bouquet_size_selected">@color/white</color>
 </resources>

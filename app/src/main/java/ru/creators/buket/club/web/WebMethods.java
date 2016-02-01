@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
@@ -25,6 +26,7 @@ import ru.creators.buket.club.web.request.ProfileGetRequest;
 import ru.creators.buket.club.web.request.ReviewRequest;
 import ru.creators.buket.club.web.request.SessionCreateRequest;
 import ru.creators.buket.club.web.request.SessionUpdateRequest;
+import ru.creators.buket.club.web.request.ShopsAllGetRequest;
 import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
@@ -34,6 +36,7 @@ import ru.creators.buket.club.web.response.OrdersResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
 import ru.creators.buket.club.web.response.ProfileResponse;
 import ru.creators.buket.club.web.response.SessionResponse;
+import ru.creators.buket.club.web.response.ShopListResponse;
 
 /**
  * Created by mifkamaz on 19/11/15.
@@ -172,5 +175,16 @@ public class WebMethods {
         OrderDeleteRequest request = new OrderDeleteRequest(accessToken, orderId);
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
+    }
+
+    public void listShopGetRequest(String accessToken, int page, int perPage, RequestListener<ShopListResponse> listener){
+        ShopsAllGetRequest request = new ShopsAllGetRequest(accessToken, page, perPage);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener){
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, requestListener);
     }
 }
