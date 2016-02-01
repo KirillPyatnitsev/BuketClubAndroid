@@ -144,10 +144,9 @@ public class PaymentTypeActivity extends BaseActivity {
     private void goToNextAct() {
         switch (currentPayType) {
             case PAY_CARD:
-                pay();
+                payYandexMoney();
                 break;
             case PAY_CASH:
-//                DataController.getInstance().getOrder().set
                 DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CASH);
                 DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CASH);
                 startActivity(PayDoneActivity.class);
@@ -163,7 +162,7 @@ public class PaymentTypeActivity extends BaseActivity {
         startActivity(new Intent(this, c));
     }
 
-    private void pay(){
+    private void payYandexMoney(){
 //        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
         PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
                 .setAmount(new BigDecimal(order.getPrice()))
