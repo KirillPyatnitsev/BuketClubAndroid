@@ -15,6 +15,7 @@ import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
 import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
 import ru.creators.buket.club.web.request.OrderCreateRequest;
+import ru.creators.buket.club.web.request.OrderDeleteRequest;
 import ru.creators.buket.club.web.request.OrderGetFlexibleAnswersRequest;
 import ru.creators.buket.club.web.request.OrderGetRequest;
 import ru.creators.buket.club.web.request.OrderPatchRequest;
@@ -163,6 +164,12 @@ public class WebMethods {
 
     public void sessionUpdateRequest(String accessToken, String deviceToken, RequestListener<DefaultResponse> listener){
         SessionUpdateRequest request = new SessionUpdateRequest(accessToken, deviceToken);
+        request.setRetryPolicy(getRetryPolicy());
+        mSpiceManager.execute(request, listener);
+    }
+
+    public void removeOrderRequest(String accessToken, int orderId, RequestListener<DefaultResponse> listener){
+        OrderDeleteRequest request = new OrderDeleteRequest(accessToken, orderId);
         request.setRetryPolicy(getRetryPolicy());
         mSpiceManager.execute(request, listener);
     }

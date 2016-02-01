@@ -1,6 +1,7 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -9,13 +10,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import com.elirex.fayeclient.FayeClient;
 import com.elirex.fayeclient.FayeClientListener;
@@ -42,6 +43,7 @@ import ru.creators.buket.club.model.lists.ListAnswerFlex;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.view.adapters.ListAnswerFlexAdapter;
 import ru.creators.buket.club.web.WebMethods;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 
@@ -88,11 +90,10 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         listMarker = new ArrayList<>();
 
 
-
         sendOrder();
     }
 
-    private void initMap(){
+    private void initMap() {
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.a_cs_map);
         mapFragment.getMapAsync(this);
@@ -118,7 +119,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
             // Getting Current Location
             Location location = locationManager.getLastKnownLocation(provider);
 
-            if(location!=null) {
+            if (location != null) {
                 // Getting latitude of the current location
                 double latitude = location.getLatitude();
 
@@ -144,18 +145,18 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         return R.id.a_cs_coordinator_root;
     }
 
-    private void showShops(ListAnswerFlex listAnswerFlex){
+    private void showShops(ListAnswerFlex listAnswerFlex) {
         googleMap.clear();
         listMarker.clear();
-        for (AnswerFlex answerFlex : listAnswerFlex){
+        for (AnswerFlex answerFlex : listAnswerFlex) {
             listMarker.add(googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
-                    .title(MARKER_BID_PRICE+" "+Helper.getStringWithCostPrefix(answerFlex.getPrice(), this))
-                    .snippet(MARKER_STORE + " "+answerFlex.getShop().getName())));
+                    .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this))
+                    .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
         }
     }
 
-    private void assignView(){
+    private void assignView() {
         imageBouquet = getViewById(R.id.a_cs_image_bouquet);
         imageBack = getViewById(R.id.i_ab_image_back);
         listView = getViewById(R.id.a_cs_list_view_artists);
@@ -169,11 +170,11 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                showExitDialog();
             }
         });
 
@@ -209,16 +210,16 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
                 imageSettingsClose.setVisibility(View.GONE);
                 imageSettingsOpen.setVisibility(View.VISIBLE);
-                if (listAnswerFlex.size()!=0){
+                if (listAnswerFlex.size() != 0) {
                     textShopNotFound.setVisibility(View.GONE);
-                }else{
+                } else {
                     textShopNotFound.setVisibility(View.VISIBLE);
                 }
             }
         });
     }
 
-    private void initView(){
+    private void initView() {
         imageBack.setVisibility(View.VISIBLE);
         imageSettingsOpen.setVisibility(View.VISIBLE);
 
@@ -229,7 +230,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         listView.setAdapter(listAnswerFlexAdapter);
     }
 
-    private void initFaye(){
+    private void initFaye() {
         MetaMessage metaMessageFixOrder = new MetaMessage();
         fayeClientOrder = new FayeClient(ServerConfig.SERVER_FAYE, metaMessageFixOrder);
         fayeClientOrder.setListener(new FayeClientListener() {
@@ -258,7 +259,25 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         fayeClientOrder.connectServer();
     }
 
-    private void choseShop(int shopPosition){
+    private void showExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                removeOrderRequest(order.getId());
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+            }
+        });
+
+        builder.setMessage(R.string.remove_order_dialog_text);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void choseShop(int shopPosition) {
         order.setShopId(Integer.toString(listAnswerFlex.get(shopPosition).getShop().getId()));
         order.setPrice(listAnswerFlex.get(shopPosition).getPrice());
         DataController.getInstance().setOrder(order);
@@ -269,7 +288,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         startActivity(new Intent(this, PaymentTypeActivity.class));
     }
 
-    private void sendOrder(){
+    private void sendOrder() {
         startLoading(false);
 
         WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
@@ -291,7 +310,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 });
     }
 
-    private void updateArtistsList(){
+    private void updateArtistsList() {
         if (!swipeRefreshLayout.isRefreshing())
             startLoading(false);
         WebMethods.getInstance().getFlexAnswers(
@@ -313,11 +332,28 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                         listAnswerFlex.clear();
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
                         listAnswerFlexAdapter.notifyDataSetChanged();
-                        if (listAnswerFlex.size()!=0){
+                        if (listAnswerFlex.size() != 0) {
                             textShopNotFound.setVisibility(View.GONE);
                         }
                         showShops(listAnswerFlex);
                     }
                 });
+    }
+
+    private void removeOrderRequest(int orderId){
+        startLoading();
+        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+                onBackPressed();
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                stopLoading();
+                onBackPressed();
+            }
+        });
     }
 }
