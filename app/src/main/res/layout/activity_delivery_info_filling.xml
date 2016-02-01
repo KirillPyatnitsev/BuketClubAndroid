@@ -7,7 +7,7 @@
     android:id="@+id/a_dif_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+    tools:context="ru.creators.buket.club.view.activitys.DeliveryInfoFillingActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -83,10 +83,16 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/text_address_delivery_1"/>
 
-                <EditText
+                <!--<EditText-->
+                    <!--android:id="@+id/a_dif_edit_delivery_address"-->
+                    <!--style="@style/text_view_normal"-->
+                    <!--android:singleLine="true"/>-->
+
+                <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
                     android:id="@+id/a_dif_edit_delivery_address"
-                    style="@style/text_view_normal"
-                    android:singleLine="true"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:pacv_googleMapsApiKey="@string/google_maps_server_key"/>
 
                 <TextView
                     style="@style/small_text.text_black"

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
 
@@ -33,7 +34,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity {
     private EditText editRecipientName;
     private EditText editPhoneNumber;
     private EditText editComment;
-    private EditText editAddress;
+    private PlacesAutocompleteTextView editAddress;
 
     private Button buttonNext;
 
