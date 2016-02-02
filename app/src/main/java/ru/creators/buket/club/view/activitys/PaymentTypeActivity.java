@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PaymentParams;
@@ -15,7 +17,10 @@ import java.math.BigDecimal;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.web.WebMethods;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.yandex.money.android.PaymentActivity;
 
 public class PaymentTypeActivity extends BaseActivity {
@@ -179,4 +184,5 @@ public class PaymentTypeActivity extends BaseActivity {
     protected int getCoordinatorViewId() {
         return R.id.a_pt_coordinator_root;
     }
+
 }

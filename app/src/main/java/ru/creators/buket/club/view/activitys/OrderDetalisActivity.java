@@ -2,10 +2,12 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.media.Image;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -39,6 +41,9 @@ public class OrderDetalisActivity extends BaseActivity {
     private ImageView imageBouquet;
     private ImageView imageArtistIcon;
 
+    private LinearLayout linearPickup;
+    private LinearLayout linearOnMap;
+
     private Order order = DataController.getInstance().getOrder();
 
     @Override
@@ -69,6 +74,8 @@ public class OrderDetalisActivity extends BaseActivity {
 
         imageBouquet = getViewById(R.id.a_bdsd_image_bouquet);
         imageArtistIcon = getViewById(R.id.a_bdsd_image_artist_icon);
+        linearOnMap = getViewById(R.id.a_bdsd_linear_on_map);
+        linearPickup = getViewById(R.id.a_bdsd_linear_pickup);
     }
 
     private void assignListener(){
@@ -76,6 +83,13 @@ public class OrderDetalisActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        linearOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mapIntent(order.getShop().getAddressLat(), order.getShop().getAddressLng());
             }
         });
     }
@@ -94,7 +108,18 @@ public class OrderDetalisActivity extends BaseActivity {
 
         textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
-        textAddress.setText(order.getAddress());
+
+
+        if (order.getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))
+            textAddress.setText(order.getAddress());
+        else{
+            textAddress.setVisibility(View.GONE);
+            linearPickup.setVisibility(View.VISIBLE);
+
+            if (order.getShop()!=null)
+                linearOnMap.setVisibility(View.VISIBLE);
+        }
+
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         if (order.getTimeDelivery() != null){
@@ -103,7 +128,7 @@ public class OrderDetalisActivity extends BaseActivity {
             textDeliveryTime.setText(getString(R.string.text_time_soon));
         }
 
-        textPayType.setText("Неизвестно");
+        textPayType.setText(getString(order.getPaymentTypeDesk()));
 
         if (order.getShop()!= null && order.getShop().getPhone() != null) {
             textShopPhone.setText(order.getShop().getPhone());
@@ -135,5 +160,16 @@ public class OrderDetalisActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         startActivity(new Intent(this, OrdersActivity.class));
+    }
+
+    public void mapIntent(float latitude, float longitude){
+        String label = "ABC Label";
+        String uriBegin = "geo:" + latitude + "," + longitude;
+        String query = latitude + "," + longitude + "(" + label + ")";
+        String encodedQuery = Uri.encode(query);
+        String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
+        Uri uri = Uri.parse(uriString);
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }

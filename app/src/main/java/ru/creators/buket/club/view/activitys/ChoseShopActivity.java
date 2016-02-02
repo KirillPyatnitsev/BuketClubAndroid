@@ -4,10 +4,13 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +24,9 @@ import android.widget.TextView;
 import com.elirex.fayeclient.FayeClient;
 import com.elirex.fayeclient.FayeClientListener;
 import com.elirex.fayeclient.MetaMessage;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,8 +38,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
@@ -52,7 +62,9 @@ import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.ShopListResponse;
 
-public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class ChoseShopActivity extends BaseActivity implements
+        OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private ListAnswerFlex listAnswerFlex;
     private ListAnswerFlexAdapter listAnswerFlexAdapter;
@@ -65,6 +77,7 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
     private ImageView imageSettingsClose;
     private ImageView imageBouquet;
 
+
     private SwipeRefreshLayout swipeRefreshLayout;
 
     private Order order = DataController.getInstance().getOrder();
@@ -75,13 +88,23 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
     private GoogleMap googleMap;
 
     private TextView textShopNotFound;
+    private TextView textSort;
 
-    private List<Marker> listMarker;
+
+    private List<Marker> listMarkerAnsweredShops;
+    private List<Marker> listMarkerNotAnsweredShops;
 
     private String MARKER_BID_PRICE;
     private String MARKER_STORE;
 
     private Pagination paginationShopGetList;
+
+    private GoogleApiClient mGoogleApiClient;
+
+    private Location mLastLocation;
+
+    private Comparator<AnswerFlex> selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,11 +118,74 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         assignListener();
         initView();
         initMap();
-        listMarker = new ArrayList<>();
+        listMarkerAnsweredShops = new ArrayList<>();
+        listMarkerNotAnsweredShops = new ArrayList<>();
 
-
-        sendOrder();
         startLoadingShopList();
+
+        if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)) {
+            if (mGoogleApiClient == null) {
+                mGoogleApiClient = new GoogleApiClient.Builder(this)
+                        .addConnectionCallbacks(this)
+                        .addOnConnectionFailedListener(this)
+                        .addApi(LocationServices.API)
+                        .build();
+            }
+        } else {
+            sendOrder();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        if (mGoogleApiClient != null)
+            mGoogleApiClient.disconnect();
+        super.onStop();
+    }
+
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        if (ActivityCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+            DataController.getInstance().getOrder().setAddress(addresses.get(0).getAddressLine(0));
+            DataController.getInstance().getOrder().setAddressLat(mLastLocation.getLatitude());
+            DataController.getInstance().getOrder().setAddressLng(mLastLocation.getLongitude());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sendOrder();
+        updateMapMarkers();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     private void initMap() {
@@ -114,7 +200,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            googleMap.setMyLocationEnabled(true);
+            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP))
+                googleMap.setMyLocationEnabled(true);
 
             // Getting LocationManager object from System Service LOCATION_SERVICE
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -146,7 +233,9 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
 
     @Override
     public void onInfoWindowClick(Marker marker) {
-        choseShop(listMarker.indexOf(marker));
+        if (listMarkerAnsweredShops.contains(marker)) {
+            choseShop(listMarkerAnsweredShops.indexOf(marker));
+        }
     }
 
     @Override
@@ -154,24 +243,55 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         return R.id.a_cs_coordinator_root;
     }
 
-    private void showShops(ListAnswerFlex listAnswerFlex, ListShop listShop) {
+    private void updateMapMarkers() {
         googleMap.clear();
-        listMarker.clear();
-        for (AnswerFlex answerFlex : listAnswerFlex) {
-            listShop.removeByShopId(answerFlex.getShop().getId());
-            listMarker.add(googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
-                    .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this))
-                    .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
-        }
-        if (listShop != null)
-            for (Shop shop : listShop) {
+        listMarkerNotAnsweredShops.clear();
+        listMarkerAnsweredShops.clear();
+        if (listAnswerFlex != null && listShopAll != null
+                && (mLastLocation != null || DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))) {
+
+            double lat;
+            double lng;
+
+            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(DataController.getInstance().getOrder().getAddressLat(),
+                                DataController.getInstance().getOrder().getAddressLng()))
+                        .title("Место доставки заказа.")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_ico))
+                        .snippet(DataController.getInstance().getOrder().getAddress()));
+                lat = DataController.getInstance().getOrder().getAddressLat();
+                lng = DataController.getInstance().getOrder().getAddressLng();
+            } else {
+                lat = mLastLocation.getLatitude();
+                lng = mLastLocation.getLongitude();
+            }
+
+
+            for (AnswerFlex answerFlex : listAnswerFlex) {
+                listShopAll.removeByShopId(answerFlex.getShop().getId());
+                answerFlex.setDistance(Helper.distFrom((float) lat, (float) lng
+                        , answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()));
+                listMarkerAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
+                        .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this) + ", " +
+                                distToString(answerFlex.getDistance()))
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
+                        .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
+            }
+
+            listAnswerFlexAdapter.notifyDataSetChanged();
+
+            for (Shop shop : listShopAll) {
                 if (shop != null)
-                    listMarker.add(googleMap.addMarker(new MarkerOptions()
+                    listMarkerNotAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(shop.getAddressLat(), shop.getAddressLng()))
                             .title(MARKER_STORE + " " + shop.getName())
-                            .snippet("Test")));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_gray))
+                            .snippet("Расстояние: " + distToString(Helper.distFrom((float) lat, (float) lng
+                                    , shop.getAddressLat(), shop.getAddressLng())))));
             }
+        }
     }
 
     private void assignView() {
@@ -186,6 +306,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
 
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
+
+        textSort = getViewById(R.id.a_o_text_action_bar_second);
     }
 
     private void assignListener() {
@@ -218,6 +340,8 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 imageSettingsClose.setVisibility(View.VISIBLE);
                 imageSettingsOpen.setVisibility(View.GONE);
                 textShopNotFound.setVisibility(View.GONE);
+                imageBouquet.setVisibility(View.GONE);
+                textSort.setVisibility(View.GONE);
             }
         });
 
@@ -230,9 +354,19 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                 imageSettingsOpen.setVisibility(View.VISIBLE);
                 if (listAnswerFlex.size() != 0) {
                     textShopNotFound.setVisibility(View.GONE);
+                    textSort.setVisibility(View.VISIBLE);
                 } else {
                     textShopNotFound.setVisibility(View.VISIBLE);
+                    textSort.setVisibility(View.GONE);
                 }
+                imageBouquet.setVisibility(View.VISIBLE);
+            }
+        });
+
+        textSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortDialog();
             }
         });
     }
@@ -349,11 +483,13 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
                             swipeRefreshLayout.setRefreshing(false);
                         listAnswerFlex.clear();
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
+                        Collections.sort(listAnswerFlex, selectedAnswersComporator);
                         listAnswerFlexAdapter.notifyDataSetChanged();
                         if (listAnswerFlex.size() != 0) {
                             textShopNotFound.setVisibility(View.GONE);
+                            textSort.setVisibility(View.VISIBLE);
                         }
-                        showShops(listAnswerFlex, listShopAll);
+                        updateMapMarkers();
                     }
                 });
     }
@@ -364,13 +500,13 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
-                onBackPressed();
+                finish();
             }
 
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
                 stopLoading();
-                onBackPressed();
+                finish();
             }
         });
     }
@@ -406,12 +542,39 @@ public class ChoseShopActivity extends BaseActivity implements OnMapReadyCallbac
         if (pagination.getNextPage() != 0) {
             getShopListRequest(pagination.getNextPage(), Pagination.PER_PAGE);
         } else {
-            showShops(listAnswerFlex, listShopAll);
+            updateMapMarkers();
         }
     }
 
     @Override
     public void onBackPressed() {
         showExitDialog();
+    }
+
+    private String distToString(float distMeters) {
+        if (distMeters >= 1000) {
+            return Integer.toString((int) distMeters / 1000) + " " + getString(R.string.kilometer);
+        } else {
+            return Integer.toString((int) distMeters) + " " + getString(R.string.meter);
+        }
+    }
+
+    private void showSortDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.chose_sort_type)
+                .setItems(R.array.sort_types, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
+                        } else {
+                            selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_DIST;
+                        }
+                        Collections.sort(listAnswerFlex, selectedAnswersComporator);
+                        listAnswerFlexAdapter.notifyDataSetChanged();
+                    }
+                });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

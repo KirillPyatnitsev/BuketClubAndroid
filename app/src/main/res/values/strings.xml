@@ -14,7 +14,9 @@
 
     <string name="text_flowers_chose_type">Выберите тип цветов</string>
     <string name="text_overall_chose_tone_bouquet">Выберите общий тон букета</string>
-    <string name="text_overall_chose_event">Выьерите событие</string>
+    <string name="text_overall_chose_event">Выберите событие</string>
+    <string name="text_overall_chose_time">Выберите время доставки</string>
+    <string name="text_overall_chose_shipping_type">Выберите способ доставки</string>
 
 
     <string name="text_little">Маленький</string>
@@ -45,6 +47,7 @@
     <string name="text_by_distance">Расстоянию</string>
 
     <string name="text_delivery_time">Время доставки</string>
+    <string name="text_delivery_type">Способ доставки</string>
 
     <string name="text_recipient">Получатель</string>
     <string name="text_contact_telephone_of_recipient">Контактный телефон получателя</string>
@@ -88,7 +91,8 @@
 
     <string name="text_finding_shop">Поиск магазина</string>
     <string name="text_in_process">Осуществляется доставка</string>
-    <string name="text_delivered">Доставлено</string>
+    <string name="text_in_process_pickup">Ваш букет ждет</string>
+    <string name="text_delivered">Букет получен.\nПожулйста, оставьте отзыв</string>
     <string name="text_order_done">Заказ выполенен</string>
     <string name="phone_mask">+7 (###) ###-##-##</string>
     <string name="telephone">Телефон</string>
@@ -96,6 +100,7 @@
     <string name="marker_bid_price">Предложенная цена: </string>
     <string name="marker_store">Магазин: </string>
     <string name="delivery_info_error">Пожалуста заполните данные о заказе. </string>
+    <string name="delivery_info_address_error">При заполнении выберите адресс из числа подсказок.</string>
     <string name="chose_shop_not_shop">Идёт поиск магазинов</string>
     
     <string name="remove_order_dialog_text">Если Вы перейдете обратно, Ваш заказ будет удален.\nПерейти?</string>
@@ -103,4 +108,21 @@
     <string name="no">Нет</string>
     <string name="cancel">Отмена</string>
 
+    <string name="pickup">Самовывоз</string>
+    <string name="delivery">Доставка</string>
+
+    <string name="on_map">На карте</string>
+
+    <string name="meter">м.</string>
+    <string name="kilometer">км.</string>
+
+    <string name="sort">Сортировка</string>
+    <string name="sort_underline"><u>Сортировка</u></string>
+    <string name="chose_sort_type">Выберите способ сортировки</string>
+    <string name="sort_by_price">Сортировка по цене</string>
+    <string name="sort_by_distance">Сортировка по расстоянию</string>
+    <string-array name="sort_types">
+        <item>@string/sort_by_price</item>
+        <item>@string/sort_by_distance</item>
+    </string-array>
 </resources>

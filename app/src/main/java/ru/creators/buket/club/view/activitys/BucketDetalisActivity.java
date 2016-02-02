@@ -56,6 +56,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private ImageView imageBouquet;
     private TextView textPrice;
+    private TextView textBouquetName;
 
     private TextView textTimeSoon;
     private TextView textTime;
@@ -112,6 +113,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
         textTime = getViewById(R.id.a_bd_text_time);
         textTimeSoon = getViewById(R.id.a_bd_text_time_soon);
+        textBouquetName = getViewById(R.id.a_ab_text_bouquet_name);
 
         textPrice = getViewById(R.id.a_ab_text_cost);
         imageBouquet = getViewById(R.id.a_bd_image_bouquet);
@@ -191,7 +193,7 @@ public class BucketDetalisActivity extends BaseActivity {
     private void initView(){
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
-
+        textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
         timeSoon = getString(R.string.text_time_soon);
         time = getString(R.string.text_time);
 
@@ -219,6 +221,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void selectSize(int sizeId) {
         if (sizeId != currentSize) {
+            textBouquetName.setText(bouquet.getBouquetNameBySize(sizeId));
             getSizeHolder(currentSize).setSelection(SizeViewHolder.UNSELECTED);
             getSizeHolder(sizeId).setSelection(SizeViewHolder.SELECTED);
             currentSize = sizeId;

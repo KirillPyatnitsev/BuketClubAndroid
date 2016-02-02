@@ -110,7 +110,7 @@ public class WebMethods {
         };
     }
 
-    public static void loadImage(Context context, String url, final ImageView imageView) {
+    public void loadImage(Context context, String url, final ImageView imageView) {
         Picasso.with(context)
                 .load(url)
                 .into(imageView);

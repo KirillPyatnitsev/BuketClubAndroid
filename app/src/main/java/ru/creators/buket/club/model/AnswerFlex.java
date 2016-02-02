@@ -2,6 +2,8 @@ package ru.creators.buket.club.model;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import java.util.Comparator;
+
 import ru.creators.buket.club.consts.Fields;
 
 /**
@@ -16,6 +18,8 @@ public class AnswerFlex {
     private Order order;
     @JsonProperty(Fields.SHOP)
     private Shop shop;
+
+    private float distance;
 
     public int getId() {
         return id;
@@ -48,4 +52,26 @@ public class AnswerFlex {
     public void setShop(Shop shop) {
         this.shop = shop;
     }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public static final Comparator<AnswerFlex> COMPARATOR_SORT_BY_DIST = new Comparator<AnswerFlex>() {
+        @Override
+        public int compare(AnswerFlex lhs, AnswerFlex rhs) {
+            return (int) (lhs.getDistance() - rhs.getDistance());
+        }
+    };
+
+    public static final Comparator<AnswerFlex> COMPARATOR_SORT_BY_PRICE = new Comparator<AnswerFlex>() {
+        @Override
+        public int compare(AnswerFlex lhs, AnswerFlex rhs) {
+            return lhs.getPrice() - rhs.getPrice();
+        }
+    };
 }

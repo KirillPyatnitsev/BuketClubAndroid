@@ -64,9 +64,14 @@ public class OrdersActivity extends BaseActivity {
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToBouquetsActivity();
+                onBackPressed();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        goToBouquetsActivity();
     }
 
     private void goToBouquetsActivity(){

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/a_dif_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -17,7 +16,7 @@
             android:id="@+id/a_dif_blur_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/a_dif_relative_action_bar_container"
@@ -64,78 +63,98 @@
             android:layout_below="@id/a_dif_relative_action_bar_container"
             android:layout_marginTop="-37dp">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="@dimen/margin_normal">
+                android:layout_height="match_parent">
 
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:text="@string/text_delivery_time"/>
 
-                <fr.ganfra.materialspinner.MaterialSpinner
-                    android:id="@+id/a_dif_spinner_delivery_type"
-                    style="@style/spinner" />
-
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_address_delivery_1"/>
-
-                <!--<EditText-->
-                    <!--android:id="@+id/a_dif_edit_delivery_address"-->
-                    <!--style="@style/text_view_normal"-->
-                    <!--android:singleLine="true"/>-->
-
-                <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
-                    android:id="@+id/a_dif_edit_delivery_address"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:pacv_googleMapsApiKey="@string/google_maps_server_key"/>
+                    android:layout_margin="@dimen/margin_normal"
+                    android:orientation="vertical">
 
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_recipient"/>
+                    <TextView
+                        style="@style/small_text.text_black"
+                        android:text="@string/text_delivery_type" />
 
-                <EditText
-                    android:id="@+id/a_dif_edit_recipient"
-                    style="@style/text_view_normal"
-                    android:singleLine="true"/>
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/a_dif_spinner_delivery_type_place"
+                        style="@style/spinner"/>
 
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_contact_telephone_of_recipient"/>
+                    <TextView
+                        style="@style/small_text.text_black"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/text_delivery_time" />
 
-                <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
-                    android:id="@+id/a_dif_edit_phone"
-                    style="@style/text_view_normal"
-                    custom_edit:mask="@string/phone_mask"
-                    android:inputType="number"/>
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/a_dif_spinner_delivery_type_time"
+                        style="@style/spinner"/>
 
-                <TextView
-                    style="@style/small_text.text_black"
-                    android:layout_marginTop="@dimen/margin_small"
-                    android:text="@string/text_contact_comment_to_order"/>
+                    <TextView
+                        android:id="@+id/a_dif_text_delivery_address"
+                        style="@style/small_text.text_black"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/text_address_delivery_1"
+                        android:visibility="gone"/>
 
-                <EditText
-                    android:id="@+id/a_dif_edit_comment"
-                    style="@style/text_view_normal"
-                    android:singleLine="true"/>
+                    <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
+                        android:id="@+id/a_dif_edit_delivery_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:pacv_googleMapsApiKey="@string/google_maps_server_key"
+                        android:visibility="gone"/>
 
-            </LinearLayout>
+                    <TextView
+                        style="@style/small_text.text_black"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/text_recipient" />
 
-            <Button
-                android:id="@+id/a_dif_button_next"
-                style="@style/button_default"
-                android:text="@string/text_continue"
-                android:layout_alignParentBottom="true"/>
+                    <EditText
+                        android:id="@+id/a_dif_edit_recipient"
+                        style="@style/text_view_normal"
+                        android:singleLine="true" />
+
+                    <TextView
+                        style="@style/small_text.text_black"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/text_contact_telephone_of_recipient" />
+
+                    <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                        android:id="@+id/a_dif_edit_phone"
+                        style="@style/text_view_normal"
+                        android:inputType="number"
+                        custom_edit:mask="@string/phone_mask" />
+
+                    <TextView
+                        style="@style/small_text.text_black"
+                        android:layout_marginTop="@dimen/margin_small"
+                        android:text="@string/text_contact_comment_to_order" />
+
+                    <EditText
+                        android:id="@+id/a_dif_edit_comment"
+                        style="@style/text_view_normal"
+                        android:singleLine="true" />
+
+                     <LinearLayout
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content">
+                         <Button
+                             android:id="@+id/a_dif_button_next"
+                             style="@style/button_default"
+                             android:text="@string/text_continue"
+                             android:layout_marginBottom="@dimen/margin_small"/>
+                     </LinearLayout>
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
 
         </RelativeLayout>
 
-        <include layout="@layout/include_progress"/>
+        <include layout="@layout/include_progress" />
 
     </RelativeLayout>
 

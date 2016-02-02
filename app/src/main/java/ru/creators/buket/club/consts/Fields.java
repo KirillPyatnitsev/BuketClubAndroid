@@ -6,6 +6,7 @@ package ru.creators.buket.club.consts;
 public class Fields {
     public static final String APP_MODE = "app_mode";
     public static final String ID = "id";
+    public static final String SHIPPING_TYPE = "shipping_type";
 
     public static final String FIRST_NAME = "first_name";
     public static final String LAST_NAME = "last_name";

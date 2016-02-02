@@ -22,15 +22,20 @@ import org.florescu.android.rangeseekbar.RangeSeekBar;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.consts.Rest;
+import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.lists.ListBouquet;
 import ru.creators.buket.club.model.lists.ListDictionaryItem;
+import ru.creators.buket.club.model.lists.ListOrder;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.view.adapters.GridAdapterBouquet;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.BouquetsResponse;
+import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
+import ru.creators.buket.club.web.response.OrdersResponse;
 
 public class BucketsActivity extends BaseActivity {
 
@@ -84,6 +89,10 @@ public class BucketsActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+
+        if (DataController.getInstance().getSession().getAppMode() == ApplicationMode.COST_FLEXIBLE){
+            getOrders();
+        }
     }
 
     @Override
@@ -363,5 +372,47 @@ public class BucketsActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         return;
+    }
+
+    private void getOrders(){
+        startLoading(false);
+        WebMethods.getInstance().getOrders(
+                DataController.getInstance().getSession().getAccessToken(),
+                new RequestListener<OrdersResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(OrdersResponse ordersResponse) {
+                        stopLoading();
+                        if (ordersResponse.getListOrder()!=null && ordersResponse.getListOrder().size()!=0)
+                            removeOrders(ordersResponse.getListOrder());
+                    }
+                });
+    }
+
+    private void removeOrders(ListOrder listOrder){
+        for (Order order : listOrder){
+            if (order.getStatusIndex() == Order.STATUS_FILLING_SHOP_INDEX){
+                removeOrderRequest(order.getId());
+            }
+        }
+    }
+
+    private void removeOrderRequest(int orderId) {
+        startLoading();
+        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                stopLoading();
+            }
+        });
     }
 }

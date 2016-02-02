@@ -35,18 +35,6 @@
                     android:layout_height="match_parent"/>
             </android.support.v4.widget.SwipeRefreshLayout>
 
-            <RelativeLayout
-                android:id="@+id/a_cs_relative_container_map"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-                <fragment
-                    android:id="@+id/a_cs_map"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:name="com.google.android.gms.maps.SupportMapFragment" />
-            </RelativeLayout>
-
             <TextView
                 android:id="@+id/a_cs_text_shop_not_found"
                 android:layout_width="wrap_content"
@@ -59,8 +47,7 @@
                 android:textColor="@color/text_color_default"
                 android:textSize="@dimen/text_size_normal"
                 android:layout_marginLeft="@dimen/text_size_large"
-                android:layout_marginRight="@dimen/text_size_large"
-                android:visibility="visible" />
+                android:layout_marginRight="@dimen/text_size_large" />
 
 
         </RelativeLayout>
@@ -68,6 +55,18 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/a_cs_relative_container_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginTop="120dp">
+        <fragment
+            android:id="@+id/a_cs_map"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="com.google.android.gms.maps.SupportMapFragment" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/a_cs_relative_action_bar_container"
@@ -102,6 +101,20 @@
             android:textColor="@color/text_color_default"
             android:textSize="@dimen/text_size_large"
             android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/a_o_text_action_bar_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_centerHorizontal="true"
+
+            android:layout_marginTop="@dimen/margin_normal"
+            android:gravity="center"
+            android:text="@string/sort_underline"
+            android:textColor="@color/text_color_default"
+            android:textSize="@dimen/text_size_normal"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

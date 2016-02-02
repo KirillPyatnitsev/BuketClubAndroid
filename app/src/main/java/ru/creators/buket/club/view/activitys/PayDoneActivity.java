@@ -2,6 +2,7 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -11,6 +12,7 @@ import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
@@ -24,6 +26,9 @@ public class PayDoneActivity extends BaseActivity {
         setContentView(R.layout.activity_pay_done);
 
         sendOrder();
+        if (DataController.getInstance().getOrder().getTypePaymentIndex() == Order.TYPE_PAYMENT_INDEX_CARD){
+            getViewById(R.id.a_pd_text_action_bar_title).setVisibility(View.VISIBLE);
+        }
     }
 
     private void startClosingTimer(){
@@ -33,7 +38,7 @@ public class PayDoneActivity extends BaseActivity {
             @Override
             public void run() {
 
-                goToBouquetsActivity();
+                goToOrderDetais();
 
                 // If you want to call Activity then call from here for 5 seconds it automatically call and your image disappear....
             }
@@ -42,6 +47,10 @@ public class PayDoneActivity extends BaseActivity {
 
     private void goToBouquetsActivity(){
         startActivity(new Intent(this, BucketsActivity.class));
+    }
+
+    private void goToOrderDetais(){
+        startActivity(new Intent(this, OrderDetalisActivity.class));
     }
 
     private void sendOrder(){
@@ -58,6 +67,7 @@ public class PayDoneActivity extends BaseActivity {
             public void onRequestSuccess(OrderResponse orderResponse) {
                 stopLoading();
                 startClosingTimer();
+                DataController.getInstance().setOrder(orderResponse.getOrder());
             }
         };
 

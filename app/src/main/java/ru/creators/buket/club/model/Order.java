@@ -16,6 +16,12 @@ import ru.creators.buket.club.consts.Fields;
 //@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
 
+    public static final String DELIVERY_TYPE_PICKUP = "pickup";
+    public static final String DELIVERY_TYPE_ADDRESS = "address";
+
+    public static final int DELIVERY_TYPE_PICKUP_DESK_RES_ID = R.string.pickup;
+    public static final int DELIVERY_TYPE_ADDRESS_DESK_RES_ID = R.string.delivery;
+
     public static final int STATUS_FILLING_SHOP_INDEX = 0;
     public static final int STATUS_IN_PROCESS_INDEX = 1;
     public static final int STATUS_DELIVERED_INDEX = 2;
@@ -26,15 +32,19 @@ public class Order {
     public static final String TYPE_PAYMENT_INDEX_CASH = "0";
     public static final String TYPE_PAYMENT_INDEX_CARD = "1";
 
+    public static final int TYPE_PAYMENT_INDEX_CARD_DESK = R.string.text_in_credit_card;
+    public static final int TYPE_PAYMENT_INDEX_CASH_DESK = R.string.text_in_cash;
+
     private static final String STATUS_FILLING_SHOP = "finding_shop";
     private static final String STATUS_IN_PROCESS = "in_progress";
     private static final String STATUS_DELIVERED = "delivered";
     private static final String STATUS_DONE = "done";
 
     private static final int STATUS_FILLING_SHOP_DESC = R.string.text_finding_shop;
-    private static final int STATUS_IN_PROCESS_DESC =  R.string.text_in_process;
-    private static final int STATUS_DELIVERED_DESC =  R.string.text_delivered;
-    private static final int STATUS_DONE_DESC =  R.string.text_order_done;
+    private static final int STATUS_IN_PROCESS_DESC = R.string.text_in_process;
+    private static final int STATUS_IN_PROCESS_DESC_PICKUP = R.string.text_in_process_pickup;
+    private static final int STATUS_DELIVERED_DESC = R.string.text_delivered;
+    private static final int STATUS_DONE_DESC = R.string.text_order_done;
 
     @JsonProperty(Fields.ID)
     private int id;
@@ -101,6 +111,9 @@ public class Order {
 
     @JsonProperty(Fields.TYPE_PAYMENT)
     private String typePayment;
+
+    @JsonProperty(Fields.SHIPPING_TYPE)
+    private String shippingType;
 
     @JsonProperty(Fields.TYPE_PAYMENT_INDEX)
     private String typePaymentIndex;
@@ -282,12 +295,15 @@ public class Order {
     }
 
     @JsonIgnore
-    public int getStatusDescRes(){
-        switch (statusIndex){
+    public int getStatusDescRes() {
+        switch (statusIndex) {
             case STATUS_FILLING_SHOP_INDEX:
                 return STATUS_FILLING_SHOP_DESC;
             case STATUS_IN_PROCESS_INDEX:
-                return STATUS_IN_PROCESS_DESC;
+                if (shippingType.equals(DELIVERY_TYPE_ADDRESS))
+                    return STATUS_IN_PROCESS_DESC;
+                else
+                    return STATUS_IN_PROCESS_DESC_PICKUP;
             case STATUS_DELIVERED_INDEX:
                 return STATUS_DELIVERED_DESC;
             case STATUS_DONE_INDEX:
@@ -298,7 +314,7 @@ public class Order {
     }
 
     @JsonIgnore
-    public Order getOrderForServer(){
+    public Order getOrderForServer() {
         Order order = new Order();
 
         order.setPrice(this.getPrice());
@@ -315,8 +331,39 @@ public class Order {
         order.setTimeDelivery(this.getTimeDelivery());
         order.setComment(this.getComment());
         order.setShopId(this.getShopId());
+        order.setShippingType(this.getShippingType());
 
         return order;
+    }
+
+    public String getShippingType() {
+        return shippingType;
+    }
+
+    public void setShippingType(String shippingType) {
+        this.shippingType = shippingType;
+    }
+
+    @JsonIgnore
+    public int getDeliveryTypeResId() {
+        return getDeliveryTypeResId(shippingType);
+    }
+
+    @JsonIgnore
+    public int getDeliveryTypeResId(String deliveryType) {
+        if (deliveryType != null && deliveryType.equals(DELIVERY_TYPE_PICKUP)) {
+            return DELIVERY_TYPE_PICKUP_DESK_RES_ID;
+        } else {
+            return DELIVERY_TYPE_ADDRESS_DESK_RES_ID;
+        }
+    }
+
+    @JsonIgnore
+    public int getPaymentTypeDesk() {
+        if (typePayment != null && typePayment.equals(TYPE_PAYMENT_CARD))
+            return TYPE_PAYMENT_INDEX_CARD_DESK;
+        else
+            return TYPE_PAYMENT_INDEX_CASH_DESK;
     }
 
     public Profile getUser() {

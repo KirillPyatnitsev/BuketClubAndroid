@@ -203,6 +203,16 @@
                     android:textSize="@dimen/text_size_large"
                     android:layout_gravity="center"/>
 
+                <TextView
+                    android:id="@+id/a_ab_text_bouquet_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_normal"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="@dimen/margin_normal"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -233,6 +243,7 @@
                         android:textColor="@color/black"
                         android:textSize="@dimen/text_size_large"
                         android:layout_toRightOf="@id/a_bd_text_dash_cost"/>
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -240,7 +251,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/margin_small"
-                    android:visibility="invisible">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/a_bd_text_dash_delivery"
@@ -271,7 +282,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/a_bd_text_dash_time"

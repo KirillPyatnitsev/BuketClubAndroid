@@ -80,6 +80,7 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
             holder.textArtistName.setText(answerFlex.getShop().getName());
             holder.textBouquetCost.setText(Helper.getStringWithCostPrefix(answerFlex.getPrice(), context));
             holder.ratingBar.setRating(answerFlex.getShop().getCachedRating());
+            holder.textDistance.setText(distToString(answerFlex.getDistance()));
         }
 
         return convertView;
@@ -95,5 +96,13 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
         TextView textDistance;
         RatingBar ratingBar;
         ImageView imageArtistLogo;
+    }
+
+    private String distToString(float distMeters) {
+        if (distMeters >= 1000) {
+            return Integer.toString((int) distMeters / 1000) + " " + context.getString(R.string.kilometer);
+        } else {
+            return Integer.toString((int) distMeters) + " " + context.getString(R.string.meter);
+        }
     }
 }
