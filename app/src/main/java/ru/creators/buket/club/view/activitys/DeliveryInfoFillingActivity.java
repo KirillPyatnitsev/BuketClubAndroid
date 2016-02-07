@@ -284,7 +284,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 currentDate != null ? ISO8601Utils.format(currentDate) : null
         );
         DataController.getInstance().getOrder().setShippingType(currentShippingType);
-
+        DataController.getInstance().getOrder().setShopId(null);
+        DataController.getInstance().getOrder().setShop(null);
         return (!editPhoneNumber.getText().toString().isEmpty()
                 && editPhoneNumber.getText().toString().replaceAll("[^\\d.]", "").length() == 11
                 && !editRecipientName.getText().toString().isEmpty()

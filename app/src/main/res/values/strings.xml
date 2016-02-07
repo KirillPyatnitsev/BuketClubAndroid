@@ -101,7 +101,7 @@
     <string name="marker_store">Магазин: </string>
     <string name="delivery_info_error">Пожалуста заполните данные о заказе. </string>
     <string name="delivery_info_address_error">При заполнении выберите адресс из числа подсказок.</string>
-    <string name="chose_shop_not_shop">Идёт поиск магазинов</string>
+    <string name="chose_shop_not_shop">Пожалуйста, подождите, идёт поиск исполнителей</string>
     
     <string name="remove_order_dialog_text">Если Вы перейдете обратно, Ваш заказ будет удален.\nПерейти?</string>
     <string name="yes">Да</string>
