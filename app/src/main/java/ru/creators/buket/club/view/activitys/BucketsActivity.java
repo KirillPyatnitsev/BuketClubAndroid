@@ -36,6 +36,7 @@ import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.DictionaryResponse;
 import ru.creators.buket.club.web.response.OrdersResponse;
+import ru.creators.buket.club.web.response.PriceRangeResponse;
 
 public class BucketsActivity extends BaseActivity {
 
@@ -58,6 +59,7 @@ public class BucketsActivity extends BaseActivity {
     private MaterialSpinner spinnerDayEvent;
 
     private GridView gridView;
+    private TextView textNotFindBouquets;
 
     private GridAdapterBouquet gridAdapterBouquet;
 
@@ -86,9 +88,11 @@ public class BucketsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buckets);
 
+        loadBouquets(DataController.getInstance().getSession().getAccessToken());
+        loadPriceRange(DataController.getInstance().getSession().getAccessToken());
         assignView();
         assignListener();
-        initView();
+//        initView();
 
         if (DataController.getInstance().getSession().getAppMode() == ApplicationMode.COST_FLEXIBLE){
             getOrders();
@@ -121,6 +125,8 @@ public class BucketsActivity extends BaseActivity {
         spinnerFlowerType = getViewById(R.id.i_bf_spinner_flowers_type);
         spinnerFlowerClor = getViewById(R.id.i_bf_spinner_tone_bouquet);
         spinnerDayEvent = getViewById(R.id.i_bf_spinner_chose_event);
+
+        textNotFindBouquets = getViewById(R.id.a_b_text_not_find);
     }
 
     private void assignListener() {
@@ -213,16 +219,18 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void initView() {
-        imageOpenFilter.setVisibility(View.VISIBLE);
-        imageOrders.setVisibility(View.VISIBLE);
-        setSpinnerData(priceRange.getMinPrice(), priceRange.getMaxPrice());
+        if (priceRange!=null && listBouquet!=null) {
+            imageOpenFilter.setVisibility(View.VISIBLE);
+            imageOrders.setVisibility(View.VISIBLE);
+            setSpinnerData(priceRange.getMinPrice(), priceRange.getMaxPrice());
 
-        DisplayMetrics displaymetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-        gridAdapterBouquet = new GridAdapterBouquet(listBouquet, this, displaymetrics.widthPixels);
-        gridView.setAdapter(gridAdapterBouquet);
+            DisplayMetrics displaymetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+            gridAdapterBouquet = new GridAdapterBouquet(listBouquet, this, displaymetrics.widthPixels);
+            gridView.setAdapter(gridAdapterBouquet);
 
-        loadAllDictioay();
+            loadAllDictioay();
+        }
     }
 
     private void openFilter() {
@@ -330,17 +338,17 @@ public class BucketsActivity extends BaseActivity {
     @Override
     protected void allProcessDone() {
         if (dictonaryFlowerTypes.size() != 0 && adapterFlowerTypes == null) {
-            adapterFlowerTypes = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFlowerTypes.getValuesArray());
+            adapterFlowerTypes = new ArrayAdapter<String>(this, R.layout.list_item_spiner, R.id.li_s_text, dictonaryFlowerTypes.getValuesArray());
             spinnerFlowerType.setAdapter(adapterFlowerTypes);
         }
 
         if (dictonaryFloverColors.size() != 0 && adapterFloverColors == null) {
-            adapterFloverColors = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryFloverColors.getValuesArray());
+            adapterFloverColors = new ArrayAdapter<String>(this,  R.layout.list_item_spiner, R.id.li_s_text, dictonaryFloverColors.getValuesArray());
             spinnerFlowerClor.setAdapter(adapterFloverColors);
         }
 
         if (dictonaryDayEvents.size() != 0 && adapterDayEvents == null) {
-            adapterDayEvents = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dictonaryDayEvents.getValuesArray());
+            adapterDayEvents = new ArrayAdapter<String>(this,  R.layout.list_item_spiner, R.id.li_s_text, dictonaryDayEvents.getValuesArray());
             spinnerDayEvent.setAdapter(adapterDayEvents);
         }
     }
@@ -363,6 +371,11 @@ public class BucketsActivity extends BaseActivity {
                     public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
                         listBouquet.clear();
                         listBouquet.addAll(bouquetsResponse.getListBouquet());
+                        if (listBouquet.isEmpty()){
+                            textNotFindBouquets.setVisibility(View.VISIBLE);
+                        }else{
+                            textNotFindBouquets.setVisibility(View.GONE);
+                        }
                         gridAdapterBouquet.notifyDataSetChanged();
                         stopLoading();
                     }
@@ -387,7 +400,7 @@ public class BucketsActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(OrdersResponse ordersResponse) {
                         stopLoading();
-                        if (ordersResponse.getListOrder()!=null && ordersResponse.getListOrder().size()!=0)
+                        if (ordersResponse.getListOrder() != null && ordersResponse.getListOrder().size() != 0)
                             removeOrders(ordersResponse.getListOrder());
                     }
                 });
@@ -415,4 +428,40 @@ public class BucketsActivity extends BaseActivity {
             }
         });
     }
+
+    private void loadBouquets(String accessToken){
+        startLoading(false);
+        WebMethods.getInstance().loadBouquets(accessToken, -1, -1, -1, -1, -1, 1, 200,
+                new RequestListener<BouquetsResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
+                        listBouquet = bouquetsResponse.getListBouquet();
+                        initView();
+                        stopLoading();
+                    }
+                });
+    }
+
+    private void loadPriceRange(String accessToken){
+        startLoading(false);
+        WebMethods.getInstance().loadPriceRange(accessToken, new RequestListener<PriceRangeResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+            }
+
+            @Override
+            public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
+                priceRange = priceRangeResponse.getPriceRange();
+                initView();
+                stopLoading();
+            }
+        });
+    }
+
 }

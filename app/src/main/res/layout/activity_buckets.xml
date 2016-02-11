@@ -145,14 +145,37 @@
                     android:textColor="@color/gray"/>
             </LinearLayout>
 
-            <GridView
-                android:id="@+id/a_b_grid_view_buckets"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/a_b_costs_container"
-                android:horizontalSpacing="@dimen/margin_small"
-                android:verticalSpacing="@dimen/margin_smaller"
-                android:numColumns="2"/>
+                android:layout_below="@id/a_b_costs_container">
+
+                <GridView
+                    android:id="@+id/a_b_grid_view_buckets"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:horizontalSpacing="@dimen/margin_small"
+                    android:verticalSpacing="@dimen/margin_smaller"
+                    android:numColumns="2"/>
+
+                <TextView
+                    android:id="@+id/a_b_text_not_find"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+
+                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+                    android:gravity="center"
+                    android:text="@string/not_find_bouquets"
+                    android:textColor="@color/text_color_default"
+                    android:textSize="@dimen/text_size_normal"
+                    android:layout_marginLeft="@dimen/text_size_large"
+                    android:layout_marginRight="@dimen/text_size_large"
+                    android:visibility="gone"/>
+
+            </RelativeLayout>
+
+
 
         </RelativeLayout>
 

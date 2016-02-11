@@ -260,7 +260,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
 //        editAddress.setText(DataController.getInstance().getOrder().getAddress());
 
-        delivetyTimeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, deliveryTime);
+        delivetyTimeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
 
         spinnerDeliveryTime.setAdapter(delivetyTimeAdapter);
 
@@ -271,7 +271,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         shippingTypes.add(getString(R.string.pickup));
         shippingTypes.add(getString(R.string.delivery));
 
-        shippingTypeAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, shippingTypes);
+        shippingTypeAdapter = new ArrayAdapter<String>(this,  R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
         spinnerDeliveryType.setAdapter(shippingTypeAdapter);
     }
 

@@ -111,7 +111,35 @@
 
             android:layout_marginTop="@dimen/margin_normal"
             android:gravity="center"
-            android:text="@string/sort_underline"
+            android:text="@string/sort"
+            android:textColor="@color/text_color_default"
+            android:textSize="@dimen/text_size_normal"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/a_o_text_action_bar_second_show_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_centerHorizontal="true"
+
+            android:layout_marginTop="@dimen/margin_normal"
+            android:gravity="center"
+            android:text="@string/see_map"
+            android:textColor="@color/text_color_default"
+            android:textSize="@dimen/text_size_normal"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/a_o_text_action_bar_second_show_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_centerHorizontal="true"
+
+            android:layout_marginTop="@dimen/margin_normal"
+            android:gravity="center"
+            android:text="@string/see_list"
             android:textColor="@color/text_color_default"
             android:textSize="@dimen/text_size_normal"
             android:visibility="gone" />

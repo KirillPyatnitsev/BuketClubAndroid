@@ -10,8 +10,9 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
 
+import ru.creators.buket.club.DataController;
+import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
-import ru.creators.buket.club.web.request.BaseRequest;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
 import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
@@ -56,7 +57,8 @@ public class WebMethods {
         return mSpiceManager;
     }
 
-    public WebMethods() {}
+    public WebMethods() {
+    }
 
     public WebMethods(SpiceManager mSpiceManager) {
         this.mSpiceManager = mSpiceManager;
@@ -64,31 +66,84 @@ public class WebMethods {
 
     private SpiceManager mSpiceManager;
 
-    public void createSession(String uuid, String deviceToken, RequestListener<SessionResponse> listener){
-        SessionCreateRequest request = new SessionCreateRequest(uuid, deviceToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
+    public void createSession(String uuid, String deviceToken, RequestListener<SessionResponse> listener) {
+        execute(new SessionCreateRequest(uuid, deviceToken), listener);
     }
 
     public void loadBouquets(String accessToken, int floverTypeId,
-                              int floverColorId, int dayEventId,
-                              int minPrice, int maxPrice, int page, int perPage,
-                              RequestListener<BouquetsResponse> listener){
-        BouquetsGetRequest request = new BouquetsGetRequest(accessToken, floverTypeId, floverColorId, dayEventId, minPrice, maxPrice, page, perPage);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
+                             int floverColorId, int dayEventId,
+                             int minPrice, int maxPrice, int page, int perPage,
+                             RequestListener<BouquetsResponse> listener) {
+        execute(new BouquetsGetRequest(accessToken, floverTypeId, floverColorId, dayEventId, minPrice, maxPrice, page, perPage), listener);
     }
 
-    public void loadPriceRange(String accessToken, RequestListener<PriceRangeResponse> listener){
-        PriceRangeGetRequest request = new PriceRangeGetRequest(accessToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
+    public void loadPriceRange(String accessToken, RequestListener<PriceRangeResponse> listener) {
+        execute(new PriceRangeGetRequest(accessToken), listener);
     }
 
-    public void getProfile(String accessToken, RequestListener<ProfileResponse> listener){
-        ProfileGetRequest request = new ProfileGetRequest(accessToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
+    public void getProfile(String accessToken, RequestListener<ProfileResponse> listener) {
+        execute(new ProfileGetRequest(accessToken), listener);
+    }
+
+    public void loadImage(Context context, String url, final ImageView imageView) {
+        Picasso.with(context)
+                .load(url)
+                .into(imageView);
+        imageView.requestLayout();
+    }
+
+    public void getDictionary(String accessToken, String dictionaryType, RequestListener<DictionaryResponse> listener) {
+        execute(new DictionaryGetRequest(accessToken, dictionaryType), listener);
+    }
+
+    public void sendOrder(String accessToken, Order order, RequestListener<OrderResponse> listener) {
+        execute(new OrderCreateRequest(accessToken, order), listener);
+    }
+
+    public void getOrders(String accessToken, RequestListener<OrdersResponse> listener) {
+        execute(new OrdersGetRequest(accessToken), listener);
+    }
+
+    public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener) {
+        execute(new GenerateTypePriceRequest(accessToken), listener);
+    }
+
+    public void getFlexAnswers(String accessToken, int orderId, RequestListener<ListAnswerFlexResponse> listener) {
+        execute(new OrderGetFlexibleAnswersRequest(accessToken, orderId), listener);
+    }
+
+    public void orderPathRequest(String accessToken, Order order, int orderId, RequestListener<DefaultResponse> listener) {
+        execute(new OrderPatchRequest(accessToken, order, orderId), listener);
+    }
+
+    public void sendReviewRequest(String accessToken, int orderId, String comment, int rating, RequestListener<DefaultResponse> listener) {
+        execute(new ReviewRequest(accessToken, orderId, comment, rating), listener);
+    }
+
+    public void orderGetRequest(String accessToken, int orderId, RequestListener<OrderResponse> listener) {
+        execute(new OrderGetRequest(accessToken, orderId), listener);
+    }
+
+    public void sessionUpdateRequest(String accessToken, String deviceToken, RequestListener<DefaultResponse> listener) {
+        execute(new SessionUpdateRequest(accessToken, deviceToken), listener);
+    }
+
+    public void removeOrderRequest(String accessToken, int orderId, RequestListener<DefaultResponse> listener) {
+        execute(new OrderDeleteRequest(accessToken, orderId), listener);
+    }
+
+    public void listShopGetRequest(String accessToken, int page, int perPage, RequestListener<ShopListResponse> listener) {
+        execute(new ShopsAllGetRequest(accessToken, page, perPage), listener);
+    }
+
+    private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {
+        if (DataController.getInstance().getBaseActivity().isOnline()) {
+            request.setRetryPolicy(getRetryPolicy());
+            mSpiceManager.execute(request, requestListener);
+        }else{
+            DataController.getInstance().getBaseActivity().showSnackBar(R.string.check_internet_connection);
+            DataController.getInstance().getBaseActivity().stopLoading();
+        }
     }
 
     private RetryPolicy getRetryPolicy() {
@@ -108,83 +163,5 @@ public class WebMethods {
                 return 0;
             }
         };
-    }
-
-    public void loadImage(Context context, String url, final ImageView imageView) {
-        Picasso.with(context)
-                .load(url)
-                .into(imageView);
-        imageView.requestLayout();
-    }
-
-    public void getDictionary(String accessToken, String dictionaryType, RequestListener<DictionaryResponse> listener){
-        DictionaryGetRequest request = new DictionaryGetRequest(accessToken, dictionaryType);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void sendOrder(String accessToken, Order order, RequestListener<OrderResponse> listener){
-        OrderCreateRequest request = new OrderCreateRequest(accessToken, order);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void getOrders(String accessToken, RequestListener<OrdersResponse> listener){
-        OrdersGetRequest request = new OrdersGetRequest(accessToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener){
-        GenerateTypePriceRequest request = new GenerateTypePriceRequest(accessToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void getFlexAnswers(String accessToken, int orderId,RequestListener<ListAnswerFlexResponse> listener){
-        OrderGetFlexibleAnswersRequest request = new OrderGetFlexibleAnswersRequest(accessToken, orderId);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void orderPathRequest(String accessToken, Order order, int orderId, RequestListener<DefaultResponse> listener){
-        OrderPatchRequest request = new OrderPatchRequest(accessToken, order, orderId);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void sendReviewRequest(String accessToken, int orderId, String comment, int rating, RequestListener<DefaultResponse> listener){
-        ReviewRequest request = new ReviewRequest(accessToken, orderId, comment, rating);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void orderGetRequest(String accessToken, int orderId, RequestListener<OrderResponse> listener){
-        OrderGetRequest request = new OrderGetRequest(accessToken, orderId);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void sessionUpdateRequest(String accessToken, String deviceToken, RequestListener<DefaultResponse> listener){
-        SessionUpdateRequest request = new SessionUpdateRequest(accessToken, deviceToken);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void removeOrderRequest(String accessToken, int orderId, RequestListener<DefaultResponse> listener){
-        OrderDeleteRequest request = new OrderDeleteRequest(accessToken, orderId);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    public void listShopGetRequest(String accessToken, int page, int perPage, RequestListener<ShopListResponse> listener){
-        ShopsAllGetRequest request = new ShopsAllGetRequest(accessToken, page, perPage);
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, listener);
-    }
-
-    private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener){
-        request.setRetryPolicy(getRetryPolicy());
-        mSpiceManager.execute(request, requestListener);
     }
 }

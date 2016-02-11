@@ -70,8 +70,10 @@
             android:exported="false"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".view.activitys.OrdersActivity" />
-        <activity android:name=".view.activitys.ChoseShopActivity" />
+        <activity android:name=".view.activitys.OrdersActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.activitys.ChoseShopActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

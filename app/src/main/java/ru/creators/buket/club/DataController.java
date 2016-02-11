@@ -1,13 +1,12 @@
 package ru.creators.buket.club;
 
-import android.content.Context;
-
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.Session;
 import ru.creators.buket.club.model.lists.ListBouquet;
+import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.view.activitys.BaseActivity;
 
 /**
@@ -49,10 +48,22 @@ public class DataController {
     }
 
     public Session getSession() {
+        if (session == null) {
+            session = PreferenceCache.getObject(
+                    baseActivity.getApplicationContext(),
+                    PreferenceCache.KEY_SESSION,
+                    Session.class);
+        }
         return session;
     }
 
     public void setSession(Session session) {
+        if (session != null) {
+            PreferenceCache.putObject(
+                    baseActivity.getApplicationContext(),
+                    PreferenceCache.KEY_SESSION,
+                    session);
+        }
         this.session = session;
     }
 

@@ -61,7 +61,8 @@ public class Helper {
     }
 
     public static Bitmap fastBlur(Bitmap sentBitmap, int radius) {
-
+        if (sentBitmap==null)
+            return sentBitmap;
         // Stack Blur v1.0 from
         // http://www.quasimondo.com/StackBlurForCanvas/StackBlurDemo.html
         //

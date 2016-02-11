@@ -74,4 +74,11 @@ public class AnswerFlex {
             return lhs.getPrice() - rhs.getPrice();
         }
     };
+
+    public static final Comparator<AnswerFlex> COMPARATOR_SORT_BY_RATE = new Comparator<AnswerFlex>() {
+        @Override
+        public int compare(AnswerFlex lhs, AnswerFlex rhs) {
+            return (int)(lhs.getShop().getCachedRating() - lhs.getShop().getCachedRating());
+        }
+    };
 }

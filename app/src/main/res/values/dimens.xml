@@ -32,7 +32,7 @@
 
     <dimen name="margin_filter_content">@dimen/margin_normal</dimen>
 
-    <dimen name="margin_top_action_bar_a_b_open">-200dp</dimen>
+    <dimen name="margin_top_action_bar_a_b_open">-180dp</dimen>
     <dimen name="margin_top_action_bar_a_b_close">-430dp</dimen>
     <dimen name="margin_top_action_bar_a_pt_close">-400dp</dimen>
     <dimen name="margin_top_action_bar_a_o_close">-450dp</dimen>

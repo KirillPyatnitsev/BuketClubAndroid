@@ -1,7 +1,10 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -54,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return coordinatorLayout;
     }
 
-    protected void showSnackBar(int stringResId){
+    public void showSnackBar(int stringResId){
         showSnackBar(getString(stringResId));
     }
 
@@ -71,16 +74,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void showBlur(){
-        if (getImageBlurId()!=0 && getContentContainerId()!=0){
-            Bitmap blur = Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20);
-            ImageView imageViewBlur = getViewById(getImageBlurId());
-            View viewForHide = getViewById(getContentContainerId());
-
-            TransitionManager.beginDelayedTransition(coordinatorLayout);
-            viewForHide.setVisibility(View.GONE);
-            imageViewBlur.setImageBitmap(blur);
-            imageViewBlur.setVisibility(View.VISIBLE);
-        }
+//        if (getImageBlurId()!=0 && getContentContainerId()!=0){
+//            Bitmap blur = Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20);
+//            ImageView imageViewBlur = getViewById(getImageBlurId());
+//            View viewForHide = getViewById(getContentContainerId());
+//
+//            TransitionManager.beginDelayedTransition(coordinatorLayout);
+//            viewForHide.setVisibility(View.GONE);
+//            imageViewBlur.setImageBitmap(blur);
+//            imageViewBlur.setVisibility(View.VISIBLE);
+//        }
     }
 
     protected void hideBlur(){
@@ -127,7 +130,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return runnigProcessCount == 0;
     }
 
-    protected void stopLoading(){
+    public void stopLoading(){
         if (runnigProcessCount != 0) runnigProcessCount--;
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.GONE);
@@ -153,5 +156,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 }

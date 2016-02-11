@@ -89,6 +89,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
     private TextView textShopNotFound;
     private TextView textSort;
+    private TextView textShowMap;
+    private TextView textShowList;
 
 
     private List<Marker> listMarkerAnsweredShops;
@@ -160,19 +162,21 @@ public class ChoseShopActivity extends BaseActivity implements
         }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
                 mGoogleApiClient);
-
-
-        Geocoder geocoder;
-        List<Address> addresses;
-        geocoder = new Geocoder(this, Locale.getDefault());
-
-        try {
-            addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-            DataController.getInstance().getOrder().setAddress(addresses.get(0).getAddressLine(0));
+        if (mLastLocation != null) {
             DataController.getInstance().getOrder().setAddressLat(mLastLocation.getLatitude());
             DataController.getInstance().getOrder().setAddressLng(mLastLocation.getLongitude());
-        } catch (IOException e) {
-            e.printStackTrace();
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this, Locale.getDefault());
+
+            try {
+                addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
+                if (addresses != null && addresses.size() > 0)
+                    DataController.getInstance().getOrder().setAddress(addresses.get(0).getAddressLine(0));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         sendOrder();
         updateMapMarkers();
@@ -185,7 +189,7 @@ public class ChoseShopActivity extends BaseActivity implements
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        textShowMap.setVisibility(View.INVISIBLE);
     }
 
     private void initMap() {
@@ -244,52 +248,57 @@ public class ChoseShopActivity extends BaseActivity implements
     }
 
     private void updateMapMarkers() {
-        googleMap.clear();
-        listMarkerNotAnsweredShops.clear();
-        listMarkerAnsweredShops.clear();
-        if (listAnswerFlex != null && listShopAll != null
-                && (mLastLocation != null || DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))) {
+        if (googleMap!=null) {
+            googleMap.clear();
+            listMarkerNotAnsweredShops.clear();
+            listMarkerAnsweredShops.clear();
+            if (listAnswerFlex != null && listShopAll != null
+                    && (mLastLocation != null || DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))) {
 
-            double lat;
-            double lng;
+                double lat;
+                double lng;
 
-            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
-                googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(DataController.getInstance().getOrder().getAddressLat(),
-                                DataController.getInstance().getOrder().getAddressLng()))
-                        .title("Место доставки заказа.")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_ico))
-                        .snippet(DataController.getInstance().getOrder().getAddress()));
-                lat = DataController.getInstance().getOrder().getAddressLat();
-                lng = DataController.getInstance().getOrder().getAddressLng();
-            } else {
-                lat = mLastLocation.getLatitude();
-                lng = mLastLocation.getLongitude();
-            }
+                if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(DataController.getInstance().getOrder().getAddressLat(),
+                                    DataController.getInstance().getOrder().getAddressLng()))
+                            .title("Место доставки заказа.")
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_ico))
+                            .snippet(DataController.getInstance().getOrder().getAddress()));
+                    lat = DataController.getInstance().getOrder().getAddressLat();
+                    lng = DataController.getInstance().getOrder().getAddressLng();
+                } else {
+                    lat = mLastLocation.getLatitude();
+                    lng = mLastLocation.getLongitude();
+                }
 
+                if (lat == 0f && lng == 0f) {
+                    showSnackBar(R.string.gps_error);
+                }
 
-            for (AnswerFlex answerFlex : listAnswerFlex) {
-                listShopAll.removeByShopId(answerFlex.getShop().getId());
-                answerFlex.setDistance(Helper.distFrom((float) lat, (float) lng
-                        , answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()));
-                listMarkerAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
-                        .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this) + ", " +
-                                distToString(answerFlex.getDistance()))
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
-                        .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
-            }
+                for (AnswerFlex answerFlex : listAnswerFlex) {
+                    listShopAll.removeByShopId(answerFlex.getShop().getId());
+                    answerFlex.setDistance(Helper.distFrom((float) lat, (float) lng
+                            , answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()));
+                    listMarkerAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
+                            .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
+                            .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this) + ", " +
+                                    distToString(answerFlex.getDistance()))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
+                            .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
+                }
 
-            listAnswerFlexAdapter.notifyDataSetChanged();
+                listAnswerFlexAdapter.notifyDataSetChanged();
 
-            for (Shop shop : listShopAll) {
-                if (shop != null)
-                    listMarkerNotAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(shop.getAddressLat(), shop.getAddressLng()))
-                            .title(MARKER_STORE + " " + shop.getName())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_gray))
-                            .snippet("Расстояние: " + distToString(Helper.distFrom((float) lat, (float) lng
-                                    , shop.getAddressLat(), shop.getAddressLng())))));
+                for (Shop shop : listShopAll) {
+                    if (shop != null)
+                        listMarkerNotAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
+                                .position(new LatLng(shop.getAddressLat(), shop.getAddressLng()))
+                                .title(MARKER_STORE + " " + shop.getName())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_gray))
+                                .snippet("Расстояние: " + distToString(Helper.distFrom((float) lat, (float) lng
+                                        , shop.getAddressLat(), shop.getAddressLng())))));
+                }
             }
         }
     }
@@ -300,7 +309,7 @@ public class ChoseShopActivity extends BaseActivity implements
         listView = getViewById(R.id.a_cs_list_view_artists);
         relativeContainerMap = getViewById(R.id.a_cs_relative_container_map);
         imageSettingsOpen = getViewById(R.id.i_ab_image_settings_open);
-        imageSettingsOpen.setImageResource(R.drawable.searchmap_ico);
+//        imageSettingsOpen.setImageResource(R.drawable.searchmap_ico);
         imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
         textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
@@ -308,6 +317,8 @@ public class ChoseShopActivity extends BaseActivity implements
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
 
         textSort = getViewById(R.id.a_o_text_action_bar_second);
+        textShowMap = getViewById(R.id.a_o_text_action_bar_second_show_map);
+        textShowList = getViewById(R.id.a_o_text_action_bar_second_show_list);
     }
 
     private void assignListener() {
@@ -332,38 +343,38 @@ public class ChoseShopActivity extends BaseActivity implements
             }
         });
 
-        imageSettingsOpen.setOnClickListener(new View.OnClickListener() {
+        textShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 relativeContainerMap.setVisibility(View.VISIBLE);
                 swipeRefreshLayout.setVisibility(View.GONE);
-                imageSettingsClose.setVisibility(View.VISIBLE);
-                imageSettingsOpen.setVisibility(View.GONE);
+                textShowList.setVisibility(View.VISIBLE);
+                textShowMap.setVisibility(View.GONE);
                 textShopNotFound.setVisibility(View.GONE);
                 imageBouquet.setVisibility(View.GONE);
                 textSort.setVisibility(View.GONE);
+                imageSettingsOpen.setVisibility(View.GONE);
             }
         });
 
-        imageSettingsClose.setOnClickListener(new View.OnClickListener() {
+        textShowList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 relativeContainerMap.setVisibility(View.GONE);
                 swipeRefreshLayout.setVisibility(View.VISIBLE);
-                imageSettingsClose.setVisibility(View.GONE);
+                textShowList.setVisibility(View.GONE);
+                textShowMap.setVisibility(View.VISIBLE);
                 imageSettingsOpen.setVisibility(View.VISIBLE);
                 if (listAnswerFlex.size() != 0) {
                     textShopNotFound.setVisibility(View.GONE);
-                    textSort.setVisibility(View.VISIBLE);
                 } else {
                     textShopNotFound.setVisibility(View.VISIBLE);
-                    textSort.setVisibility(View.GONE);
                 }
                 imageBouquet.setVisibility(View.VISIBLE);
             }
         });
 
-        textSort.setOnClickListener(new View.OnClickListener() {
+        imageSettingsOpen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showSortDialog();
@@ -373,9 +384,9 @@ public class ChoseShopActivity extends BaseActivity implements
 
     private void initView() {
         imageBack.setVisibility(View.VISIBLE);
-        imageSettingsOpen.setVisibility(View.VISIBLE);
 
-        WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+        if (order.getBouquetItem()!=null)
+            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
 
         listAnswerFlex = new ListAnswerFlex();
         listAnswerFlexAdapter = new ListAnswerFlexAdapter(this, listAnswerFlex);
@@ -487,7 +498,7 @@ public class ChoseShopActivity extends BaseActivity implements
                         listAnswerFlexAdapter.notifyDataSetChanged();
                         if (listAnswerFlex.size() != 0) {
                             textShopNotFound.setVisibility(View.GONE);
-                            textSort.setVisibility(View.VISIBLE);
+                            imageSettingsOpen.setVisibility(View.VISIBLE);
                         }
                         updateMapMarkers();
                     }
@@ -564,10 +575,19 @@ public class ChoseShopActivity extends BaseActivity implements
         builder.setTitle(R.string.chose_sort_type)
                 .setItems(R.array.sort_types, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
+                                break;
+                            case 1:
+                                selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_DIST;
+                                break;
+                            case 2:
+                                selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_RATE;
+                                break;
+                        }
                         if (which == 0) {
-                            selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
                         } else {
-                            selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_DIST;
                         }
                         Collections.sort(listAnswerFlex, selectedAnswersComporator);
                         listAnswerFlexAdapter.notifyDataSetChanged();
