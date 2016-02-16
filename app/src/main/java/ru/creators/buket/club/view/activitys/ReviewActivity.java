@@ -23,6 +23,7 @@ public class ReviewActivity extends BaseActivity {
     ImageView imageArtistIcon;
     EditText editComment;
     Button buttonSendReview;
+    ImageView imageBack;
 
     Order order = DataController.getInstance().getOrder();
 
@@ -45,13 +46,32 @@ public class ReviewActivity extends BaseActivity {
         imageArtistIcon = getViewById(R.id.a_r_image_artist_icon);
         editComment = getViewById(R.id.a_r_edit_comment);
         buttonSendReview = getViewById(R.id.a_r_button_send_review);
+        imageBack = getViewById(R.id.i_ab_image_back);
+        imageBack.setVisibility(View.VISIBLE);
     }
 
     private void assignListener(){
+        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                if (rating<4){
+                    editComment.setEnabled(true);
+                }else{
+                    editComment.setEnabled(false);
+                    editComment.setText("");
+                }
+            }
+        });
         buttonSendReview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendReview();
+            }
+        });
+        imageBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
     }
@@ -83,10 +103,5 @@ public class ReviewActivity extends BaseActivity {
 
     private void goToOrderDetalis(){
         startActivity(new Intent(this, OrderDetalisActivity.class));
-    }
-
-    @Override
-    public void onBackPressed() {
-        return;
     }
 }

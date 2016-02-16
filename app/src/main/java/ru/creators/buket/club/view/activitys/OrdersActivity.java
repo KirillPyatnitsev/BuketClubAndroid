@@ -33,7 +33,6 @@ public class OrdersActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
-        getOrders();
     }
 
     @Override

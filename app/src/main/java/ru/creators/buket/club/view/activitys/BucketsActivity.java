@@ -384,7 +384,7 @@ public class BucketsActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        return;
+        moveTaskToBack(true);
     }
 
     private void getOrders(){
