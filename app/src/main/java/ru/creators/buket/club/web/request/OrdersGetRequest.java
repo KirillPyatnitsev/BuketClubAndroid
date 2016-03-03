@@ -13,10 +13,14 @@ import ru.creators.buket.club.web.response.OrdersResponse;
 public class OrdersGetRequest extends BaseRequest<OrdersResponse> {
 
     private String accessToken;
+    private int page;
+    private int perPage;
 
-    public OrdersGetRequest(String accessToken) {
+    public OrdersGetRequest(String accessToken, int page, int perPage) {
         super(OrdersResponse.class);
         this.accessToken = accessToken;
+        this.page = page;
+        this.perPage = perPage;
     }
 
     @Override
@@ -31,6 +35,8 @@ public class OrdersGetRequest extends BaseRequest<OrdersResponse> {
         HttpRequest request = getGetHttpRequest();
 
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
+        request.getUrl().put(Rest.PAGE, page);
+        request.getUrl().put(Rest.PER_PAGE, perPage);
 
         return (OrdersResponse) getResponse(request.execute(), OrdersResponse.class, new OrdersResponse());
     }

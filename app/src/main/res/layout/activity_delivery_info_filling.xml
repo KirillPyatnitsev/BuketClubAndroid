@@ -98,22 +98,43 @@
                         android:text="@string/text_address_delivery_1"
                         android:visibility="gone"/>
 
-                    <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
-                        android:id="@+id/a_dif_edit_delivery_address"
+                    <RelativeLayout
+                        android:id="@+id/a_dif_relative_address_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:pacv_googleMapsApiKey="@string/google_maps_server_key"
-                        android:visibility="gone"/>
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
-                    <TextView
-                        style="@style/small_text.text_black"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/text_recipient" />
+                        <ImageButton
+                            android:id="@+id/a_dif_button_my_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/gps_device"
+                            android:background="@android:color/transparent"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentRight="true"
+                            android:visibility="gone"/>
 
-                    <EditText
-                        android:id="@+id/a_dif_edit_recipient"
-                        style="@style/text_view_normal"
-                        android:singleLine="true" />
+                        <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
+                            android:id="@+id/a_dif_edit_delivery_address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:pacv_googleMapsApiKey="@string/google_maps_server_key"
+                            android:layout_toLeftOf="@id/a_dif_button_my_location"/>
+
+                    </RelativeLayout>
+
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/a_dif_text_recipient"-->
+                        <!--style="@style/small_text.text_black"-->
+                        <!--android:layout_marginTop="@dimen/margin_small"-->
+                        <!--android:text="@string/text_recipient" />-->
+
+                    <!--<EditText-->
+                        <!--android:id="@+id/a_dif_edit_recipient"-->
+                        <!--style="@style/text_view_normal"-->
+                        <!--android:singleLine="true" />-->
 
                     <TextView
                         style="@style/small_text.text_black"

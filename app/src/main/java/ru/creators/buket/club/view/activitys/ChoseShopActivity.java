@@ -44,6 +44,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
@@ -107,6 +109,9 @@ public class ChoseShopActivity extends BaseActivity implements
 
     private Comparator<AnswerFlex> selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
 
+    private boolean mapIsNeverOpened = true;
+
+    private LatLng mapCenterLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +139,7 @@ public class ChoseShopActivity extends BaseActivity implements
                         .build();
             }
         } else {
+            mapCenterLocation = new LatLng(DataController.getInstance().getOrder().getAddressLat(), DataController.getInstance().getOrder().getAddressLng());
             sendOrder();
         }
     }
@@ -190,6 +196,7 @@ public class ChoseShopActivity extends BaseActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         textShowMap.setVisibility(View.INVISIBLE);
+        sendOrder();
     }
 
     private void initMap() {
@@ -228,11 +235,13 @@ public class ChoseShopActivity extends BaseActivity implements
 
                 // Creating a LatLng object for the current location
                 LatLng latLng = new LatLng(latitude, longitude);
-                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10.0f));
+                mapCenterLocation = latLng;
             }
         }
 
         googleMap.setOnInfoWindowClickListener(this);
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
     }
 
     @Override
@@ -245,6 +254,10 @@ public class ChoseShopActivity extends BaseActivity implements
     @Override
     protected int getCoordinatorViewId() {
         return R.id.a_cs_coordinator_root;
+    }
+
+    private void zoopUpFromLocation(double latitude, double longitude){
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10));
     }
 
     private void updateMapMarkers() {
@@ -265,8 +278,10 @@ public class ChoseShopActivity extends BaseActivity implements
                             .title("Место доставки заказа.")
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_ico))
                             .snippet(DataController.getInstance().getOrder().getAddress()));
-                    lat = DataController.getInstance().getOrder().getAddressLat();
-                    lng = DataController.getInstance().getOrder().getAddressLng();
+
+                    lat = mapCenterLocation.latitude;
+                    lng = mapCenterLocation.longitude;
+
                 } else {
                     lat = mLastLocation.getLatitude();
                     lng = mLastLocation.getLongitude();
@@ -309,7 +324,6 @@ public class ChoseShopActivity extends BaseActivity implements
         listView = getViewById(R.id.a_cs_list_view_artists);
         relativeContainerMap = getViewById(R.id.a_cs_relative_container_map);
         imageSettingsOpen = getViewById(R.id.i_ab_image_settings_open);
-//        imageSettingsOpen.setImageResource(R.drawable.searchmap_ico);
         imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
         textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
@@ -354,6 +368,14 @@ public class ChoseShopActivity extends BaseActivity implements
                 imageBouquet.setVisibility(View.GONE);
                 textSort.setVisibility(View.GONE);
                 imageSettingsOpen.setVisibility(View.GONE);
+                if (mapIsNeverOpened){
+                    Timer timer = new Timer();
+                    TimerMapZoom timerMapZoom = new TimerMapZoom();
+
+                    timer.schedule(timerMapZoom, 1000);
+
+                    mapIsNeverOpened = false;
+                }
             }
         });
 
@@ -496,9 +518,12 @@ public class ChoseShopActivity extends BaseActivity implements
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
                         Collections.sort(listAnswerFlex, selectedAnswersComporator);
                         listAnswerFlexAdapter.notifyDataSetChanged();
-                        if (listAnswerFlex.size() != 0) {
+                        if (!listAnswerFlex.isEmpty()) {
                             textShopNotFound.setVisibility(View.GONE);
                             imageSettingsOpen.setVisibility(View.VISIBLE);
+                        } else {
+                            textShopNotFound.setVisibility(View.VISIBLE);
+                            imageSettingsOpen.setVisibility(View.INVISIBLE);
                         }
                         updateMapMarkers();
                     }
@@ -596,5 +621,18 @@ public class ChoseShopActivity extends BaseActivity implements
 
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    class TimerMapZoom extends TimerTask {
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 15000, null);
+                }
+            });
+        }
     }
 }

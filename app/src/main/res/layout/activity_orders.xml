@@ -74,11 +74,17 @@
             android:layout_marginTop="-20dp"
             android:layout_below="@id/a_o_relative_action_bar_container">
 
-            <ListView
-                android:id="@+id/a_o_list_view_orders"
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/a_o_swipe_refresh"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/margin_larger"/>
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/a_o_list_view_orders"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v4.widget.SwipeRefreshLayout>
 
         </RelativeLayout>
 

@@ -60,7 +60,8 @@
                     style="@style/rating_bar_large"
                     android:layout_below="@id/a_r_text_action_bar_title"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/margin_normal"/>
+                    android:layout_marginBottom="@dimen/margin_normal"
+                    android:stepSize="1"/>
 
                 <ImageView
                     android:id="@+id/a_r_image_artist_icon"

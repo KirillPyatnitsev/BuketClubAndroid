@@ -150,13 +150,22 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/a_b_costs_container">
 
-                <GridView
-                    android:id="@+id/a_b_grid_view_buckets"
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/a_b_swipe_refresh"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:horizontalSpacing="@dimen/margin_small"
-                    android:verticalSpacing="@dimen/margin_smaller"
-                    android:numColumns="2"/>
+                    android:layout_height="match_parent">
+
+                    <GridView
+                        android:id="@+id/a_b_grid_view_buckets"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:horizontalSpacing="@dimen/margin_small"
+                        android:verticalSpacing="@dimen/margin_smaller"
+                        android:numColumns="2"/>
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+
 
                 <TextView
                     android:id="@+id/a_b_text_not_find"

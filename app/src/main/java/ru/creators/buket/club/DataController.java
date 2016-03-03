@@ -29,6 +29,8 @@ public class DataController {
     private Bouquet bouquet;
     private Order order;
 
+    private boolean appIsFolded = false;
+
     private BaseActivity baseActivity;
 
     public BaseActivity getBaseActivity() {
@@ -105,5 +107,13 @@ public class DataController {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public boolean isAppIsFolded() {
+        return appIsFolded;
+    }
+
+    public void setAppIsFolded(boolean appIsFolded) {
+        this.appIsFolded = appIsFolded;
     }
 }

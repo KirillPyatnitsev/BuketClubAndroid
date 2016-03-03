@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.web.request.AddressGetRequest;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
 import ru.creators.buket.club.web.request.GenerateTypePriceRequest;
@@ -100,8 +101,8 @@ public class WebMethods {
         execute(new OrderCreateRequest(accessToken, order), listener);
     }
 
-    public void getOrders(String accessToken, RequestListener<OrdersResponse> listener) {
-        execute(new OrdersGetRequest(accessToken), listener);
+    public void getOrders(String accessToken, int page, int perPage, RequestListener<OrdersResponse> listener) {
+        execute(new OrdersGetRequest(accessToken, page, perPage), listener);
     }
 
     public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener) {
@@ -134,6 +135,10 @@ public class WebMethods {
 
     public void listShopGetRequest(String accessToken, int page, int perPage, RequestListener<ShopListResponse> listener) {
         execute(new ShopsAllGetRequest(accessToken, page, perPage), listener);
+    }
+
+    public void addressGetRequest(double latitude, double longitude, Context context, RequestListener<String> listener){
+        execute(new AddressGetRequest(latitude, longitude, context), listener);
     }
 
     private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {

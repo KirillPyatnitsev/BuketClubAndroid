@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/margin_normal"
-    android:layout_marginBottom="@dimen/margin_normal">
+    android:layout_marginBottom="@dimen/margin_normal"
+    android:paddingLeft="@dimen/margin_larger">
 
     <ImageView
         android:id="@+id/i_oi_image_open"

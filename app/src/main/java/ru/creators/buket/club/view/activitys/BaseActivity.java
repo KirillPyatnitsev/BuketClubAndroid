@@ -151,11 +151,18 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         DataController.getInstance().setBaseActivity(this);
+        DataController.getInstance().setAppIsFolded(false);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        DataController.getInstance().setAppIsFolded(true);
+        super.onPause();
     }
 
     public boolean isOnline() {

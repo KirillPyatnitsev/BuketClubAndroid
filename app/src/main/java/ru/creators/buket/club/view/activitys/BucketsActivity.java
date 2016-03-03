@@ -3,9 +3,11 @@ package ru.creators.buket.club.view.activitys;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
@@ -25,6 +27,7 @@ import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Pagination;
 import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.lists.ListBouquet;
 import ru.creators.buket.club.model.lists.ListDictionaryItem;
@@ -61,6 +64,8 @@ public class BucketsActivity extends BaseActivity {
     private GridView gridView;
     private TextView textNotFindBouquets;
 
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     private GridAdapterBouquet gridAdapterBouquet;
 
     private RangeSeekBar rangeSeekBarCost;
@@ -83,16 +88,19 @@ public class BucketsActivity extends BaseActivity {
     private int currentMinPrice = -1;
     private int currentMaxPrice = -1;
 
+    private Pagination pagination;
+    private int lastLoadedPage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buckets);
 
-        loadBouquets(DataController.getInstance().getSession().getAccessToken());
         loadPriceRange(DataController.getInstance().getSession().getAccessToken());
         assignView();
         assignListener();
-//        initView();
+
+        listBouquetsGetResponse(true);
 
         if (DataController.getInstance().getSession().getAppMode() == ApplicationMode.COST_FLEXIBLE){
             getOrders();
@@ -127,6 +135,8 @@ public class BucketsActivity extends BaseActivity {
         spinnerDayEvent = getViewById(R.id.i_bf_spinner_chose_event);
 
         textNotFindBouquets = getViewById(R.id.a_b_text_not_find);
+
+        swipeRefreshLayout = getViewById(R.id.a_b_swipe_refresh);
     }
 
     private void assignListener() {
@@ -152,7 +162,7 @@ public class BucketsActivity extends BaseActivity {
                 if (currentMaxPrice != (int) maxValue || currentMinPrice != (int) minValue) {
                     currentMaxPrice = (int) maxValue;
                     currentMinPrice = (int) minValue;
-                    updateListBouquet();
+                    listBouquetsGetResponse(true);
                 }
             }
         });
@@ -160,7 +170,7 @@ public class BucketsActivity extends BaseActivity {
         spinnerFlowerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    currentFlowerTypeId = position;
+                currentFlowerTypeId = position;
             }
 
             @Override
@@ -169,11 +179,17 @@ public class BucketsActivity extends BaseActivity {
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                listBouquetsGetResponse(true);
+            }
+        });
 
         spinnerFlowerClor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    currentFlowerClorId = position;
+                currentFlowerClorId = position;
             }
 
             @Override
@@ -206,6 +222,20 @@ public class BucketsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 goToOrdersActivity();
+            }
+        });
+
+        gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                if ( listBouquet.size()!= 0 && (firstVisibleItem + visibleItemCount) == listBouquet.size()){
+                    listBouquetsGetResponse(false);
+                }
             }
         });
     }
@@ -274,7 +304,7 @@ public class BucketsActivity extends BaseActivity {
         imageOpenFilter.setVisibility(View.VISIBLE);
         imageCloseFilter.setVisibility(View.GONE);
 
-        updateListBouquet();
+        listBouquetsGetResponse(true);
     }
 
     private void setSpinnerData(int min, int max) {
@@ -353,31 +383,54 @@ public class BucketsActivity extends BaseActivity {
         }
     }
 
-    private void updateListBouquet() {
-        startLoading(false);
+    private void listBouquetsGetResponse(boolean reloadList){
+        if (reloadList){
+            lastLoadedPage = 0;
+            pagination = null;
+            listBouquet.clear();
+        }
+
+        if (pagination==null || lastLoadedPage < pagination.getNextPage()){
+            lastLoadedPage = pagination==null?1:pagination.getNextPage();
+            updateListBouquet(lastLoadedPage);
+        }
+    }
+
+    private void updateListBouquet(int page) {
+        if (!swipeRefreshLayout.isRefreshing())
+            startLoading(false);
         WebMethods.getInstance().loadBouquets(DataController.getInstance().getSession().getAccessToken(),
                 currentFlowerTypeId == -1 ? currentFlowerTypeId : dictonaryFlowerTypes.getItemId(currentFlowerTypeId),
                 currentFlowerClorId == -1 ? currentFlowerClorId : dictonaryFloverColors.getItemId(currentFlowerClorId),
                 currentDayEventId == -1 ? currentDayEventId : dictonaryDayEvents.getItemId(currentDayEventId),
                 currentMinPrice,
-                currentMaxPrice, 1, 200,
+                currentMaxPrice, page, Pagination.PER_PAGE,
                 new RequestListener<BouquetsResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        stopLoading();
+                        if (!swipeRefreshLayout.isRefreshing())
+                            stopLoading();
+                        else
+                            swipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
-                        listBouquet.clear();
+                        pagination = bouquetsResponse.getMeta().getPagination();
                         listBouquet.addAll(bouquetsResponse.getListBouquet());
-                        if (listBouquet.isEmpty()){
+
+                        if (listBouquet.isEmpty()) {
                             textNotFindBouquets.setVisibility(View.VISIBLE);
-                        }else{
+                        } else {
                             textNotFindBouquets.setVisibility(View.GONE);
                         }
+
                         gridAdapterBouquet.notifyDataSetChanged();
-                        stopLoading();
+
+                        if (!swipeRefreshLayout.isRefreshing())
+                            stopLoading();
+                        else
+                            swipeRefreshLayout.setRefreshing(false);
                     }
                 });
     }
@@ -390,7 +443,7 @@ public class BucketsActivity extends BaseActivity {
     private void getOrders(){
         startLoading(false);
         WebMethods.getInstance().getOrders(
-                DataController.getInstance().getSession().getAccessToken(),
+                DataController.getInstance().getSession().getAccessToken(), 1, 100,
                 new RequestListener<OrdersResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -427,24 +480,6 @@ public class BucketsActivity extends BaseActivity {
                 stopLoading();
             }
         });
-    }
-
-    private void loadBouquets(String accessToken){
-        startLoading(false);
-        WebMethods.getInstance().loadBouquets(accessToken, -1, -1, -1, -1, -1, 1, 200,
-                new RequestListener<BouquetsResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        stopLoading();
-                    }
-
-                    @Override
-                    public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
-                        listBouquet = bouquetsResponse.getListBouquet();
-                        initView();
-                        stopLoading();
-                    }
-                });
     }
 
     private void loadPriceRange(String accessToken){

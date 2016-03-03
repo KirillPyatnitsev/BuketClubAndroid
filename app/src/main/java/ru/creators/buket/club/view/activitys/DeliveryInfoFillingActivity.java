@@ -1,13 +1,19 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
@@ -15,9 +21,11 @@ import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.Drive;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
+import com.octo.android.robospice.persistence.exception.SpiceException;
+import com.octo.android.robospice.request.listener.RequestListener;
 import com.seatgeek.placesautocomplete.OnPlaceSelectedListener;
 import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
 import com.seatgeek.placesautocomplete.model.Place;
@@ -35,6 +43,7 @@ import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
+import ru.creators.buket.club.web.WebMethods;
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -45,11 +54,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private MaterialSpinner spinnerDeliveryTime;
     private MaterialSpinner spinnerDeliveryType;
-    private EditText editRecipientName;
     private EditText editPhoneNumber;
     private EditText editComment;
     private PlacesAutocompleteTextView editAddress;
     private TextView textAddress;
+    private RelativeLayout relativeAddressContainer;
+    private ImageButton buttonMyLocation;
 
     private Button buttonNext;
 
@@ -71,6 +81,9 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
+    private Location mLastLocation;
+    private String lastAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,11 +93,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         initView();
         assignListener();
 
-
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, 0, this)
                 .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
                 .build();
     }
 
@@ -107,6 +121,18 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     @Override
     public void onConnected(Bundle bundle) {
+        if (ActivityCompat
+                .checkSelfPermission(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
+                mGoogleApiClient);
+
+        if (mLastLocation!=null){
+            addressGetRequest(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        }
 
     }
 
@@ -126,13 +152,14 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         spinnerDeliveryTime = getViewById(R.id.a_dif_spinner_delivery_type_time);
         spinnerDeliveryType = getViewById(R.id.a_dif_spinner_delivery_type_place);
-        editRecipientName = getViewById(R.id.a_dif_edit_recipient);
         editPhoneNumber = getViewById(R.id.a_dif_edit_phone);
         editComment = getViewById(R.id.a_dif_edit_comment);
         editAddress = getViewById(R.id.a_dif_edit_delivery_address);
         textAddress = getViewById(R.id.a_dif_text_delivery_address);
-
         buttonNext = getViewById(R.id.a_dif_button_next);
+
+        relativeAddressContainer = getViewById(R.id.a_dif_relative_address_container);
+        buttonMyLocation = getViewById(R.id.a_dif_button_my_location);
     }
 
     private void assignListener() {
@@ -163,12 +190,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 switch (position) {
                     case 0:
                         currentShippingType = Order.DELIVERY_TYPE_PICKUP;
-                        editAddress.setVisibility(View.GONE);
+                        relativeAddressContainer.setVisibility(View.GONE);
                         textAddress.setVisibility(View.GONE);
                         break;
                     case 1:
                         currentShippingType = Order.DELIVERY_TYPE_ADDRESS;
-                        editAddress.setVisibility(View.VISIBLE);
+                        relativeAddressContainer.setVisibility(View.VISIBLE);
                         textAddress.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -224,6 +251,13 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
             }
         });
+
+        buttonMyLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editAddress.setText(lastAddress);
+            }
+        });
     }
 
     private SlideDateTimeListener slideDateTimeListener = new SlideDateTimeListener() {
@@ -277,7 +311,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private boolean addDataToOrder() {
         DataController.getInstance().getOrder().setRecipientPhone(editPhoneNumber.getText().toString());
-        DataController.getInstance().getOrder().setRecipientName(editRecipientName.getText().toString());
         DataController.getInstance().getOrder().setAddress(editAddress.getText().toString());
         DataController.getInstance().getOrder().setComment(editComment.getText().toString());
         DataController.getInstance().getOrder().setTimeDelivery(
@@ -288,7 +321,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         DataController.getInstance().getOrder().setShop(null);
         return (!editPhoneNumber.getText().toString().isEmpty()
                 && editPhoneNumber.getText().toString().replaceAll("[^\\d.]", "").length() == 11
-                && !editRecipientName.getText().toString().isEmpty()
                 && (!editAddress.getText().toString().isEmpty() || currentShippingType.equals(Order.DELIVERY_TYPE_PICKUP)));
 
     }
@@ -302,5 +334,20 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 startActivity(new Intent(this, ChoseShopActivity.class));
                 break;
         }
+    }
+
+    private void addressGetRequest(double latitude, double longitude){
+        WebMethods.getInstance().addressGetRequest(latitude, longitude, this, new RequestListener<String>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+
+            }
+
+            @Override
+            public void onRequestSuccess(String s) {
+                lastAddress = s;
+                buttonMyLocation.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }
