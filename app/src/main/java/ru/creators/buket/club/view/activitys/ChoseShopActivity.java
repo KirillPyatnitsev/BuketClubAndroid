@@ -235,7 +235,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
                 // Creating a LatLng object for the current location
                 LatLng latLng = new LatLng(latitude, longitude);
-                mapCenterLocation = latLng;
+                if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP))
+                    mapCenterLocation = latLng;
             }
         }
 
@@ -256,17 +257,13 @@ public class ChoseShopActivity extends BaseActivity implements
         return R.id.a_cs_coordinator_root;
     }
 
-    private void zoopUpFromLocation(double latitude, double longitude){
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 10));
-    }
-
     private void updateMapMarkers() {
         if (googleMap!=null) {
             googleMap.clear();
             listMarkerNotAnsweredShops.clear();
             listMarkerAnsweredShops.clear();
             if (listAnswerFlex != null && listShopAll != null
-                    && (mLastLocation != null || DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))) {
+                    && (mapCenterLocation != null || DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS))) {
 
                 double lat;
                 double lng;
@@ -278,14 +275,10 @@ public class ChoseShopActivity extends BaseActivity implements
                             .title("Место доставки заказа.")
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.finish_ico))
                             .snippet(DataController.getInstance().getOrder().getAddress()));
-
-                    lat = mapCenterLocation.latitude;
-                    lng = mapCenterLocation.longitude;
-
-                } else {
-                    lat = mLastLocation.getLatitude();
-                    lng = mLastLocation.getLongitude();
                 }
+
+                lat = mapCenterLocation.latitude;
+                lng = mapCenterLocation.longitude;
 
                 if (lat == 0f && lng == 0f) {
                     showSnackBar(R.string.gps_error);
