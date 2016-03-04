@@ -23,6 +23,8 @@ import ru.creators.buket.club.web.request.OrderGetFlexibleAnswersRequest;
 import ru.creators.buket.club.web.request.OrderGetRequest;
 import ru.creators.buket.club.web.request.OrderPatchRequest;
 import ru.creators.buket.club.web.request.OrdersGetRequest;
+import ru.creators.buket.club.web.request.PhoneVerificationFinishPostRequest;
+import ru.creators.buket.club.web.request.PhoneVerificationStartPostRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
 import ru.creators.buket.club.web.request.ReviewRequest;
@@ -139,6 +141,14 @@ public class WebMethods {
 
     public void addressGetRequest(double latitude, double longitude, Context context, RequestListener<String> listener){
         execute(new AddressGetRequest(latitude, longitude, context), listener);
+    }
+
+    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<DefaultResponse> listener){
+        execute(new PhoneVerificationStartPostRequest(accessToken, phone), listener);
+    }
+
+    public void phoneVerificationFinishPostRequest(String accessToken, String phone, String code,RequestListener<DefaultResponse> listener){
+        execute(new PhoneVerificationFinishPostRequest(accessToken, phone, code), listener);
     }
 
     private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {

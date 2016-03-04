@@ -12,6 +12,7 @@ public final class PreferenceCache {
     public static final String KEY_SESSION= "key_session";
     private final static String mFileName = "buket.club";
     public static final String SHAREDPRED_GCM_TOKEN_KEY = "buket.club_gcm_token_key";
+    public static final String SAVED_PHONES = "saved_phones";
     private static ObjectMapper objectMapper = new ObjectMapper();
 
     private PreferenceCache() {

@@ -1,11 +1,15 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,7 +47,10 @@ import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
+import ru.creators.buket.club.model.lists.ListString;
+import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.web.WebMethods;
+import ru.creators.buket.club.web.response.DefaultResponse;
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -176,7 +183,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 if (currentShippingType.equals(Order.DELIVERY_TYPE_ADDRESS) && currentPlace == null)
                     showSnackBar(getString(R.string.delivery_info_address_error));
                 else if (addDataToOrder())
-                    goToNextActivity();
+                    phoneVerification(DataController.getInstance().getOrder().getRecipientPhone());
                 else
                     showSnackBar(getString(R.string.delivery_info_error));
 
@@ -292,8 +299,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
             deliveryTime.add("Выбрать время");
         }
 
-//        editAddress.setText(DataController.getInstance().getOrder().getAddress());
-
         delivetyTimeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
 
         spinnerDeliveryTime.setAdapter(delivetyTimeAdapter);
@@ -349,5 +354,77 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 buttonMyLocation.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    private void phoneVerification(String phone){
+        ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
+
+        if (listPhone != null && listPhone.contains(phone)){
+            goToNextActivity();
+        }else{
+            phoneVerificationStartPostRequest(phone);
+        }
+
+    }
+
+    private void phoneVerificationStartPostRequest(final String phone){
+        WebMethods.getInstance().phoneVerificationStartPostRequest(DataController.getInstance().getSession().getAccessToken(), phone,
+                new RequestListener<DefaultResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        showSnackBar(R.string.phone_verification_error);
+                    }
+
+                    @Override
+                    public void onRequestSuccess(DefaultResponse defaultResponse) {
+                        showEnterCodeDialog(phone);
+                    }
+                });
+    }
+
+    private void phoneVerificationFinishPostRequest(final String phone, String code){
+        WebMethods.getInstance().phoneVerificationFinishPostRequest(DataController.getInstance().getSession().getAccessToken(), phone, code,
+                new RequestListener<DefaultResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        showSnackBar(R.string.phone_verification_error);
+                    }
+
+                    @Override
+                    public void onRequestSuccess(DefaultResponse defaultResponse) {
+                        savePhone(phone);
+                        goToNextActivity();
+                    }
+                });
+    }
+
+    private void savePhone(String phone){
+        ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
+        if (listPhone == null)
+            listPhone = new ListString();
+        listPhone.add(phone);
+        PreferenceCache.putObject(this, PreferenceCache.SAVED_PHONES, listPhone);
+    }
+
+    private void showEnterCodeDialog(final String phone){
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.code_write_title)
+                .setMessage(R.string.code_write_second)
+                .setView(input)
+                .setPositiveButton(R.string.text_done, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!input.getText().toString().isEmpty()) {
+                            phoneVerificationFinishPostRequest(phone, input.getText().toString());
+                        }else{
+                            showSnackBar(R.string.code_is_not_write);
+                        }
+                    }
+                })
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
     }
 }

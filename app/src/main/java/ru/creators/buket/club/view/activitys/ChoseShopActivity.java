@@ -175,7 +175,14 @@ public class ChoseShopActivity extends BaseActivity implements
             List<Address> addresses;
             geocoder = new Geocoder(this, Locale.getDefault());
 
-            try {
+            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)){
+                mapCenterLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                if (googleMap!=null){
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
+                }
+            }
+
+                try {
                 addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
                 if (addresses != null && addresses.size() > 0)
                     DataController.getInstance().getOrder().setAddress(addresses.get(0).getAddressLine(0));
@@ -242,7 +249,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
         googleMap.setOnInfoWindowClickListener(this);
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
+        if (mapCenterLocation!=null)
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
     }
 
     @Override
@@ -623,7 +631,8 @@ public class ChoseShopActivity extends BaseActivity implements
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 15000, null);
+                    if (mapCenterLocation!=null)
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 15000, null);
                 }
             });
         }
