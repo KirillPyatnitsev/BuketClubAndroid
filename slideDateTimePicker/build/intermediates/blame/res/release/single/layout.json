@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/build/intermediates/res/merged/release/layout/fragment_date.xml",
+        "source": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/src/main/res/layout/fragment_date.xml"
+    },
+    {
         "merged": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/build/intermediates/res/merged/release/layout/slide_date_time_picker.xml",
         "source": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/src/main/res/layout/slide_date_time_picker.xml"
     },
@@ -10,9 +14,5 @@
     {
         "merged": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/build/intermediates/res/merged/release/layout/custom_tab.xml",
         "source": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/src/main/res/layout/custom_tab.xml"
-    },
-    {
-        "merged": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/build/intermediates/res/merged/release/layout/fragment_date.xml",
-        "source": "/Users/mifkamaz/Documents/Develop/AndroidStudio/AndroidDev/Work/Buket.Club/slideDateTimePicker/src/main/res/layout/fragment_date.xml"
     }
 ]

@@ -25,166 +25,6 @@
                 android:scaleType="centerCrop"
                 android:background="@color/green" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/a_bd_image_bouquet"
-                android:layout_marginTop="@dimen/margin_top_bouquet_size_selector">
-
-                <View
-                    android:id="@+id/a_bd_view_line_pink"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:layout_centerVertical="true"
-                    android:background="@color/pink" />
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:id="@+id/a_bd_relative_bouquet_little"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="-10dp"
-                        android:layout_marginRight="-10dp"
-                        android:layout_weight="@integer/weight_bouquet_type_relative_unselected">
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_big_bouquet_size_little"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_big_unselected" />
-
-                        <View
-                            android:id="@+id/a_bd_view_line_pink_1"
-                            android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_centerInParent="true"
-                            android:background="@color/pink" />
-
-                        <TextView
-                            android:id="@+id/a_bd_text_bouquet_size_little"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_little"
-                            android:layout_centerHorizontal="true"
-                            android:textSize="@dimen/text_size_bouquet_type_unselected"
-                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_unselected"
-                            android:textColor="@color/text_color_bouquet_size_unselected"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_below="@id/a_bd_view_line_pink_1"
-                            android:background="@color/white" />
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_min_bouquet_size_little"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_unselected" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/a_bd_relative_bouquet_medium"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="-10dp"
-                        android:layout_marginRight="-10dp"
-                        android:layout_weight="@integer/weight_bouquet_type_relative_selected">
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_big_bouquet_size_medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_big_selected" />
-
-                        <View
-                            android:id="@+id/a_bd_view_line_pink_2"
-                            android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_centerInParent="true"
-                            android:background="@color/pink" />
-
-                        <TextView
-                            android:id="@+id/a_bd_text_bouquet_size_medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_middle"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_selected"
-                            android:textSize="@dimen/text_size_bouquet_type_selected"
-                            android:textColor="@color/text_color_bouquet_size_selected"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_below="@id/a_bd_view_line_pink_2"
-                            android:background="@color/white" />
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_min_bouquet_size_medium"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_selected" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/a_bd_relative_bouquet_great"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="-10dp"
-                        android:layout_marginRight="-10dp"
-                        android:layout_weight="@integer/weight_bouquet_type_relative_unselected">
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_big_bouquet_size_great"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_big_unselected" />
-
-                        <View
-                            android:id="@+id/a_bd_view_line_pink_3"
-                            android:layout_width="match_parent"
-                            android:layout_height="6dp"
-                            android:layout_centerInParent="true"
-                            android:background="@color/pink" />
-
-                        <TextView
-                            android:id="@+id/a_bd_text_bouquet_size_great"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/text_great"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_unselected"
-                            android:textSize="@dimen/text_size_bouquet_type_unselected"
-                            android:textColor="@color/text_color_bouquet_size_unselected"/>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_below="@id/a_bd_view_line_pink_3"
-                            android:background="@color/white" />
-
-                        <ImageView
-                            android:id="@+id/a_bd_image_min_bouquet_size_great"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/round_bouquet_type_unselected" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/a_bd_linear_bucket_info"
@@ -211,7 +51,8 @@
                     android:textSize="@dimen/text_size_normal"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:padding="@dimen/margin_normal"/>
+                    android:padding="@dimen/margin_normal"
+                    android:text="Красные розы, букет 101, без упаковки. Красные розы, букет 101, без упаковки." />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -320,6 +161,220 @@
                     android:textSize="@dimen/text_size_normal" />
 
             </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/a_bd_linear_bucket_info">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/a_bd_relative_bouquet_little"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@integer/weight_bouquet_type_relative_unselected"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="-10dp"
+                        android:layout_marginRight="-10dp">
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_big_bouquet_size_little"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/circle_white"
+                            android:adjustViewBounds="true"/>
+
+                        <TextView
+                            android:id="@+id/a_bd_text_bouquet_size_little"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_little"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_unselected"
+                            android:textSize="@dimen/text_size_bouquet_type_unselected"
+                            android:textColor="@color/text_color_bouquet_size_unselected"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:layout_centerInParent="true"
+                            android:background="@color/pink"
+                            android:layout_below="@id/a_bd_image_big_bouquet_size_little"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_1_bellow"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_1"
+                            android:background="@android:color/transparent" />
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_1_above"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_above="@id/a_bd_view_line_pink_1"
+                            android:background="@android:color/transparent" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_1"
+                            android:background="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_min_bouquet_size_little"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+
+                            android:layout_alignTop="@id/a_bd_view_line_pink_1_above"
+                            android:layout_alignBottom="@id/a_bd_view_line_pink_1_bellow"
+
+                            android:src="@drawable/round_bouquet_type_unselected" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/a_bd_relative_bouquet_medium"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@integer/weight_bouquet_type_relative_selected"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="-10dp"
+                        android:layout_marginRight="-10dp">
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_big_bouquet_size_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/circle_red"
+                            android:adjustViewBounds="true"/>
+
+                        <TextView
+                            android:id="@+id/a_bd_text_bouquet_size_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_middle"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_selected"
+                            android:textSize="@dimen/text_size_bouquet_type_selected"
+                            android:textColor="@color/text_color_bouquet_size_selected"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_2"
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:layout_centerInParent="true"
+                            android:background="@color/pink"
+                            android:layout_below="@id/a_bd_image_big_bouquet_size_medium"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_2_bellow"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_2"
+                            android:background="@android:color/transparent" />
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_2_above"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_above="@id/a_bd_view_line_pink_2"
+                            android:background="@android:color/transparent" />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_2"
+                            android:background="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_min_bouquet_size_medium"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+
+                            android:layout_alignTop="@id/a_bd_view_line_pink_2_above"
+                            android:layout_alignBottom="@id/a_bd_view_line_pink_2_bellow"
+
+                            android:src="@drawable/round_bouquet_type_selected" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/a_bd_relative_bouquet_great"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="@integer/weight_bouquet_type_relative_unselected"
+                        android:layout_gravity="bottom"
+                        android:layout_marginLeft="-10dp"
+                        android:layout_marginRight="-10dp">
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_big_bouquet_size_great"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/circle_white"
+                            android:adjustViewBounds="true"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_3"
+                            android:layout_width="match_parent"
+                            android:layout_height="6dp"
+                            android:layout_centerInParent="true"
+                            android:background="@color/pink"
+                            android:layout_below="@id/a_bd_image_big_bouquet_size_great"/>
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_3_bellow"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_3"
+                            android:background="@android:color/transparent" />
+
+                        <View
+                            android:id="@+id/a_bd_view_line_pink_3_above"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_above="@id/a_bd_view_line_pink_3"
+                            android:background="@android:color/transparent" />
+
+                        <TextView
+                            android:id="@+id/a_bd_text_bouquet_size_great"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/text_great"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/margin_top_bouquet_type_text_unselected"
+                            android:textSize="@dimen/text_size_bouquet_type_unselected"
+                            android:textColor="@color/text_color_bouquet_size_unselected"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/image_bouquet"
+                            android:layout_below="@id/a_bd_view_line_pink_3"
+                            android:background="@color/white" />
+
+                        <ImageView
+                            android:id="@+id/a_bd_image_min_bouquet_size_great"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+
+                            android:layout_alignTop="@id/a_bd_view_line_pink_3_above"
+                            android:layout_alignBottom="@id/a_bd_view_line_pink_3_bellow"
+
+                            android:src="@drawable/round_bouquet_type_unselected" />
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </RelativeLayout>
 

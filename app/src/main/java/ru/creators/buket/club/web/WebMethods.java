@@ -61,6 +61,7 @@ public class WebMethods {
     }
 
     public WebMethods() {
+
     }
 
     public WebMethods(SpiceManager mSpiceManager) {

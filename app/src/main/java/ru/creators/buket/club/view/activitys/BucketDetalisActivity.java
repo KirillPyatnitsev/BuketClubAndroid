@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -121,6 +122,10 @@ public class BucketDetalisActivity extends BaseActivity {
         little = new SizeViewHolder(textBouquetSizeLittle, imageBouquetSizeLittleBig, imageBouquetSizeLittleMin, relativeBouquetSizeLittle);
         medium = new SizeViewHolder(textBouquetSizeMedium, imageBouquetSizeMediumBig, imageBouquetSizeMediumMin, relativeBouquetSizeMedium);
         great = new SizeViewHolder(textBouquetSizeGreat, imageBouquetSizeGreatBig, imageBouquetSizeGreatMin, relativeBouquetSizeGreat);
+
+        little.setSelection(SizeViewHolder.UNSELECTED);
+        little.setSelection(SizeViewHolder.SELECTED);
+        little.setSelection(SizeViewHolder.UNSELECTED);
 
         imageBack = getViewById(R.id.i_ab_image_back);
     }
@@ -268,8 +273,8 @@ public class BucketDetalisActivity extends BaseActivity {
         private int textSizeSelected = R.dimen.text_size_bouquet_type_selected;
         private int textSizeUnselected = R.dimen.text_size_bouquet_type_unselected;
 
-        private int imageBigSelected = R.drawable.round_bouquet_type_big_selected;
-        private int imageBigUnselected = R.drawable.round_bouquet_type_big_unselected;
+        private int imageBigSelected = R.drawable.circle_red;
+        private int imageBigUnselected = R.drawable.circle_white;
 
         private int imageMinSelected = R.drawable.round_bouquet_type_selected;
         private int imageMinUnselected = R.drawable.round_bouquet_type_unselected;
@@ -298,7 +303,7 @@ public class BucketDetalisActivity extends BaseActivity {
             LinearLayout.LayoutParams layoutParamsRelative;
             switch (selection) {
                 case SELECTED:
-                    TransitionManager.beginDelayedTransition(relativeLayout);
+                    TransitionManager.beginDelayedTransition(getCoordinatorLayout());
                     layoutParamsText
                             = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     layoutParamsText.setMargins(0, getResources().getDimensionPixelOffset(imageMarginTopTextSelected), 0, 0);
@@ -311,6 +316,7 @@ public class BucketDetalisActivity extends BaseActivity {
                             getResources().getDimensionPixelSize(relativeMarginLeftRight), 0);
 
                     relativeLayout.setLayoutParams(layoutParamsRelative);
+                    relativeLayout.setGravity(Gravity.BOTTOM);
 
                     text.setLayoutParams(layoutParamsText);
                     text.setTextColor(getResources().getColor(textColorSelected));
@@ -320,7 +326,7 @@ public class BucketDetalisActivity extends BaseActivity {
                     imageMin.setImageResource(imageMinSelected);
                     break;
                 case UNSELECTED:
-                    TransitionManager.beginDelayedTransition(relativeLayout);
+                    TransitionManager.beginDelayedTransition(getCoordinatorLayout());
                     layoutParamsText
                             = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     layoutParamsText.setMargins(0, getResources().getDimensionPixelOffset(imageMarginTopTextUnselected), 0, 0);
@@ -334,6 +340,7 @@ public class BucketDetalisActivity extends BaseActivity {
                             getResources().getDimensionPixelSize(relativeMarginLeftRight), 0);
 
                     relativeLayout.setLayoutParams(layoutParamsRelative);
+                    relativeLayout.setGravity(Gravity.BOTTOM);
 
                     text.setLayoutParams(layoutParamsText);
                     text.setTextColor(getResources().getColor(textColorUnselected));

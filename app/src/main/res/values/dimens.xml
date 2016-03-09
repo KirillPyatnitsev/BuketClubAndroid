@@ -50,7 +50,7 @@
     <dimen name="text_size_bouquet_type_unselected">@dimen/text_size_small</dimen>
     <dimen name="text_size_bouquet_type_selected">@dimen/text_size_normal</dimen>
 
-    <dimen name="margin_top_bouquet_type_text_unselected">40dp</dimen>
+    <dimen name="margin_top_bouquet_type_text_unselected">30dp</dimen>
     <dimen name="margin_top_bouquet_type_text_selected">30dp</dimen>
 
     <dimen name="margin_left_right_bouquet_size_relative">-10dp</dimen>
@@ -65,4 +65,6 @@
     <dimen name="image_artist_icon_width">100dp</dimen>
     <dimen name="image_artist_icon_height">80dp</dimen>
     <dimen name="image_order_details_artist_icon_height">40dp</dimen>
+
+    <dimen name="image_bouquet">20dp</dimen>
 </resources>
