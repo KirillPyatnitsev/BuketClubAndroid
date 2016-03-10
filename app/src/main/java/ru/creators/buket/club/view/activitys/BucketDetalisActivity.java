@@ -59,32 +59,25 @@ public class BucketDetalisActivity extends BaseActivity {
     private TextView textPrice;
     private TextView textBouquetName;
 
-    private TextView textTimeSoon;
-    private TextView textTime;
-
     private Bouquet bouquet = DataController.getInstance().getBouquet();
 
     private Button buttonBay;
 
-    private String timeSoon;
-    private String time;
-
-    private SpannableString spannableStringTimeSoon;
-    private SpannableString spannableStringTime;
-
-    private String currentDoliveryTime = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bucket_detalis);
-        assignView();
-        assignListener();
-        initView();
-        imageBack.setVisibility(View.VISIBLE);
+        if (bouquet!=null){
+            assignView();
+            assignListener();
+            initView();
+            imageBack.setVisibility(View.VISIBLE);
+        }else{
+            showSnackBar(R.string.oops_error);
+            startActivity(new Intent(this, BucketsActivity.class));
+        }
 
-        spannableStringTimeSoon.setSpan(new UnderlineSpan(), 0, timeSoon.length(), 0);
-        spannableStringTime.setSpan(new UnderlineSpan(), 0, time.length(), 0);
 
     }
 
@@ -112,8 +105,6 @@ public class BucketDetalisActivity extends BaseActivity {
         imageBouquetSizeGreatMin = getViewById(R.id.a_bd_image_min_bouquet_size_great);
         relativeBouquetSizeGreat = getViewById(R.id.a_bd_relative_bouquet_great);
 
-        textTime = getViewById(R.id.a_bd_text_time);
-        textTimeSoon = getViewById(R.id.a_bd_text_time_soon);
         textBouquetName = getViewById(R.id.a_ab_text_bouquet_name);
 
         textPrice = getViewById(R.id.a_ab_text_cost);
@@ -168,61 +159,13 @@ public class BucketDetalisActivity extends BaseActivity {
             }
         });
 
-        textTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textTime.setText(spannableStringTime);
-                textTimeSoon.setText(timeSoon);
-
-                new SlideDateTimePicker.Builder(getSupportFragmentManager())
-                        .setListener(slideDateTimeListener)
-                        .setInitialDate(new Date())
-                        .setIs24HourTime(true)
-                        .setMinDate(new Date())
-                        .setIndicatorColor(getResources().getColor(R.color.yellow))
-                        .build()
-                        .show();
-            }
-        });
-
-        textTimeSoon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textTime.setText(time);
-                currentDoliveryTime = null;
-                textTimeSoon.setText(spannableStringTimeSoon);
-            }
-        });
     }
 
     private void initView(){
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
-        timeSoon = getString(R.string.text_time_soon);
-        time = getString(R.string.text_time);
-
-        spannableStringTimeSoon = new SpannableString(timeSoon);
-        spannableStringTime = new SpannableString(time);
-
-        textTime.setText(time);
-        textTimeSoon.setText(spannableStringTimeSoon);
     }
-
-    private SlideDateTimeListener slideDateTimeListener = new SlideDateTimeListener() {
-
-        @Override
-        public void onDateTimeSet(Date date)
-        {
-            currentDoliveryTime = ISO8601Utils.format(date);
-        }
-
-        @Override
-        public void onDateTimeCancel()
-        {
-            currentDoliveryTime = null;
-        }
-    };
 
     private void selectSize(int sizeId) {
         if (sizeId != currentSize) {
@@ -359,7 +302,6 @@ public class BucketDetalisActivity extends BaseActivity {
         order.setSizeIndex(currentSize);
         order.setSize(Bouquet.getSizeDesc(currentSize));
         order.setBouquetItemId(bouquet.getId());
-        order.setTimeDelivery(currentDoliveryTime);
         order.setBouquetItem(bouquet);
         order.setPrice(bouquet.getBouquetPriceBySize(currentSize));
 

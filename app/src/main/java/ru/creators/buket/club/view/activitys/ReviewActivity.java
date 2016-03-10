@@ -102,6 +102,6 @@ public class ReviewActivity extends BaseActivity {
     }
 
     private void goToOrderDetalis(){
-        startActivity(new Intent(this, OrderDetalisActivity.class));
+        startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 }

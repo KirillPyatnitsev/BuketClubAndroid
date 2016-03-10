@@ -59,7 +59,7 @@
             android:name=".view.activitys.PayDoneActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.OrderDetalisActivity"
+            android:name=".view.activitys.OrderDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activitys.ReviewActivity"

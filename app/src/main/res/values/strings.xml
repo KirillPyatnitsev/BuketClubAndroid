@@ -138,4 +138,6 @@
     <string name="code_write_second">Вам на телефон отправлен код, для подтверждения Вашего номера.</string>
     <string name="text_done">Готово</string>
     <string name="phone_verification_error">Ошибка подтверждения телефона</string>
+
+    <string name="oops_error">Оопс, что-то пошло не так.</string>
 </resources>

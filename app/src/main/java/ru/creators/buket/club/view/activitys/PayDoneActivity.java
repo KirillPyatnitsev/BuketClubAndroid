@@ -50,7 +50,7 @@ public class PayDoneActivity extends BaseActivity {
     }
 
     private void goToOrderDetais(){
-        startActivity(new Intent(this, OrderDetalisActivity.class));
+        startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 
     private void sendOrder(){

@@ -160,7 +160,7 @@ public class OrdersActivity extends BaseActivity {
     }
 
     private void goToOrderDetalisActivity(){
-        startActivity(new Intent(this, OrderDetalisActivity.class));
+        startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 
     private void goToReviewActivity(){

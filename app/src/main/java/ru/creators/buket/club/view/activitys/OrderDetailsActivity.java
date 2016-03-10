@@ -1,9 +1,7 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +12,6 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
-import org.w3c.dom.Text;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -26,7 +23,7 @@ import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.OrderResponse;
 
-public class OrderDetalisActivity extends BaseActivity {
+public class OrderDetailsActivity extends BaseActivity {
 
     private ImageView imageBack;
 
@@ -50,10 +47,15 @@ public class OrderDetalisActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bouquet_delivery_status_detalis);
-        assingnView();
-        assignListener();
-        initView();
-        updateOrder();
+        if (order!=null) {
+            assingView();
+            assignListener();
+            initView();
+            updateOrder();
+        } else {
+            showSnackBar(R.string.oops_error);
+            startActivity(new Intent(this, OrdersActivity.class));
+        }
     }
 
     @Override
@@ -61,7 +63,7 @@ public class OrderDetalisActivity extends BaseActivity {
         return R.id.a_bdsd_coordinator_root;
     }
 
-    private void assingnView(){
+    private void assingView(){
         textBouquetName = getViewById(R.id.a_bdsd_text_bouquet_name);
         textBouquetCost = getViewById(R.id.a_bdsd_text_bouquet_cost);
         textAddress = getViewById(R.id.a_bdsd_text_address);
@@ -96,7 +98,6 @@ public class OrderDetalisActivity extends BaseActivity {
 
     private void initView(){
         fillView(order);
-
     }
 
     private void fillView(Order order){
