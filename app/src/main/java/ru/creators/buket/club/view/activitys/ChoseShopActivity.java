@@ -1,16 +1,14 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.Manifest;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Criteria;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -37,13 +35,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.transitionseverywhere.TransitionManager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -67,6 +64,8 @@ import ru.creators.buket.club.web.response.ShopListResponse;
 public class ChoseShopActivity extends BaseActivity implements
         OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
+    private final LatLng MOSCOW_CENTER = new LatLng(55.75370903771494, 37.61981338262558);
 
     private ListAnswerFlex listAnswerFlex;
     private ListAnswerFlexAdapter listAnswerFlexAdapter;
@@ -93,7 +92,10 @@ public class ChoseShopActivity extends BaseActivity implements
     private TextView textSort;
     private TextView textShowMap;
     private TextView textShowList;
-
+    private TextView textActionBarTitle;
+    private ImageView imageActionBarAnimation1;
+    private ImageView imageActionBarAnimation2;
+    private ImageView imageActionBar;
 
     private List<Marker> listMarkerAnsweredShops;
     private List<Marker> listMarkerNotAnsweredShops;
@@ -110,8 +112,11 @@ public class ChoseShopActivity extends BaseActivity implements
     private Comparator<AnswerFlex> selectedAnswersComporator = AnswerFlex.COMPARATOR_SORT_BY_PRICE;
 
     private boolean mapIsNeverOpened = true;
+    private boolean firstAnsver = true;
 
     private LatLng mapCenterLocation;
+
+    private PulseScaleAnimation pulseScaleAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,6 +135,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
         startLoadingShopList();
 
+        sendOrder();
+
         if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)) {
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -140,8 +147,10 @@ public class ChoseShopActivity extends BaseActivity implements
             }
         } else {
             mapCenterLocation = new LatLng(DataController.getInstance().getOrder().getAddressLat(), DataController.getInstance().getOrder().getAddressLng());
-            sendOrder();
         }
+
+        showMap();
+        textShowList.setVisibility(View.GONE);
     }
 
     @Override
@@ -159,40 +168,39 @@ public class ChoseShopActivity extends BaseActivity implements
     }
 
     @Override
+    protected void onPause() {
+//        pulseScaleAnimation.stop();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        startAnimation();
+    }
+
+    @Override
     public void onConnected(Bundle connectionHint) {
-        if (ActivityCompat
-                .checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-        if (mLastLocation != null) {
-            DataController.getInstance().getOrder().setAddressLat(mLastLocation.getLatitude());
-            DataController.getInstance().getOrder().setAddressLng(mLastLocation.getLongitude());
-            Geocoder geocoder;
-            List<Address> addresses;
-            geocoder = new Geocoder(this, Locale.getDefault());
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)){
-                mapCenterLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                if (googleMap!=null){
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+            if (mLastLocation != null) {
+                DataController.getInstance().getOrder().setAddressLat(mLastLocation.getLatitude());
+                DataController.getInstance().getOrder().setAddressLng(mLastLocation.getLongitude());
+
+                if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)) {
+                    mapCenterLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 }
-            }
 
-                try {
-                addresses = geocoder.getFromLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude(), 1);
-                if (addresses != null && addresses.size() > 0)
-                    DataController.getInstance().getOrder().setAddress(addresses.get(0).getAddressLine(0));
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            }else{
+                mapCenterLocation = MOSCOW_CENTER;
             }
         }
-        sendOrder();
-        updateMapMarkers();
+
+        if (googleMap != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
+        }
     }
 
     @Override
@@ -216,36 +224,9 @@ public class ChoseShopActivity extends BaseActivity implements
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP))
-                googleMap.setMyLocationEnabled(true);
-
-            // Getting LocationManager object from System Service LOCATION_SERVICE
-            LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-            // Creating a criteria object to retrieve provider
-            Criteria criteria = new Criteria();
-
-            // Getting the name of the best provider
-            String provider = locationManager.getBestProvider(criteria, true);
-
-            // Getting Current Location
-            Location location = locationManager.getLastKnownLocation(provider);
-
-            if (location != null) {
-                // Getting latitude of the current location
-                double latitude = location.getLatitude();
-
-                // Getting longitude of the current location
-                double longitude = location.getLongitude();
-
-                // Creating a LatLng object for the current location
-                LatLng latLng = new LatLng(latitude, longitude);
-                if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP))
-                    mapCenterLocation = latLng;
-            }
-        }
+        if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            googleMap.setMyLocationEnabled(true);
 
         googleMap.setOnInfoWindowClickListener(this);
 
@@ -263,6 +244,44 @@ public class ChoseShopActivity extends BaseActivity implements
     @Override
     protected int getCoordinatorViewId() {
         return R.id.a_cs_coordinator_root;
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        startAnimation();
+    }
+
+    private void startAnimation(){
+
+        if (pulseScaleAnimation!=null){
+            pulseScaleAnimation.stop();
+        }
+
+        int imageActionBarWidth = imageActionBar.getWidth();
+        int imageActionBarHeight = imageActionBar.getHeight();
+        float imageActionBarX = imageActionBar.getX();
+        float imageActionBarY = imageActionBar.getY();
+
+        imageActionBarAnimation1.getLayoutParams().width = imageActionBarWidth;
+        imageActionBarAnimation1.getLayoutParams().height = imageActionBarHeight;
+        imageActionBarAnimation1.setX(imageActionBarX);
+        imageActionBarAnimation1.setY(imageActionBarY);
+
+        imageActionBarAnimation2.getLayoutParams().width = imageActionBarWidth;
+        imageActionBarAnimation2.getLayoutParams().height = imageActionBarHeight;
+        imageActionBarAnimation2.setX(imageActionBarX);
+        imageActionBarAnimation2.setY(imageActionBarY);
+
+        imageActionBarAnimation1.setVisibility(View.VISIBLE);
+        imageActionBarAnimation2.setVisibility(View.VISIBLE);
+
+        imageActionBarAnimation1.requestLayout();
+        imageActionBarAnimation2.requestLayout();
+
+        pulseScaleAnimation = new PulseScaleAnimation(imageActionBarAnimation1, imageActionBarAnimation2, (float)(2), 1300);
+        pulseScaleAnimation.start();
     }
 
     private void updateMapMarkers() {
@@ -328,12 +347,16 @@ public class ChoseShopActivity extends BaseActivity implements
         imageSettingsClose = getViewById(R.id.i_ab_image_settings_close);
 
         textShopNotFound = getViewById(R.id.a_cs_text_shop_not_found);
-
+        textActionBarTitle = getViewById(R.id.a_cs_text_action_bar_title);
         swipeRefreshLayout = getViewById(R.id.a_cs_swipe_refresh);
 
-        textSort = getViewById(R.id.a_o_text_action_bar_second);
-        textShowMap = getViewById(R.id.a_o_text_action_bar_second_show_map);
-        textShowList = getViewById(R.id.a_o_text_action_bar_second_show_list);
+        textSort = getViewById(R.id.a_cs_text_action_bar_second);
+        textShowMap = getViewById(R.id.a_cs_text_action_bar_second_show_map);
+        textShowList = getViewById(R.id.a_cs_text_action_bar_second_show_list);
+        imageActionBarAnimation1 = getViewById(R.id.a_cs_image_action_bar_background_animation_1);
+        imageActionBarAnimation2 = getViewById(R.id.a_cs_image_action_bar_background_animation_2);
+        imageActionBar = getViewById(R.id.a_cs_image_action_bar_background);
+
     }
 
     private void assignListener() {
@@ -361,39 +384,14 @@ public class ChoseShopActivity extends BaseActivity implements
         textShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                relativeContainerMap.setVisibility(View.VISIBLE);
-                swipeRefreshLayout.setVisibility(View.GONE);
-                textShowList.setVisibility(View.VISIBLE);
-                textShowMap.setVisibility(View.GONE);
-                textShopNotFound.setVisibility(View.GONE);
-                imageBouquet.setVisibility(View.GONE);
-                textSort.setVisibility(View.GONE);
-                imageSettingsOpen.setVisibility(View.GONE);
-                if (mapIsNeverOpened){
-                    Timer timer = new Timer();
-                    TimerMapZoom timerMapZoom = new TimerMapZoom();
-
-                    timer.schedule(timerMapZoom, 1000);
-
-                    mapIsNeverOpened = false;
-                }
+                showMap();
             }
         });
 
         textShowList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                relativeContainerMap.setVisibility(View.GONE);
-                swipeRefreshLayout.setVisibility(View.VISIBLE);
-                textShowList.setVisibility(View.GONE);
-                textShowMap.setVisibility(View.VISIBLE);
-                imageSettingsOpen.setVisibility(View.VISIBLE);
-                if (listAnswerFlex.size() != 0) {
-                    textShopNotFound.setVisibility(View.GONE);
-                } else {
-                    textShopNotFound.setVisibility(View.VISIBLE);
-                }
-                imageBouquet.setVisibility(View.VISIBLE);
+                showList();
             }
         });
 
@@ -403,6 +401,41 @@ public class ChoseShopActivity extends BaseActivity implements
                 showSortDialog();
             }
         });
+    }
+
+    private void showMap(){
+        TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+        relativeContainerMap.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setVisibility(View.GONE);
+        textShowList.setVisibility(View.VISIBLE);
+        textShowMap.setVisibility(View.GONE);
+        textShopNotFound.setVisibility(View.GONE);
+        imageBouquet.setVisibility(View.GONE);
+        textSort.setVisibility(View.GONE);
+        imageSettingsOpen.setVisibility(View.GONE);
+        if (mapIsNeverOpened){
+            Timer timer = new Timer();
+            TimerMapZoom timerMapZoom = new TimerMapZoom();
+
+            timer.schedule(timerMapZoom, 1000);
+
+            mapIsNeverOpened = false;
+        }
+    }
+
+    private void showList(){
+        TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+        relativeContainerMap.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        textShowList.setVisibility(View.GONE);
+        textShowMap.setVisibility(View.VISIBLE);
+        imageSettingsOpen.setVisibility(View.VISIBLE);
+        if (listAnswerFlex.size() != 0) {
+            textShopNotFound.setVisibility(View.GONE);
+        } else {
+            textShopNotFound.setVisibility(View.VISIBLE);
+        }
+        imageBouquet.setVisibility(View.VISIBLE);
     }
 
     private void initView() {
@@ -446,6 +479,7 @@ public class ChoseShopActivity extends BaseActivity implements
     }
 
     private void showExitDialog() {
+        pulseScaleAnimation.stop();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -454,6 +488,8 @@ public class ChoseShopActivity extends BaseActivity implements
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                if (firstAnsver)
+                    startAnimation();
             }
         });
 
@@ -522,6 +558,14 @@ public class ChoseShopActivity extends BaseActivity implements
                         if (!listAnswerFlex.isEmpty()) {
                             textShopNotFound.setVisibility(View.GONE);
                             imageSettingsOpen.setVisibility(View.VISIBLE);
+
+                            if (firstAnsver){
+                                showList();
+                                firstAnsver = false;
+                                pulseScaleAnimation.stop();
+                                textActionBarTitle.setText(R.string.text_chose_artist_bouquet);
+                            }
+
                         } else {
                             textShopNotFound.setVisibility(View.VISIBLE);
                             imageSettingsOpen.setVisibility(View.INVISIBLE);
@@ -637,4 +681,117 @@ public class ChoseShopActivity extends BaseActivity implements
             });
         }
     }
+
+    public class PulseScaleAnimation {
+        private View view1;
+        private View view2;
+        private float scale;
+        private int duration;
+        private Thread threadAnimation;
+        private boolean stop = false;
+        private AnimatorSet pulseAnimationSet1;
+        private AnimatorSet pulseAnimationSet2;
+
+        private int durationBetveenWave = 666;
+
+        public PulseScaleAnimation(View view1, View view2, float _scale, int _duration){
+            this.view1 = view1;
+            this.view2 = view2;
+            scale = _scale;
+            duration = _duration;
+        }
+
+        public void start(){
+
+            final Handler handler = new Handler();
+
+            final float startX = view1.getX();
+            final float startY = view1.getY();
+            final float endX = view1.getX();
+            final float endY = view1.getY();
+            threadAnimation = new Thread(){
+                @Override
+                public void run(){
+                    ObjectAnimator scaleXAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_X, scale);
+                    ObjectAnimator scaleYAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_Y, scale);
+                    ObjectAnimator xAnimation1 = ObjectAnimator.ofFloat(view1, View.X, startX, endX);
+                    ObjectAnimator yAnimation1 = ObjectAnimator.ofFloat(view1, View.Y, startY, endY);
+                    ObjectAnimator alpha1 = ObjectAnimator.ofFloat(view1, View.ALPHA, 1f, 0f);
+
+                    ObjectAnimator scaleXAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_X, scale);
+                    ObjectAnimator scaleYAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_Y, scale);
+                    ObjectAnimator xAnimation2 = ObjectAnimator.ofFloat(view2, View.X, startX, endX);
+                    ObjectAnimator yAnimation2 = ObjectAnimator.ofFloat(view2, View.Y, startY, endY);
+                    ObjectAnimator alpha2 = ObjectAnimator.ofFloat(view2, View.ALPHA, 1f, 0f);
+
+                    scaleXAnimation1.setDuration(duration);
+                    scaleYAnimation1.setDuration(duration);
+                    xAnimation1.setDuration(duration);
+                    yAnimation1.setDuration(duration);
+                    alpha1.setDuration(duration);
+
+
+                    scaleXAnimation2.setDuration(duration);
+                    scaleYAnimation2.setDuration(duration);
+                    xAnimation2.setDuration(duration);
+                    yAnimation2.setDuration(duration);
+                    alpha2.setDuration(duration);
+
+                    pulseAnimationSet1 = new AnimatorSet();
+                    pulseAnimationSet2 = new AnimatorSet();
+                    pulseAnimationSet1.setDuration(duration);
+                    pulseAnimationSet2.setDuration(duration);
+
+                    pulseAnimationSet1.play(scaleXAnimation1)
+                            .with(scaleYAnimation1)
+                            .with(xAnimation1)
+                            .with(yAnimation1)
+                            .with(alpha1);
+
+                    pulseAnimationSet2.play(scaleXAnimation2)
+                            .with(scaleYAnimation2)
+                            .with(xAnimation2)
+                            .with(yAnimation2)
+                            .with(alpha2);
+
+
+                    while(!stop){
+                        handler.post(new Runnable(){
+                            public void run(){
+                                pulseAnimationSet1.start();
+                            }
+                        });
+
+                        try{sleep(durationBetveenWave);}
+                        catch (Exception err){
+                            break;
+                        }
+
+                        handler.post(new Runnable(){
+                            public void run(){
+                                pulseAnimationSet2.start();
+                            }
+                        });
+
+                        try{sleep(duration);}
+                        catch (Exception err){
+                            break;
+                        }
+                    }
+                }
+            };
+            threadAnimation.start();
+        }
+
+        public void stop(){
+            stop = true;
+            pulseAnimationSet1.cancel();
+            pulseAnimationSet2.cancel();
+            view1.setVisibility(View.GONE);
+            view2.setVisibility(View.GONE);
+            view1.requestLayout();
+            view1.requestLayout();
+        }
+    }
+
 }

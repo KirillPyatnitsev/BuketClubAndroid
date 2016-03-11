@@ -68,10 +68,26 @@
             android:name="com.google.android.gms.maps.SupportMapFragment" />
     </RelativeLayout>
 
+    <ImageView
+        android:id="@+id/a_cs_image_action_bar_background_animation_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/round_action_bar"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/a_cs_image_action_bar_background_animation_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/round_action_bar"
+        android:adjustViewBounds="true"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:id="@+id/a_cs_relative_action_bar_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/a_cs_image_action_bar_background"
@@ -82,6 +98,7 @@
             android:layout_marginTop="-350dp"
             android:src="@drawable/round_action_bar" />
 
+
         <include
             android:id="@+id/a_cs_action_bar"
             layout="@layout/include_action_bar" />
@@ -89,7 +106,7 @@
 
 
         <TextView
-            android:id="@+id/a_o_text_action_bar_title"
+            android:id="@+id/a_cs_text_action_bar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/a_cs_action_bar"
@@ -97,16 +114,16 @@
 
             android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
             android:gravity="center"
-            android:text="@string/text_chose_artist_bouquet"
+            android:text="@string/chose_shop_not_shop"
             android:textColor="@color/text_color_default"
             android:textSize="@dimen/text_size_large"
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/a_o_text_action_bar_second"
+            android:id="@+id/a_cs_text_action_bar_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_below="@id/a_cs_text_action_bar_title"
             android:layout_centerHorizontal="true"
 
             android:layout_marginTop="@dimen/margin_normal"
@@ -117,10 +134,10 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/a_o_text_action_bar_second_show_map"
+            android:id="@+id/a_cs_text_action_bar_second_show_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_below="@id/a_cs_text_action_bar_title"
             android:layout_centerHorizontal="true"
 
             android:layout_marginTop="@dimen/margin_normal"
@@ -131,10 +148,10 @@
             android:visibility="visible" />
 
         <TextView
-            android:id="@+id/a_o_text_action_bar_second_show_list"
+            android:id="@+id/a_cs_text_action_bar_second_show_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/a_o_text_action_bar_title"
+            android:layout_below="@id/a_cs_text_action_bar_title"
             android:layout_centerHorizontal="true"
 
             android:layout_marginTop="@dimen/margin_normal"

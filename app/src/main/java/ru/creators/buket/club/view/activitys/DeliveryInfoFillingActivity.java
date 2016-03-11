@@ -6,10 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.text.InputFilter;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -88,8 +90,16 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
-    private Location mLastLocation;
+    private Location lastLocation;
     private String lastAddress;
+    private Place lastPlace;
+    private boolean lastLocationSelected = false;
+
+    private String lastUserSelectedAddress;
+
+    private LocationManager mLocationManager;
+    private long LOCATION_REFRESH_TIME = 10000;
+    private float LOCATION_REFRESH_DISTANCE = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,19 +138,11 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        if (ActivityCompat
-                .checkSelfPermission(this,
-                        Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+            if (lastLocation != null)
+                addressGetRequest(lastLocation.getLatitude(), lastLocation.getLongitude());
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
-
-        if (mLastLocation!=null){
-            addressGetRequest(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        }
-
     }
 
     @Override
@@ -180,13 +182,24 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentShippingType.equals(Order.DELIVERY_TYPE_ADDRESS) && currentPlace == null)
-                    showSnackBar(getString(R.string.delivery_info_address_error));
-                else if (addDataToOrder())
-                    phoneVerification(DataController.getInstance().getOrder().getRecipientPhone());
-                else
-                    showSnackBar(getString(R.string.delivery_info_error));
 
+                boolean deliveryPickup = currentShippingType.equals(Order.DELIVERY_TYPE_PICKUP);
+
+                boolean myLocation = lastLocationSelected && lastUserSelectedAddress.equals(editAddress.getText().toString());
+
+                boolean editLocation = currentPlace!=null && lastUserSelectedAddress.equals(editAddress.getText().toString());
+
+                boolean dataIsDone = addDataToOrder();
+
+                if (dataIsDone){
+                    if (deliveryPickup || myLocation || editLocation){
+                        phoneVerification(DataController.getInstance().getOrder().getRecipientPhone());
+                    }else{
+                        showSnackBar(R.string.delivery_info_address_error);
+                    }
+                }else{
+                    showSnackBar(getString(R.string.delivery_info_error));
+                }
             }
         });
 
@@ -217,6 +230,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         editAddress.setOnPlaceSelectedListener(new OnPlaceSelectedListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                lastLocationSelected = false;
+                lastUserSelectedAddress = editAddress.getText().toString();
                 currentPlace = place;
                 Places.GeoDataApi.getPlaceById(mGoogleApiClient, currentPlace.place_id)
                         .setResultCallback(new ResultCallback<PlaceBuffer>() {
@@ -262,7 +277,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         buttonMyLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                currentPlace = null;
                 editAddress.setText(lastAddress);
+                lastUserSelectedAddress = lastAddress;
+                lastLocationSelected = true;
+                DataController.getInstance().getOrder().setAddressLat(lastLocation.getLatitude());
+                DataController.getInstance().getOrder().setAddressLng(lastLocation.getLongitude());
             }
         });
     }
@@ -316,7 +336,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private boolean addDataToOrder() {
         DataController.getInstance().getOrder().setRecipientPhone(editPhoneNumber.getText().toString());
-        DataController.getInstance().getOrder().setAddress(editAddress.getText().toString());
+        DataController.getInstance().getOrder().setAddress(lastUserSelectedAddress);
         DataController.getInstance().getOrder().setComment(editComment.getText().toString());
         DataController.getInstance().getOrder().setTimeDelivery(
                 currentDate != null ? ISO8601Utils.format(currentDate) : null
