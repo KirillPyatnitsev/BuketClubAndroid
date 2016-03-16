@@ -101,7 +101,8 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void fillView(Order order){
-        WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+        if (order.getBouquetItem()!=null)
+            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
         if (order.getShop()!=null)
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
 

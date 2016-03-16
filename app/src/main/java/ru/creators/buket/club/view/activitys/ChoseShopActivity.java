@@ -1,6 +1,7 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.Manifest;
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.DialogInterface;
@@ -58,7 +59,6 @@ import ru.creators.buket.club.view.adapters.ListAnswerFlexAdapter;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
-import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.ShopListResponse;
 
 public class ChoseShopActivity extends BaseActivity implements
@@ -135,8 +135,6 @@ public class ChoseShopActivity extends BaseActivity implements
 
         startLoadingShopList();
 
-        sendOrder();
-
         if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)) {
             if (mGoogleApiClient == null) {
                 mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -148,6 +146,8 @@ public class ChoseShopActivity extends BaseActivity implements
         } else {
             mapCenterLocation = new LatLng(DataController.getInstance().getOrder().getAddressLat(), DataController.getInstance().getOrder().getAddressLng());
         }
+
+        initFaye();
 
         showMap();
         textShowList.setVisibility(View.GONE);
@@ -193,7 +193,7 @@ public class ChoseShopActivity extends BaseActivity implements
                     mapCenterLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
                 }
 
-            }else{
+            } else {
                 mapCenterLocation = MOSCOW_CENTER;
             }
         }
@@ -211,7 +211,6 @@ public class ChoseShopActivity extends BaseActivity implements
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
         textShowMap.setVisibility(View.INVISIBLE);
-        sendOrder();
     }
 
     private void initMap() {
@@ -230,7 +229,7 @@ public class ChoseShopActivity extends BaseActivity implements
 
         googleMap.setOnInfoWindowClickListener(this);
 
-        if (mapCenterLocation!=null)
+        if (mapCenterLocation != null)
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 20));
     }
 
@@ -253,10 +252,10 @@ public class ChoseShopActivity extends BaseActivity implements
         startAnimation();
     }
 
-    private void startAnimation(){
+    private void startAnimation() {
 
-        if (pulseScaleAnimation!=null){
-            pulseScaleAnimation.stop();
+        if (pulseScaleAnimation != null) {
+//            pulseScaleAnimation.stop();
         }
 
         int imageActionBarWidth = imageActionBar.getWidth();
@@ -280,12 +279,12 @@ public class ChoseShopActivity extends BaseActivity implements
         imageActionBarAnimation1.requestLayout();
         imageActionBarAnimation2.requestLayout();
 
-        pulseScaleAnimation = new PulseScaleAnimation(imageActionBarAnimation1, imageActionBarAnimation2, (float)(2), 1300);
+        pulseScaleAnimation = new PulseScaleAnimation(imageActionBarAnimation1, imageActionBarAnimation2, (float) (2), 1300);
         pulseScaleAnimation.start();
     }
 
     private void updateMapMarkers() {
-        if (googleMap!=null) {
+        if (googleMap != null) {
             googleMap.clear();
             listMarkerNotAnsweredShops.clear();
             listMarkerAnsweredShops.clear();
@@ -403,7 +402,7 @@ public class ChoseShopActivity extends BaseActivity implements
         });
     }
 
-    private void showMap(){
+    private void showMap() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         relativeContainerMap.setVisibility(View.VISIBLE);
         swipeRefreshLayout.setVisibility(View.GONE);
@@ -413,7 +412,7 @@ public class ChoseShopActivity extends BaseActivity implements
         imageBouquet.setVisibility(View.GONE);
         textSort.setVisibility(View.GONE);
         imageSettingsOpen.setVisibility(View.GONE);
-        if (mapIsNeverOpened){
+        if (mapIsNeverOpened) {
             Timer timer = new Timer();
             TimerMapZoom timerMapZoom = new TimerMapZoom();
 
@@ -423,7 +422,7 @@ public class ChoseShopActivity extends BaseActivity implements
         }
     }
 
-    private void showList(){
+    private void showList() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         relativeContainerMap.setVisibility(View.GONE);
         swipeRefreshLayout.setVisibility(View.VISIBLE);
@@ -441,7 +440,7 @@ public class ChoseShopActivity extends BaseActivity implements
     private void initView() {
         imageBack.setVisibility(View.VISIBLE);
 
-        if (order.getBouquetItem()!=null)
+        if (order.getBouquetItem() != null)
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
 
         listAnswerFlex = new ListAnswerFlex();
@@ -510,28 +509,6 @@ public class ChoseShopActivity extends BaseActivity implements
         startActivity(new Intent(this, PaymentTypeActivity.class));
     }
 
-    private void sendOrder() {
-        startLoading(false);
-
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                order.getOrderForServer(),
-                new RequestListener<OrderResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        showSnackBar("Ошибка создания заказа");
-                        stopLoading();
-                    }
-
-                    @Override
-                    public void onRequestSuccess(OrderResponse orderResponse) {
-                        order = orderResponse.getOrder();
-                        order.setBouquetItemId(order.getBouquetItem().getId());
-                        initFaye();
-                        stopLoading();
-                    }
-                });
-    }
-
     private void updateArtistsList() {
         if (!swipeRefreshLayout.isRefreshing())
             startLoading(false);
@@ -559,7 +536,7 @@ public class ChoseShopActivity extends BaseActivity implements
                             textShopNotFound.setVisibility(View.GONE);
                             imageSettingsOpen.setVisibility(View.VISIBLE);
 
-                            if (firstAnsver){
+                            if (firstAnsver) {
                                 showList();
                                 firstAnsver = false;
                                 pulseScaleAnimation.stop();
@@ -675,7 +652,7 @@ public class ChoseShopActivity extends BaseActivity implements
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (mapCenterLocation!=null)
+                    if (mapCenterLocation != null)
                         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 15000, null);
                 }
             });
@@ -688,20 +665,23 @@ public class ChoseShopActivity extends BaseActivity implements
         private float scale;
         private int duration;
         private Thread threadAnimation;
-        private boolean stop = false;
         private AnimatorSet pulseAnimationSet1;
         private AnimatorSet pulseAnimationSet2;
 
+        private boolean stop = false;
+
         private int durationBetveenWave = 666;
 
-        public PulseScaleAnimation(View view1, View view2, float _scale, int _duration){
+        public PulseScaleAnimation(View view1, View view2, float _scale, int _duration) {
             this.view1 = view1;
             this.view2 = view2;
             scale = _scale;
             duration = _duration;
         }
 
-        public void start(){
+        public void start() {
+
+            stop = false;
 
             final Handler handler = new Handler();
 
@@ -709,88 +689,116 @@ public class ChoseShopActivity extends BaseActivity implements
             final float startY = view1.getY();
             final float endX = view1.getX();
             final float endY = view1.getY();
-            threadAnimation = new Thread(){
+
+            ObjectAnimator scaleXAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_X, scale);
+            ObjectAnimator scaleYAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_Y, scale);
+            ObjectAnimator xAnimation1 = ObjectAnimator.ofFloat(view1, View.X, startX, endX);
+            ObjectAnimator yAnimation1 = ObjectAnimator.ofFloat(view1, View.Y, startY, endY);
+            ObjectAnimator alpha1 = ObjectAnimator.ofFloat(view1, View.ALPHA, 1f, 0f);
+
+            ObjectAnimator scaleXAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_X, scale);
+            ObjectAnimator scaleYAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_Y, scale);
+            ObjectAnimator xAnimation2 = ObjectAnimator.ofFloat(view2, View.X, startX, endX);
+            ObjectAnimator yAnimation2 = ObjectAnimator.ofFloat(view2, View.Y, startY, endY);
+            ObjectAnimator alpha2 = ObjectAnimator.ofFloat(view2, View.ALPHA, 1f, 0f);
+
+            scaleXAnimation1.setDuration(duration);
+            scaleYAnimation1.setDuration(duration);
+            xAnimation1.setDuration(duration);
+            yAnimation1.setDuration(duration);
+            alpha1.setDuration(duration);
+
+
+            scaleXAnimation2.setDuration(duration);
+            scaleYAnimation2.setDuration(duration);
+            xAnimation2.setDuration(duration);
+            yAnimation2.setDuration(duration);
+            alpha2.setDuration(duration);
+
+            pulseAnimationSet1 = new AnimatorSet();
+            pulseAnimationSet2 = new AnimatorSet();
+            pulseAnimationSet1.setDuration(duration);
+            pulseAnimationSet2.setDuration(duration);
+
+            pulseAnimationSet1.play(scaleXAnimation1)
+                    .with(scaleYAnimation1)
+                    .with(xAnimation1)
+                    .with(yAnimation1)
+                    .with(alpha1);
+
+            pulseAnimationSet2.play(scaleXAnimation2)
+                    .with(scaleYAnimation2)
+                    .with(xAnimation2)
+                    .with(yAnimation2)
+                    .with(alpha2);
+
+            pulseAnimationSet2.setStartDelay(durationBetveenWave);
+
+            pulseAnimationSet2.addListener(new Animator.AnimatorListener() {
                 @Override
-                public void run(){
-                    ObjectAnimator scaleXAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_X, scale);
-                    ObjectAnimator scaleYAnimation1 = ObjectAnimator.ofFloat(view1, View.SCALE_Y, scale);
-                    ObjectAnimator xAnimation1 = ObjectAnimator.ofFloat(view1, View.X, startX, endX);
-                    ObjectAnimator yAnimation1 = ObjectAnimator.ofFloat(view1, View.Y, startY, endY);
-                    ObjectAnimator alpha1 = ObjectAnimator.ofFloat(view1, View.ALPHA, 1f, 0f);
+                public void onAnimationStart(Animator animation) {
 
-                    ObjectAnimator scaleXAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_X, scale);
-                    ObjectAnimator scaleYAnimation2 = ObjectAnimator.ofFloat(view2, View.SCALE_Y, scale);
-                    ObjectAnimator xAnimation2 = ObjectAnimator.ofFloat(view2, View.X, startX, endX);
-                    ObjectAnimator yAnimation2 = ObjectAnimator.ofFloat(view2, View.Y, startY, endY);
-                    ObjectAnimator alpha2 = ObjectAnimator.ofFloat(view2, View.ALPHA, 1f, 0f);
+                }
 
-                    scaleXAnimation1.setDuration(duration);
-                    scaleYAnimation1.setDuration(duration);
-                    xAnimation1.setDuration(duration);
-                    yAnimation1.setDuration(duration);
-                    alpha1.setDuration(duration);
-
-
-                    scaleXAnimation2.setDuration(duration);
-                    scaleYAnimation2.setDuration(duration);
-                    xAnimation2.setDuration(duration);
-                    yAnimation2.setDuration(duration);
-                    alpha2.setDuration(duration);
-
-                    pulseAnimationSet1 = new AnimatorSet();
-                    pulseAnimationSet2 = new AnimatorSet();
-                    pulseAnimationSet1.setDuration(duration);
-                    pulseAnimationSet2.setDuration(duration);
-
-                    pulseAnimationSet1.play(scaleXAnimation1)
-                            .with(scaleYAnimation1)
-                            .with(xAnimation1)
-                            .with(yAnimation1)
-                            .with(alpha1);
-
-                    pulseAnimationSet2.play(scaleXAnimation2)
-                            .with(scaleYAnimation2)
-                            .with(xAnimation2)
-                            .with(yAnimation2)
-                            .with(alpha2);
-
-
-                    while(!stop){
-                        handler.post(new Runnable(){
-                            public void run(){
-                                pulseAnimationSet1.start();
-                            }
-                        });
-
-                        try{sleep(durationBetveenWave);}
-                        catch (Exception err){
-                            break;
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!stop) {
+                        pulseAnimationSet1.start();
+                        pulseAnimationSet2.start();
+                    }else{
+                        pulseAnimationSet1.end();
+                        pulseAnimationSet2.end();
+                        if (view1 != null) {
+                            view1.clearAnimation();
+                            view1.animate().cancel();
+                            view1.setVisibility(View.GONE);
+                            view1.requestLayout();
                         }
 
-                        handler.post(new Runnable(){
-                            public void run(){
-                                pulseAnimationSet2.start();
-                            }
-                        });
-
-                        try{sleep(duration);}
-                        catch (Exception err){
-                            break;
+                        if (view2 != null) {
+                            view2.clearAnimation();
+                            view2.animate().cancel();
+                            view2.setVisibility(View.GONE);
+                            view2.requestLayout();
                         }
                     }
                 }
-            };
-            threadAnimation.start();
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+
+            pulseAnimationSet1.start();
+            pulseAnimationSet2.start();
         }
 
-        public void stop(){
+        public void stop() {
             stop = true;
-            pulseAnimationSet1.cancel();
-            pulseAnimationSet2.cancel();
-            view1.setVisibility(View.GONE);
-            view2.setVisibility(View.GONE);
-            view1.requestLayout();
-            view1.requestLayout();
+//            if (pulseAnimationSet1 != null)
+//                pulseAnimationSet1.cancel();
+//            if (pulseAnimationSet2 != null)
+//                pulseAnimationSet2.cancel();
+//
+//            if (view1 != null) {
+//                view1.clearAnimation();
+//                view1.animate().cancel();
+//                view1.setVisibility(View.GONE);
+//                view1.requestLayout();
+//            }
+//
+//            if (view2 != null) {
+//                view2.clearAnimation();
+//                view2.animate().cancel();
+//                view2.setVisibility(View.GONE);
+//                view2.requestLayout();
+//            }
         }
     }
 

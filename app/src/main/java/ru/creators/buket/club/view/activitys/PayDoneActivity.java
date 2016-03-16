@@ -13,10 +13,8 @@ import java.util.TimerTask;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
-import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
-import ru.creators.buket.club.web.response.OrderResponse;
 
 public class PayDoneActivity extends BaseActivity {
 
@@ -26,12 +24,12 @@ public class PayDoneActivity extends BaseActivity {
         setContentView(R.layout.activity_pay_done);
 
         sendOrder();
-        if (DataController.getInstance().getOrder().getTypePaymentIndex() == Order.TYPE_PAYMENT_INDEX_CARD){
+        if (DataController.getInstance().getOrder().getTypePaymentIndex() == Order.TYPE_PAYMENT_INDEX_CARD) {
             getViewById(R.id.a_pd_text_action_bar_title).setVisibility(View.VISIBLE);
         }
     }
 
-    private void startClosingTimer(){
+    private void startClosingTimer() {
         Timer t = new Timer();
         t.schedule(new TimerTask() {
 
@@ -45,31 +43,16 @@ public class PayDoneActivity extends BaseActivity {
         }, 5000);
     }
 
-    private void goToBouquetsActivity(){
+    private void goToBouquetsActivity() {
         startActivity(new Intent(this, BucketsActivity.class));
     }
 
-    private void goToOrderDetais(){
+    private void goToOrderDetais() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 
-    private void sendOrder(){
+    private void sendOrder() {
         startLoading(false);
-
-        RequestListener<OrderResponse> listenerPost = new RequestListener<OrderResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                showSnackBar("Ошибка создания заказа");
-                stopLoading();
-            }
-
-            @Override
-            public void onRequestSuccess(OrderResponse orderResponse) {
-                stopLoading();
-                startClosingTimer();
-                DataController.getInstance().setOrder(orderResponse.getOrder());
-            }
-        };
 
         RequestListener<DefaultResponse> listenerPath = new RequestListener<DefaultResponse>() {
             @Override
@@ -86,17 +69,10 @@ public class PayDoneActivity extends BaseActivity {
             }
         };
 
-        switch (DataController.getInstance().getSession().getAppMode()){
-            case Profile.TYPE_PRICE_FIX:
-                WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                        DataController.getInstance().getOrder().getOrderForServer(), listenerPost);
-                break;
-            case Profile.TYPE_PRICE_FLEXIBLE:
-                WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
-                        DataController.getInstance().getOrder().getOrderForServer(),
-                        DataController.getInstance().getOrder().getId(), listenerPath);
-                break;
-        }
+        WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
+                DataController.getInstance().getOrder().getOrderForServer(),
+                DataController.getInstance().getOrder().getId(), listenerPath);
+
     }
 
     @Override

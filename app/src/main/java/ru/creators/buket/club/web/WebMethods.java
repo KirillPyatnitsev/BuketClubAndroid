@@ -37,6 +37,7 @@ import ru.creators.buket.club.web.response.DictionaryResponse;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.OrdersResponse;
+import ru.creators.buket.club.web.response.PhoneCodeResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
 import ru.creators.buket.club.web.response.ProfileResponse;
 import ru.creators.buket.club.web.response.SessionResponse;
@@ -144,7 +145,7 @@ public class WebMethods {
         execute(new AddressGetRequest(latitude, longitude, context), listener);
     }
 
-    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<DefaultResponse> listener){
+    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<PhoneCodeResponse> listener){
         execute(new PhoneVerificationStartPostRequest(accessToken, phone), listener);
     }
 

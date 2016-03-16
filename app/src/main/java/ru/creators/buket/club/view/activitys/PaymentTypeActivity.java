@@ -154,10 +154,10 @@ public class PaymentTypeActivity extends BaseActivity {
             case PAY_CASH:
                 DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CASH);
                 DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CASH);
-                startActivity(PayDoneActivity.class);
+                startActivity(new Intent(this, PayDoneActivity.class));
                 break;
             case PAY_W1:
-                startActivity(PayDoneActivity.class);
+                startActivity(new Intent(this, PayDoneActivity.class));
                 break;
 
         }

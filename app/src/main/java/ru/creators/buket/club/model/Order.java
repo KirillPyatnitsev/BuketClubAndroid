@@ -118,6 +118,9 @@ public class Order {
     @JsonProperty(Fields.TYPE_PAYMENT_INDEX)
     private String typePaymentIndex;
 
+    @JsonProperty("code")
+    private String code;
+
     public String getShopId() {
         return shopId;
     }
@@ -294,6 +297,14 @@ public class Order {
         this.bouquetItemId = bouquetItemId;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     @JsonIgnore
     public int getStatusDescRes() {
         switch (statusIndex) {
@@ -332,6 +343,7 @@ public class Order {
         order.setComment(this.getComment());
         order.setShopId(this.getShopId());
         order.setShippingType(this.getShippingType());
+        order.setCode(this.getCode());
 
         return order;
     }

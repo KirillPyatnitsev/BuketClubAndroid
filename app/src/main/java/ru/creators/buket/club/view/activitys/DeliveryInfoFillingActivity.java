@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
@@ -53,6 +55,8 @@ import ru.creators.buket.club.model.lists.ListString;
 import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
+import ru.creators.buket.club.web.response.OrderResponse;
+import ru.creators.buket.club.web.response.PhoneCodeResponse;
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -377,43 +381,32 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     private void phoneVerification(String phone){
-        ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
+//        ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
+//
+//        if (listPhone != null && listPhone.contains(phone)){
+//            goToNextActivity();
+//        }else{
+//            phoneVerificationStartPostRequest(phone);
+//        }
 
-        if (listPhone != null && listPhone.contains(phone)){
-            goToNextActivity();
-        }else{
-            phoneVerificationStartPostRequest(phone);
-        }
+        phoneVerificationStartPostRequest(phone);
 
     }
 
     private void phoneVerificationStartPostRequest(final String phone){
         WebMethods.getInstance().phoneVerificationStartPostRequest(DataController.getInstance().getSession().getAccessToken(), phone,
-                new RequestListener<DefaultResponse>() {
+                new RequestListener<PhoneCodeResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         showSnackBar(R.string.phone_verification_error);
                     }
 
                     @Override
-                    public void onRequestSuccess(DefaultResponse defaultResponse) {
-                        showEnterCodeDialog(phone);
-                    }
-                });
-    }
-
-    private void phoneVerificationFinishPostRequest(final String phone, String code){
-        WebMethods.getInstance().phoneVerificationFinishPostRequest(DataController.getInstance().getSession().getAccessToken(), phone, code,
-                new RequestListener<DefaultResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        showSnackBar(R.string.phone_verification_error);
-                    }
-
-                    @Override
-                    public void onRequestSuccess(DefaultResponse defaultResponse) {
-                        savePhone(phone);
-                        goToNextActivity();
+                    public void onRequestSuccess(PhoneCodeResponse phoneCodeResponse) {
+                        if (phoneCodeResponse.getPhoneVerification()==null)
+                            showEnterCodeDialog(phone);
+                        else
+                            sendOrder(phone, phoneCodeResponse.getPhoneVerification().getCode(), null, null);
                     }
                 });
     }
@@ -429,22 +422,68 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private void showEnterCodeDialog(final String phone){
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        int maxLength = 4;
+        input.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLength)});
 
-        new AlertDialog.Builder(this)
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
                 .setTitle(R.string.code_write_title)
                 .setMessage(R.string.code_write_second)
                 .setView(input)
                 .setPositiveButton(R.string.text_done, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!input.getText().toString().isEmpty()) {
-                            phoneVerificationFinishPostRequest(phone, input.getText().toString());
-                        }else{
-                            showSnackBar(R.string.code_is_not_write);
-                        }
+
                     }
                 })
-                .setNegativeButton(getString(R.string.cancel), null)
-                .show();
+                .setNegativeButton(getString(R.string.cancel), null);
+
+        final AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
+
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code = input.getText().toString();
+                if (code.length() == 4) {
+                    sendOrder(phone, code, alertDialog, input);
+                } else {
+                    showSnackBar(R.string.code_is_not_write);
+                }
+            }
+        });
+
+    }
+
+    private void sendOrder(final String phone, final String code, final AlertDialog alertDialog, final EditText input) {
+        startLoading(false);
+
+        DataController.getInstance().getOrder().setCode(code);
+
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
+                DataController.getInstance().getOrder().getOrderForServer(),
+                new RequestListener<OrderResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        if (input!=null)input.setText("");
+                        showToast("Код неверен");
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(OrderResponse orderResponse) {
+                        stopLoading();
+                        if (alertDialog!=null)
+                            alertDialog.dismiss();
+                        orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
+                        DataController.getInstance().setOrder(orderResponse.getOrder());
+                        savePhone(phone);
+                        goToNextActivity();
+                    }
+                });
+    }
+
+    private void showToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

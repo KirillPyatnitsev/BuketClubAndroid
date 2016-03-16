@@ -58,6 +58,8 @@ public class Rest {
     public static final String REVIEWS = "reviews";
     public static final String SHOPS = "shops";
 
+    public static final String SEND_CODE = "send_code";
+
     public static final String CODE = "code";
 
 }
