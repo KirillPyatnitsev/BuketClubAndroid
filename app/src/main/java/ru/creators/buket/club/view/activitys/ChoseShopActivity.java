@@ -323,7 +323,7 @@ public class ChoseShopActivity extends BaseActivity implements
                             .position(new LatLng(answerFlex.getShop().getAddressLat(), answerFlex.getShop().getAddressLng()))
                             .title(MARKER_BID_PRICE + " " + Helper.getStringWithCostPrefix(answerFlex.getPrice(), this) + ", " +
                                     distToString(answerFlex.getDistance()))
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin))
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_map_red))
                             .snippet(MARKER_STORE + " " + answerFlex.getShop().getName())));
                 }
 
@@ -334,7 +334,7 @@ public class ChoseShopActivity extends BaseActivity implements
                         listMarkerNotAnsweredShops.add(googleMap.addMarker(new MarkerOptions()
                                 .position(new LatLng(shop.getAddressLat(), shop.getAddressLng()))
                                 .title(MARKER_STORE + " " + shop.getName())
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.pin_gray))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_map_grey))
                                 .snippet("Расстояние: " + distToString(Helper.distFrom((float) lat, (float) lng
                                         , shop.getAddressLat(), shop.getAddressLng())))));
                 }
