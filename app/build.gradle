@@ -25,8 +25,8 @@ android {
         applicationId "ru.creators.buket.club"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 13
-        versionName "1.0.12"
+        versionCode 14
+        versionName "1.0.13"
         multiDexEnabled = true
     }
 

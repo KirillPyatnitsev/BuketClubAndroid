@@ -658,7 +658,7 @@ public class ChoseShopActivity extends BaseActivity implements
                 @Override
                 public void run() {
                     if (mapCenterLocation != null)
-                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 15000, null);
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mapCenterLocation, 10), 45000, null);
                 }
             });
         }
