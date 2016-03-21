@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -42,6 +43,9 @@ public class OrdersActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+
+        FlurryAgent.logEvent("OrdersActivity");
+
     }
 
     @Override

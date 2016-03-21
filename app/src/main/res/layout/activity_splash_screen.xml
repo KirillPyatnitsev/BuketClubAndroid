@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
     android:id="@+id/a_ss_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,35 +10,120 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/a_ss_image_logo"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/logo_splash" />
+            android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/a_ss_linear_buttons_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@id/a_ss_image_logo"
-            android:layout_centerHorizontal="true">
-            <Button
-                android:id="@+id/a_ss_button_fix"
+            <ImageView
+                android:id="@+id/a_ss_image_logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Фиксированная цена"/>
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/logo_splash" />
 
-            <Button
-                android:id="@+id/a_ss_button_flex"
+            <LinearLayout
+                android:id="@+id/a_ss_linear_buttons_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Гибкая цена"/>
+                android:layout_below="@id/a_ss_image_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/margin_larger"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/margin_larger"
+                android:layout_marginRight="@dimen/margin_larger">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/a_ss_edit_name"
+                        style="@style/text_view_normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/your_name"
+                        android:textColorHint="@color/black"
+                        android:layout_gravity="center_horizontal"
+                        android:visibility="visible"
+                        android:singleLine="true"
+                        android:layout_marginBottom="@dimen/margin_small"/>
+
+                    <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                        android:id="@+id/a_ss_edit_phone"
+                        style="@style/text_view_normal"
+                        android:layout_width="match_parent"
+                        android:inputType="number"
+                        custom_edit:mask="@string/phone_mask"
+                        android:visibility="visible"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_small"/>
+
+                    <EditText
+                        android:id="@+id/a_ss_edit_code"
+                        style="@style/text_view_normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/enter_code"
+                        android:textColorHint="@color/black"
+                        android:visibility="visible"
+                        android:maxLength="4"
+                        android:inputType="numberDecimal"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_small"/>
+
+                    <Button
+                        android:id="@+id/a_ss_button_enter"
+                        style="@style/button_default"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Регистрация"
+                        android:visibility="visible"
+                        android:layout_marginBottom="@dimen/margin_small"/>
+
+                    <TextView
+                        android:id="@+id/a_ss_text_resend"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text_size_small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Отправить код еще раз"
+                        android:visibility="visible"
+                        android:layout_gravity="center_horizontal"
+                        android:textStyle="bold"/>
+
+
+                </LinearLayout>
+
+
+
+                <Button
+                    android:id="@+id/a_ss_button_fix"
+                    style="@style/button_default.white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Фиксированная цена"
+                    android:visibility="gone"/>
+
+                <Button
+                    android:id="@+id/a_ss_button_flex"
+                    style="@style/button_default.white"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Гибкая цена"
+                    android:visibility="gone"/>
+
+
+            </LinearLayout>
+
         </LinearLayout>
+
 
     </RelativeLayout>
 
-    <include layout="@layout/include_progress"/>
+    <include layout="@layout/include_progress" />
 
 </android.support.design.widget.CoordinatorLayout>

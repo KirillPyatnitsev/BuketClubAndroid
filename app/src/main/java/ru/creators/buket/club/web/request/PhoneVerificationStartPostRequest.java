@@ -25,7 +25,7 @@ public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResp
 
     @Override
     protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.ORDERS);
+        uriBuilder.appendPath(Rest.PROFILE);
         uriBuilder.appendPath(Rest.SEND_CODE);
         return uriBuilder;
     }

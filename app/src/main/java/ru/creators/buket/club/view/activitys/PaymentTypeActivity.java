@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
@@ -57,6 +58,9 @@ public class PaymentTypeActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+
+        FlurryAgent.logEvent("PaymentTypeActivity");
+
     }
 
     @Override

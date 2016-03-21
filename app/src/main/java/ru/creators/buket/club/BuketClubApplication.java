@@ -6,10 +6,12 @@ import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService;
 import com.octo.android.robospice.SpiceManager;
 
 import io.fabric.sdk.android.Fabric;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.web.WebMethods;
 
 /**
@@ -32,6 +34,12 @@ public class BuketClubApplication  extends Application {
         Fabric.with(this, new Crashlytics());
         WebMethods.getInstance().setSpiceManager(spiceManager);
         spiceManager.start(this);
+
+        // configure Flurry
+        FlurryAgent.setLogEnabled(false);
+
+        // init Flurry
+        FlurryAgent.init(this, ServerConfig.FLURRY_API_KEY);
     }
 
 

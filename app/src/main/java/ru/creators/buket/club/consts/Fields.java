@@ -137,4 +137,6 @@ public class Fields {
     public static final String RATING = "rating";
     public static final String REVIEW = "review";
 
+    public static final String FULL_NAME = "full_name";
+
 }

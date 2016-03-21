@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
@@ -105,6 +106,8 @@ public class BucketsActivity extends BaseActivity {
         if (DataController.getInstance().getSession().getAppMode() == ApplicationMode.COST_FLEXIBLE){
             getOrders();
         }
+
+        FlurryAgent.logEvent("BucketsActivity");
     }
 
     @Override

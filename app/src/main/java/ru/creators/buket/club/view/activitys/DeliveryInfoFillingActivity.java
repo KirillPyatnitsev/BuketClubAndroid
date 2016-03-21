@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -121,6 +122,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+
+        FlurryAgent.logEvent("DeliveryInfoFillingActivity");
     }
 
     @Override
@@ -197,7 +200,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
                 if (dataIsDone){
                     if (deliveryPickup || myLocation || editLocation){
-                        phoneVerification(DataController.getInstance().getOrder().getRecipientPhone());
+                        sendOrder();
                     }else{
                         showSnackBar(R.string.delivery_info_address_error);
                     }
@@ -403,7 +406,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
                     @Override
                     public void onRequestSuccess(PhoneCodeResponse phoneCodeResponse) {
-                        if (phoneCodeResponse.getPhoneVerification()==null)
+                        if (phoneCodeResponse.getPhoneVerification() == null)
                             showEnterCodeDialog(phone);
                         else
                             sendOrder(phone, phoneCodeResponse.getPhoneVerification().getCode(), null, null);
@@ -465,7 +468,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        if (input!=null)input.setText("");
+                        if (input != null) input.setText("");
                         showToast("Код неверен");
                         stopLoading();
                     }
@@ -473,11 +476,32 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                     @Override
                     public void onRequestSuccess(OrderResponse orderResponse) {
                         stopLoading();
-                        if (alertDialog!=null)
+                        if (alertDialog != null)
                             alertDialog.dismiss();
                         orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
                         DataController.getInstance().setOrder(orderResponse.getOrder());
                         savePhone(phone);
+                        goToNextActivity();
+                    }
+                });
+    }
+
+    private void sendOrder() {
+        startLoading(false);
+
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
+                DataController.getInstance().getOrder().getOrderForServer(),
+                new RequestListener<OrderResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        stopLoading();
+                    }
+
+                    @Override
+                    public void onRequestSuccess(OrderResponse orderResponse) {
+                        stopLoading();
+                        orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
+                        DataController.getInstance().setOrder(orderResponse.getOrder());
                         goToNextActivity();
                     }
                 });

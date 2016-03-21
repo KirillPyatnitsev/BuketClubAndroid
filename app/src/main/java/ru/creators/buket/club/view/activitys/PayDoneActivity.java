@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -27,6 +28,8 @@ public class PayDoneActivity extends BaseActivity {
         if (DataController.getInstance().getOrder().getTypePaymentIndex() == Order.TYPE_PAYMENT_INDEX_CARD) {
             getViewById(R.id.a_pd_text_action_bar_title).setVisibility(View.VISIBLE);
         }
+
+        FlurryAgent.logEvent("PayDoneActivity");
     }
 
     private void startClosingTimer() {

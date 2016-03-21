@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.request.AddressGetRequest;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
@@ -27,6 +28,7 @@ import ru.creators.buket.club.web.request.PhoneVerificationFinishPostRequest;
 import ru.creators.buket.club.web.request.PhoneVerificationStartPostRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
 import ru.creators.buket.club.web.request.ProfileGetRequest;
+import ru.creators.buket.club.web.request.ProfilePatchRequest;
 import ru.creators.buket.club.web.request.ReviewRequest;
 import ru.creators.buket.club.web.request.SessionCreateRequest;
 import ru.creators.buket.club.web.request.SessionUpdateRequest;
@@ -151,6 +153,10 @@ public class WebMethods {
 
     public void phoneVerificationFinishPostRequest(String accessToken, String phone, String code,RequestListener<DefaultResponse> listener){
         execute(new PhoneVerificationFinishPostRequest(accessToken, phone, code), listener);
+    }
+
+    public void profilePatchRequest(String accessToken, Profile profile, RequestListener<DefaultResponse> listener){
+        execute(new ProfilePatchRequest(accessToken, profile), listener);
     }
 
     private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {

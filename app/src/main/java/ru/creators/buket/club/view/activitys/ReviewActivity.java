@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -34,6 +35,8 @@ public class ReviewActivity extends BaseActivity {
 
         assignView();
         assignListener();
+
+        FlurryAgent.logEvent("ReviewActivity");
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -56,6 +57,7 @@ public class OrderDetailsActivity extends BaseActivity {
             showSnackBar(R.string.oops_error);
             startActivity(new Intent(this, OrdersActivity.class));
         }
+        FlurryAgent.logEvent("OrderDetailsActivity");
     }
 
     @Override

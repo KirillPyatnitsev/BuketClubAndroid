@@ -309,4 +309,8 @@ public class Helper {
 
         return dist;
     }
+
+    public static boolean phoneVerification(String phone){
+        return phone.replaceAll("[^\\d.]", "").length() == 11;
+    }
 }

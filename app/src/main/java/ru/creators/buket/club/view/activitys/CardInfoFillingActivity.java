@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.methods.params.PhoneParams;
@@ -38,6 +39,7 @@ public class CardInfoFillingActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+        FlurryAgent.logEvent("CardInfoFillingActivity");
     }
 
     @Override

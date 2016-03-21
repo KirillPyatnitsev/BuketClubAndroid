@@ -1,6 +1,9 @@
 package ru.creators.buket.club.model;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import ru.creators.buket.club.consts.Fields;
 
@@ -8,6 +11,8 @@ import ru.creators.buket.club.consts.Fields;
 /**
  * Created by mifkamaz on 12/12/15.
  */
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Profile {
 
     public final static int TYPE_PRICE_FLEXIBLE = 1;
@@ -30,6 +35,15 @@ public class Profile {
 
     @JsonProperty(Fields.UPDATED_AT)
     private String upadtedAt;
+
+    @JsonProperty(Fields.FULL_NAME)
+    private String fillName;
+
+    @JsonProperty(Fields.PHONE)
+    private String phone;
+
+    @JsonProperty(Fields.CODE)
+    private String code;
 
     public int getId() {
         return id;
@@ -77,5 +91,40 @@ public class Profile {
 
     public void setUpadtedAt(String upadtedAt) {
         this.upadtedAt = upadtedAt;
+    }
+
+    public String getFillName() {
+        return fillName;
+    }
+
+    public void setFillName(String fillName) {
+        this.fillName = fillName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @JsonIgnore
+    public Profile getProfileForPatchRequest(){
+        Profile profile = new Profile();
+
+        profile.setFillName(this.getFillName());
+        profile.setCode(this.getCode());
+        profile.setPhone(this.getPhone());
+
+        return profile;
     }
 }

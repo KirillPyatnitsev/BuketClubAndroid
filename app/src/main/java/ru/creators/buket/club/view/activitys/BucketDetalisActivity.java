@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.transitionseverywhere.TransitionManager;
@@ -78,7 +79,7 @@ public class BucketDetalisActivity extends BaseActivity {
             startActivity(new Intent(this, BucketsActivity.class));
         }
 
-
+        FlurryAgent.logEvent("BucketDetalisActivity");
     }
 
     @Override

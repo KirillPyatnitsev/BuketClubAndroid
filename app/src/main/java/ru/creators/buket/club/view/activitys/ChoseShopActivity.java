@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.elirex.fayeclient.FayeClient;
 import com.elirex.fayeclient.FayeClientListener;
 import com.elirex.fayeclient.MetaMessage;
+import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -151,6 +152,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
         showMap();
         textShowList.setVisibility(View.GONE);
+
+        FlurryAgent.logEvent("ChoseShopActivity");
     }
 
     @Override
@@ -222,6 +225,8 @@ public class ChoseShopActivity extends BaseActivity implements
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
+
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         if (DataController.getInstance().getOrder().getShippingType().equals(Order.DELIVERY_TYPE_PICKUP)
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)

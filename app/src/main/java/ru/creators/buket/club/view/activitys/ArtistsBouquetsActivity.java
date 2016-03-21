@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.transitionseverywhere.TransitionManager;
 
 import ru.creators.buket.club.R;
@@ -30,6 +31,8 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         assignView();
         assignListener();
         initView();
+
+        FlurryAgent.logEvent("ArtistsBouquetsActivity");
     }
 
     private void assignView(){
