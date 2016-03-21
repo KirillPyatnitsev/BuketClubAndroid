@@ -104,7 +104,7 @@
     <string name="chose_shop_not_shop">Идёт поиск исполнителей</string>
     <string name="not_find_bouquets">Ничего не найдено</string>
 
-    <string name="remove_order_dialog_text">Если Вы перейдете обратно, Ваш заказ будет удален.\nПерейти?</string>
+    <string name="remove_order_dialog_text">Отмена заказа. Если Вы перейдете назад, то Ваш заказ будет отменен.\nПерейти?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="cancel">Отмена</string>

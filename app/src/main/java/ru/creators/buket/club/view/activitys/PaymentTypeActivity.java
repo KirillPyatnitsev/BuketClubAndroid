@@ -1,7 +1,9 @@
 package ru.creators.buket.club.view.activitys;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -167,10 +169,6 @@ public class PaymentTypeActivity extends BaseActivity {
         }
     }
 
-    private void startActivity(Class<?> c) {
-        startActivity(new Intent(this, c));
-    }
-
     private void payYandexMoney(){
 //        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
         PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
@@ -189,4 +187,48 @@ public class PaymentTypeActivity extends BaseActivity {
         return R.id.a_pt_coordinator_root;
     }
 
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+    }
+
+    private void showExitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                removeOrderRequest(order.getId());
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+            }
+        });
+
+        builder.setMessage(R.string.remove_order_dialog_text);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void removeOrderRequest(int orderId) {
+        startLoading();
+        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+                goToBouquetsActivity();
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                stopLoading();
+                goToBouquetsActivity();
+            }
+        });
+    }
+
+    private void goToBouquetsActivity(){
+        startActivity(new Intent(this, BucketsActivity.class));
+    }
 }
