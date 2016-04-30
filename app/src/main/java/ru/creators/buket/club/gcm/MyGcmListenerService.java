@@ -33,6 +33,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.view.activitys.ChoseShopActivity;
+import ru.creators.buket.club.view.activitys.OrderDetailsActivity;
 import ru.creators.buket.club.view.activitys.OrdersActivity;
 
 
@@ -67,6 +68,9 @@ public class MyGcmListenerService extends GcmListenerService {
         if (DataController.getInstance().getBaseActivity()!=null){
             if (!(DataController.getInstance().getBaseActivity() instanceof ChoseShopActivity)){
                 DataController.getInstance().getBaseActivity().showSnackBar(message);
+            }
+            if (DataController.getInstance().getBaseActivity() instanceof OrderDetailsActivity){
+                ((OrderDetailsActivity) DataController.getInstance().getBaseActivity()).updateOrder();
             }
         }else{
             Intent intent = new Intent(this, OrdersActivity.class);

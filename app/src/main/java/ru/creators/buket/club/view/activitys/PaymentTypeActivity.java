@@ -62,15 +62,20 @@ public class PaymentTypeActivity extends BaseActivity {
         initView();
 
         FlurryAgent.logEvent("PaymentTypeActivity");
+        payYandexMoney();
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_YA_MONEY && resultCode == RESULT_OK) {
-            DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CARD);
-            DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CARD);
-            startActivity(new Intent(this, PayDoneActivity.class));
+        if (requestCode == REQUEST_CODE_YA_MONEY) {
+            if (resultCode == RESULT_OK) {
+                DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CARD);
+                DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CARD);
+                startActivity(new Intent(this, PayDoneActivity.class));
+            }else{
+                finish();
+            }
         }
     }
 

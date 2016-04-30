@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        DataController.getInstance().setBaseActivity(this);
 //        WebMethods.getInstance().setSpiceManager(spiceManager);
     }
 
@@ -150,7 +151,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        DataController.getInstance().setBaseActivity(this);
         DataController.getInstance().setAppIsFolded(false);
     }
 

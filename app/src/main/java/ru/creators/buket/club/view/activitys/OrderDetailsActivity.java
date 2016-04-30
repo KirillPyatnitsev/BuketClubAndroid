@@ -143,7 +143,7 @@ public class OrderDetailsActivity extends BaseActivity {
         textOrderStatus.setText(getString(order.getStatusDescRes()));
     }
 
-    private void updateOrder(){
+    public void updateOrder(){
         WebMethods.getInstance().orderGetRequest(DataController.getInstance().getSession().getAccessToken(),
                 order.getId(), new RequestListener<OrderResponse>() {
                     @Override

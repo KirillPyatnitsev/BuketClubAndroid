@@ -45,7 +45,7 @@ import ru.creators.buket.club.web.response.SessionResponse;
 
 public class SplashScreenActivity extends BaseActivity {
 
-    private boolean TEST_APPLICATION_MODE = true;
+    private boolean TEST_APPLICATION_MODE = false;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "SplashScreenActivity";

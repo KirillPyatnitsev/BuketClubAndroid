@@ -115,6 +115,16 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         initView();
         assignListener();
 
+        if (DataController.getInstance().getProfile()!=null && DataController.getInstance().getProfile().getPhone()!=null
+                && !DataController.getInstance().getProfile().getPhone().isEmpty()){
+            String phone = DataController.getInstance().getProfile().getPhone().replaceAll("[^\\d.]", "");
+
+            phone = phone.substring(1);
+
+            editPhoneNumber.setText(phone);
+
+        }
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(Places.GEO_DATA_API)
                 .enableAutoManage(this, 0, this)
