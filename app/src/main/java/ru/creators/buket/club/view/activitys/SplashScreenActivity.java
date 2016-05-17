@@ -138,6 +138,7 @@ public class SplashScreenActivity extends BaseActivity {
 
     private void createSession() {
         startLoading(false);
+        PreferenceCache.removeKey(this, PreferenceCache.KEY_SESSION);
         WebMethods.getInstance().createSession(getUniqueDeviceId(), PreferenceCache.getString(this, PreferenceCache.SHAREDPRED_GCM_TOKEN_KEY), new RequestListener<SessionResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -206,7 +207,7 @@ public class SplashScreenActivity extends BaseActivity {
             Profile profile = new Profile();
             profile.setPhone(phone);
             profile.setFillName(name);
-            profile.setFillName(code);
+            profile.setCode(code);
             profilePatchRequest(profile);
         }
     }
@@ -263,6 +264,7 @@ public class SplashScreenActivity extends BaseActivity {
         WebMethods.getInstance().getProfile(accessToken, new RequestListener<ProfileResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
+                createSession();
                 stopLoading();
             }
 
@@ -272,7 +274,8 @@ public class SplashScreenActivity extends BaseActivity {
 
                 profile = profileResponse.getProfile();
 
-                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode) {
+//                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode) {
+                if (profile.getTypePriceIndex() != Profile.TYPE_PRICE_FIX) {
                     generateTypePrice(accessToken);
                 } else {
                     loadBouquets(accessToken);
