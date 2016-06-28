@@ -1,3 +1,5 @@
 ### Мобильное приложение на платформе Android для заказа букетов на сайте buket.club
 
-Unfinished API documentation: http://docs.bouquet.apiary.io/#
+Mobile API documentation on [apiary.io](http://docs.buketclub.apiary.io/#)
+
+Partner API documentation on [apiary.io](http://docs.buketclubpartner.apiary.io/#)
