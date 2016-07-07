@@ -1,9 +1,12 @@
 package ru.creators.buket.club.web.request;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.api.client.http.HttpRequest;
 
+import ru.creators.buket.club.DataController;
+import ru.creators.buket.club.consts.Constants;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.web.response.SessionResponse;
@@ -12,6 +15,8 @@ import ru.creators.buket.club.web.response.SessionResponse;
  * Created by mifkamaz on 27/11/15.
  */
 public class SessionCreateRequest extends BaseRequest<SessionResponse> {
+
+    private static final String TAG= Constants.LOG_TAG + "_SessionCreateReq";
 
     private String udid;
     private String password;
@@ -43,6 +48,11 @@ public class SessionCreateRequest extends BaseRequest<SessionResponse> {
         if (deviceToken!=null) {
             request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
         }
+
+//        Log.d(TAG, "deviceToken: "  + String.valueOf(deviceToken));
+//        Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
+
+
         request.getUrl().put(Rest.DEVICE_TYPE, Rest.DEVICE_TYPE_ANDROID);
 
         return (SessionResponse) getResponse(request.execute(), SessionResponse.class);

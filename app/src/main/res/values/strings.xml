@@ -146,4 +146,18 @@
 
     <string name="phone_not_entered">Телефон не введен</string>
     <string name="name_not_entered">Имя не введено</string>
+
+    <!-- Default caption TextView, Buttons, etc -->
+    <string name="default_buket_name">Букетик тюльпанов</string>
+    <string name="default_buket_price">1990</string>
+    <string name="default_buket_payment_type">Оплата при получении</string>
+    <string name="default_buket_delivery_type">Самовывоз</string>
+    <string name="default_buket_address">г. Москва, ул. Новый Арбат, дом 17, корпус 3</string>
+
+    <string name="default_buket_address_shop">Магазин на карте</string>
+
+    <string name="default_buket_rub">%1$s\u00A0руб.</string>
+
+    <!-- END -->
+
 </resources>

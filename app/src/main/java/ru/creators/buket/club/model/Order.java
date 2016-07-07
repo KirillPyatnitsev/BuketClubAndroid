@@ -385,4 +385,36 @@ public class Order {
     public void setUser(Profile user) {
         this.user = user;
     }
+
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", price=" + price +
+                ", size='" + size + '\'' +
+                ", sizeIndex=" + sizeIndex +
+                ", status='" + status + '\'' +
+                ", statusIndex=" + statusIndex +
+                ", recipientName='" + recipientName + '\'' +
+                ", recipientPhone='" + recipientPhone + '\'' +
+                ", address='" + address + '\'' +
+                ", addressLat=" + addressLat +
+                ", addressLng=" + addressLng +
+                ", timeDelivery='" + timeDelivery + '\'' +
+                ", comment='" + comment + '\'' +
+                ", bouquetItem=" + bouquetItem +
+                ", bouquetItemId=" + bouquetItemId +
+                ", shop=" + shop +
+                ", shopId='" + shopId + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", upadtedAt='" + upadtedAt + '\'' +
+                ", user=" + user +
+                ", typePayment='" + typePayment + '\'' +
+                ", shippingType='" + shippingType + '\'' +
+                ", typePaymentIndex='" + typePaymentIndex + '\'' +
+                ", code='" + code + '\'' +
+                '}';
+    }
 }

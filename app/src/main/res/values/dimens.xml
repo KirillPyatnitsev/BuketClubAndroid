@@ -12,8 +12,8 @@
     <dimen name="margin_smaller">5dp</dimen>
 
     <dimen name="text_size_larger">40sp</dimen>
-    <dimen name="text_size_large">30sp</dimen>
-    <dimen name="text_size_normal">20sp</dimen>
+    <dimen name="text_size_large">28sp</dimen>
+    <dimen name="text_size_normal">18sp</dimen>
     <dimen name="text_size_small">15sp</dimen>
     <dimen name="text_size_smaller">10sp</dimen>
 

@@ -4,8 +4,10 @@
     <color name="pink">#FF4081</color>
 
     <color name="gray">#9E9E9E</color>
+    <color name="light_gray">#EEEEEE</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="black_light">#333333</color>
     <color name="green">#7BCB23</color>
 
     <color name="colorPrimary">@color/yellow</color>
