@@ -24,7 +24,7 @@ public class DataController {
 
     private Session session;
     private Profile profile;
-    private ListBouquet listBouquet;
+    private ListBouquet listBouquet = new ListBouquet();
     private PriceRange priceRange;
     private Bouquet bouquet;
     private Order order;

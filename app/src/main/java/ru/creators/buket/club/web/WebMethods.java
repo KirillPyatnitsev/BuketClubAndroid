@@ -95,6 +95,7 @@ public class WebMethods {
     public void loadImage(Context context, String url, final ImageView imageView) {
         Picasso.with(context)
                 .load(url)
+                .resize(600, 750)
                 .into(imageView);
         imageView.requestLayout();
     }
