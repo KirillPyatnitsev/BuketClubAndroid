@@ -417,18 +417,20 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
                     @Override
                     public void onRequestSuccess(PhoneCodeResponse phoneCodeResponse) {
-                        if (phoneCodeResponse.getPhoneVerification() == null)
+                        if (phoneCodeResponse.getPhoneVerification() == null) {
                             showEnterCodeDialog(phone);
-                        else
+                        } else {
                             sendOrder(phone, phoneCodeResponse.getPhoneVerification().getCode(), null, null);
+                        }
                     }
                 });
     }
 
     private void savePhone(String phone){
         ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
-        if (listPhone == null)
+        if (listPhone == null) {
             listPhone = new ListString();
+        }
         listPhone.add(phone);
         PreferenceCache.putObject(this, PreferenceCache.SAVED_PHONES, listPhone);
     }
@@ -474,14 +476,14 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         DataController.getInstance().getOrder().setCode(code);
 
-        FakeWebMethods fakeMethods = new FakeWebMethods();
-
-        fakeMethods.sendOrder(DataController.getInstance().getSession().getAccessToken(),
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
                 DataController.getInstance().getOrder().getOrderForServer(),
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        if (input != null) input.setText("");
+                        if (input != null) {
+                            input.setText("");
+                        }
                         showToast("Код неверен");
                         stopLoading();
                     }
@@ -489,8 +491,9 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                     @Override
                     public void onRequestSuccess(OrderResponse orderResponse) {
                         stopLoading();
-                        if (alertDialog != null)
+                        if (alertDialog != null) {
                             alertDialog.dismiss();
+                        }
                         orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
                         DataController.getInstance().setOrder(orderResponse.getOrder());
                         savePhone(phone);

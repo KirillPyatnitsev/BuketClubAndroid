@@ -92,15 +92,15 @@
     <string name="text_finding_shop">Поиск магазина</string>
     <string name="text_in_process">Осуществляется доставка</string>
     <string name="text_in_process_pickup">Ваш букет ждет</string>
-    <string name="text_delivered">Букет получен.\nПожулйста, оставьте отзыв</string>
+    <string name="text_delivered">Букет получен.\nПожалуйста, оставьте отзыв</string>
     <string name="text_order_done">Заказ выполенен</string>
     <string name="phone_mask">+7 (###) ###-##-##</string>
     <string name="telephone">Телефон</string>
 
     <string name="marker_bid_price">Предложенная цена: </string>
     <string name="marker_store">Магазин: </string>
-    <string name="delivery_info_error">Пожалуста заполните данные о заказе. </string>
-    <string name="delivery_info_address_error">При заполнении выберите адресс из числа подсказок.</string>
+    <string name="delivery_info_error">Пожалуйста, заполните данные о заказе. </string>
+    <string name="delivery_info_address_error">При заполнении выберите адрес из числа подсказок.</string>
     <string name="chose_shop_not_shop">Идёт поиск исполнителей</string>
     <string name="not_find_bouquets">Ничего не найдено</string>
 
@@ -131,8 +131,8 @@
         <item>@string/sort_by_rate</item>
     </string-array>
 
-    <string name="check_internet_connection">Нет соеденения с интернетом</string>
-    <string name="gps_error">Неудалось точно определить местоположение</string>
+    <string name="check_internet_connection">Нет соединения с Интернетом</string>
+    <string name="gps_error">Не удалось точно определить местоположение</string>
     <string name="code_is_not_write">Код не введен</string>
     <string name="code_is_wrong">Код не верен</string>
     <string name="code_write_title">@string/app_name</string>

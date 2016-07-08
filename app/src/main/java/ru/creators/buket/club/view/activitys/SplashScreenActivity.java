@@ -45,7 +45,7 @@ import ru.creators.buket.club.web.response.SessionResponse;
 
 public class SplashScreenActivity extends BaseActivity {
 
-    private boolean TEST_APPLICATION_MODE = false;
+    private static final boolean TEST_APPLICATION_MODE = false;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "SplashScreenActivity";
@@ -54,8 +54,6 @@ public class SplashScreenActivity extends BaseActivity {
     private Profile profile;
     private PriceRange priceRange;
     private ListBouquet listBouquet;
-
-    private int currentAppMode = 100;
 
     private Button buttonFlexible;
     private Button buttonFix;
@@ -96,8 +94,9 @@ public class SplashScreenActivity extends BaseActivity {
             buttonFix.setVisibility(View.VISIBLE);
             buttonFlexible.setVisibility(View.VISIBLE);
         } else {
-            if (sentToken)
-                startApp(currentAppMode);
+            if (sentToken) {
+                startApp();
+            }
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(gcmRegistrationDone,
@@ -114,8 +113,9 @@ public class SplashScreenActivity extends BaseActivity {
     private BroadcastReceiver gcmRegistrationDone = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (!TEST_APPLICATION_MODE)
-                startApp(currentAppMode);
+            if (!TEST_APPLICATION_MODE) {
+                startApp();
+            }
         }
     };
 
@@ -160,14 +160,14 @@ public class SplashScreenActivity extends BaseActivity {
         buttonFix.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startApp(Profile.TYPE_PRICE_FIX);
+                startApp();
             }
         });
 
         buttonFlexible.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startApp(Profile.TYPE_PRICE_FLEXIBLE);
+                startApp();
             }
         });
 
@@ -212,8 +212,7 @@ public class SplashScreenActivity extends BaseActivity {
         }
     }
 
-    private void startApp(int profileType) {
-        currentAppMode = profileType;
+    private void startApp() {
         session = PreferenceCache.getObject(this, PreferenceCache.KEY_SESSION, Session.class);
         if (session == null) {
             createSession();
@@ -311,10 +310,11 @@ public class SplashScreenActivity extends BaseActivity {
             DataController.getInstance().setPriceRange(priceRange);
             DataController.getInstance().setProfile(profile);
 
-            if (profile.getPhone() != null && !profile.getPhone().isEmpty())
+            if (profile.getPhone() != null && !profile.getPhone().isEmpty()) {
                 goToBuketActivity();
-            else
+            } else {
                 showRegistration();
+            }
         }
     }
 

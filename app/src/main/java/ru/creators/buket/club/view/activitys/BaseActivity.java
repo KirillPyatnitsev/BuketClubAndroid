@@ -122,17 +122,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         showBlur = false;
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.VISIBLE);
-            if (showBlur) getImageLoadingBlur().setImageBitmap(Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20));
+            if (showBlur) {
+                getImageLoadingBlur().setImageBitmap(Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20));
+            }
         }
         runnigProcessCount++;
     }
 
-    protected boolean noRunnigProcess(){
-        return runnigProcessCount == 0;
-    }
-
     public void stopLoading(){
-        if (runnigProcessCount != 0) runnigProcessCount--;
+        if (runnigProcessCount != 0) {
+            runnigProcessCount--;
+        }
         if (runnigProcessCount == 0){
             getRelativeLoading().setVisibility(View.GONE);
             allProcessDone();

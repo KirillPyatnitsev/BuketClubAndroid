@@ -13,7 +13,7 @@ import ru.creators.buket.club.view.activitys.BaseActivity;
  * Created by mifkamaz on 12/12/15.
  */
 public class DataController {
-    private static DataController ourInstance = new DataController();
+    private static final DataController ourInstance = new DataController();
 
     public static DataController getInstance() {
         return ourInstance;
@@ -29,8 +29,6 @@ public class DataController {
     private Bouquet bouquet;
     private Order order;
 
-    private boolean appIsFolded = false;
-
     private BaseActivity baseActivity;
 
     public BaseActivity getBaseActivity() {
@@ -39,14 +37,6 @@ public class DataController {
 
     public void setBaseActivity(BaseActivity baseActivity) {
         this.baseActivity = baseActivity;
-    }
-
-    public static DataController getOurInstance() {
-        return ourInstance;
-    }
-
-    public static void setOurInstance(DataController ourInstance) {
-        DataController.ourInstance = ourInstance;
     }
 
     public Session getSession() {
@@ -82,7 +72,8 @@ public class DataController {
     }
 
     public void setListBouquet(ListBouquet listBouquet) {
-        this.listBouquet = listBouquet;
+        // Ensure that list is not null
+        this.listBouquet = listBouquet == null? new ListBouquet(): listBouquet;
     }
 
     public PriceRange getPriceRange() {
@@ -109,11 +100,7 @@ public class DataController {
         this.order = order;
     }
 
-    public boolean isAppIsFolded() {
-        return appIsFolded;
-    }
-
     public void setAppIsFolded(boolean appIsFolded) {
-        this.appIsFolded = appIsFolded;
+        //this.appIsFolded = appIsFolded;
     }
 }

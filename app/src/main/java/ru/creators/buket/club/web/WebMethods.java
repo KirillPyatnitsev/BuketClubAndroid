@@ -52,11 +52,14 @@ import ru.creators.buket.club.web.response.ShopListResponse;
  */
 public class WebMethods {
     private static WebMethods mWebMethods = new WebMethods();
-    private static WebMethods fakeWebMethods = new FakeWebMethods();
+    private static WebMethods fakeWebMethods = null;
 
     public static WebMethods getInstance() {
         WebMethods wm;
         if(BuildConfig.DEBUG) {
+            if(fakeWebMethods == null) {
+                fakeWebMethods = new FakeWebMethods();
+            }
             wm = fakeWebMethods;
         } else {
             wm = mWebMethods;
@@ -64,23 +67,14 @@ public class WebMethods {
         return wm;
     }
 
+    private SpiceManager mSpiceManager;
+
+    protected WebMethods() {
+    }
+
     public void setSpiceManager(SpiceManager mSpiceManager) {
         this.mSpiceManager = mSpiceManager;
     }
-
-    public SpiceManager getSpiceManager() {
-        return mSpiceManager;
-    }
-
-    public WebMethods() {
-
-    }
-
-    public WebMethods(SpiceManager mSpiceManager) {
-        this.mSpiceManager = mSpiceManager;
-    }
-
-    private SpiceManager mSpiceManager;
 
     public void createSession(String uuid, String deviceToken, RequestListener<SessionResponse> listener) {
         execute(new SessionCreateRequest(uuid, deviceToken), listener);
@@ -104,7 +98,7 @@ public class WebMethods {
     public void loadImage(Context context, String url, final ImageView imageView) {
         Picasso.with(context)
                 .load(url)
-                .resize(600, 750)
+                .resize(600, 750).onlyScaleDown()
                 .into(imageView);
         imageView.requestLayout();
     }

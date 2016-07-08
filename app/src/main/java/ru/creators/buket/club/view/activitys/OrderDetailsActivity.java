@@ -8,14 +8,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
-import org.codehaus.jackson.map.util.ISO8601Utils;
-import org.w3c.dom.Text;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -114,8 +110,8 @@ public class OrderDetailsActivity extends BaseActivity {
         imageMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Go to the Map", Toast.LENGTH_LONG).show();
-//                mapIntent(order.getShop().getAddressLat(), order.getShop().getAddressLng());
+                //Toast.makeText(v.getContext(), "Go to the Map", Toast.LENGTH_LONG).show();
+                mapIntent(order.getShop().getAddressLat(), order.getShop().getAddressLng());
             }
         });
     }
@@ -125,10 +121,8 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void fillView(Order order){
-        if (order.getBouquetItem()!=null)
+        if (order.getBouquetItem() != null) {
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
-        if (order.getShop()!=null) {
-
         }
 
 
