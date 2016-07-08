@@ -15,6 +15,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
+import org.w3c.dom.Text;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -36,6 +37,7 @@ public class OrderDetailsActivity extends BaseActivity {
     private TextView textBouquetName;
     private TextView textBouquetCost;
     private TextView textAddress;
+    private TextView textPhone;
 //    private TextView textDeliveryTime;
     private TextView textPayType;
     private TextView textDeliveryType;
@@ -60,6 +62,7 @@ public class OrderDetailsActivity extends BaseActivity {
         if (order!=null) {
 
             Log.d(TAG, order.toString());
+            Log.d(TAG, order.getShop().getName() + " "  + order.getShop().getPhone());
             Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
 
             assingView();
@@ -82,6 +85,7 @@ public class OrderDetailsActivity extends BaseActivity {
         textBouquetName = getViewById(R.id.a_bdsd_text_bouquet_name);
         textBouquetCost = getViewById(R.id.a_bdsd_text_bouquet_cost);
         textAddress = getViewById(R.id.a_bdsd_text_address);
+        textPhone = getViewById(R.id.a_bdsd_text_phone);
 //        textDeliveryTime = getViewById(R.id.a_bdsd_text_delivery_time);
         textPayType = getViewById(R.id.a_bdsd_text_pay_type);
         textDeliveryType = getViewById(R.id.a_bdsd_text_delivery_type);
@@ -124,7 +128,7 @@ public class OrderDetailsActivity extends BaseActivity {
         if (order.getBouquetItem()!=null)
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
         if (order.getShop()!=null) {
-            //            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
+
         }
 
 
@@ -134,14 +138,19 @@ public class OrderDetailsActivity extends BaseActivity {
 
 
         if (order.getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
-            textAddress.setText(order.getAddress());
+
             textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_ADDRESS));
         } else {
             textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_PICKUP));
 //            linearPickup.setVisibility(View.VISIBLE);
 
-            if (order.getShop()!=null)
+            if (order.getShop()!=null) {
                 linearOnMap.setVisibility(View.VISIBLE);
+                textAddress.setText(order.getShop().getName());
+                textPhone.setText(order.getShop().getPhone());
+                //            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
+            }
+
         }
 
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

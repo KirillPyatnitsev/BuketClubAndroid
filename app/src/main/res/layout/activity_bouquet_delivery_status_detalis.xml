@@ -141,6 +141,14 @@
                         android:text="@string/default_buket_address"
                         />
 
+
+                    <TextView
+                        android:id="@+id/a_bdsd_text_phone"
+                        style="@style/text_view_normal"
+                        android:layout_marginLeft="7dp"
+
+                        />
+
                 </LinearLayout>
 
                 <LinearLayout

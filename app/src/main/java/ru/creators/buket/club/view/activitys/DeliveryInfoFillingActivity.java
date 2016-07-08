@@ -54,6 +54,7 @@ import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.lists.ListString;
 import ru.creators.buket.club.tools.PreferenceCache;
+import ru.creators.buket.club.web.FakeWebMethods;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
@@ -473,7 +474,9 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         DataController.getInstance().getOrder().setCode(code);
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
+        FakeWebMethods fakeMethods = new FakeWebMethods();
+
+        fakeMethods.sendOrder(DataController.getInstance().getSession().getAccessToken(),
                 DataController.getInstance().getOrder().getOrderForServer(),
                 new RequestListener<OrderResponse>() {
                     @Override

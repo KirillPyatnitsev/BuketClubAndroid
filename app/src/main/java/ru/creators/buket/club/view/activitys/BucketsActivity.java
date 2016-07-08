@@ -97,9 +97,11 @@ public class BucketsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_buckets);
 
-        loadPriceRange(DataController.getInstance().getSession().getAccessToken());
+
         assignView();
         assignListener();
+
+        loadPriceRange(DataController.getInstance().getSession().getAccessToken());
 
         listBouquetsGetResponse(true);
 

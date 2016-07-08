@@ -1,6 +1,7 @@
 package ru.creators.buket.club.web;
 
 import android.content.Context;
+import android.os.Debug;
 import android.widget.ImageView;
 
 import com.octo.android.robospice.SpiceManager;
@@ -10,6 +11,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
 
+import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
@@ -50,9 +52,16 @@ import ru.creators.buket.club.web.response.ShopListResponse;
  */
 public class WebMethods {
     private static WebMethods mWebMethods = new WebMethods();
+    private static WebMethods fakeWebMethods = new FakeWebMethods();
 
     public static WebMethods getInstance() {
-        return mWebMethods;
+        WebMethods wm;
+        if(BuildConfig.DEBUG) {
+            wm = fakeWebMethods;
+        } else {
+            wm = mWebMethods;
+        }
+        return wm;
     }
 
     public void setSpiceManager(SpiceManager mSpiceManager) {
@@ -160,7 +169,7 @@ public class WebMethods {
         execute(new ProfilePatchRequest(accessToken, profile), listener);
     }
 
-    private <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {
+    protected <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {
         if (DataController.getInstance().getBaseActivity().isOnline()) {
             request.setRetryPolicy(getRetryPolicy());
             mSpiceManager.execute(request, requestListener);
