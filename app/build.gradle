@@ -27,7 +27,7 @@ jacoco {
 
 sonarqube {
     properties {
-        property "sonar.host.url", "http://dev.open-dev.su/sonar"
+        property "sonar.host.url", "http://sonar.open-dev.su:9000/"
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.sources", "src/main/java"
         property "sonar.tests", "src/test/java"
