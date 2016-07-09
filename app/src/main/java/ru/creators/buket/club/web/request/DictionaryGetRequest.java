@@ -13,11 +13,11 @@ import ru.creators.buket.club.web.response.DictionaryResponse;
 public class DictionaryGetRequest extends BaseRequest<DictionaryResponse> {
 
     private String accessToken;
-    private String dictonaryType;
+    private String dictionaryType;
 
-    public DictionaryGetRequest(String accessToken, String dictonaryType) {
+    public DictionaryGetRequest(String accessToken, String dictionaryType) {
         super(DictionaryResponse.class);
-        this.dictonaryType = dictonaryType;
+        this.dictionaryType = dictionaryType;
         this.accessToken = accessToken;
     }
 
@@ -28,7 +28,7 @@ public class DictionaryGetRequest extends BaseRequest<DictionaryResponse> {
 
     @Override
     protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(dictonaryType);
+        uriBuilder.appendPath(dictionaryType);
         return uriBuilder;
     }
 
