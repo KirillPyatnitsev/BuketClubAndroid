@@ -1,9 +1,6 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -14,14 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
-import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.transitionseverywhere.TransitionManager;
-
-import org.codehaus.jackson.map.util.ISO8601Utils;
-
-import java.util.Date;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
@@ -68,12 +58,12 @@ public class BucketDetalisActivity extends BaseActivity {
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_bucket_detalis);
-        if (bouquet!=null){
+        if (bouquet != null) {
             assignView();
             assignListener();
             initView();
             imageBack.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             showSnackBar(R.string.oops_error);
             startActivity(new Intent(this, BucketsActivity.class));
         }
@@ -159,7 +149,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     }
 
-    private void initView(){
+    private void initView() {
         WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
@@ -171,7 +161,7 @@ public class BucketDetalisActivity extends BaseActivity {
             getSizeHolder(currentSize).setSelection(SizeViewHolder.UNSELECTED);
             getSizeHolder(sizeId).setSelection(SizeViewHolder.SELECTED);
             currentSize = sizeId;
-            switch (sizeId){
+            switch (sizeId) {
                 case Bouquet.SIZE_LITTLE:
                     textPrice.setText(Helper.intToPriceString(bouquet.getSmallSizePrice()));
                     break;
@@ -294,7 +284,7 @@ public class BucketDetalisActivity extends BaseActivity {
         }
     }
 
-    private void buildOrder(){
+    private void buildOrder() {
         Order order = new Order();
 
         order.setSizeIndex(currentSize);
@@ -306,7 +296,7 @@ public class BucketDetalisActivity extends BaseActivity {
         DataController.getInstance().setOrder(order);
     }
 
-    private void goToMapActivity(){
+    private void goToMapActivity() {
         startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
     }
 

@@ -67,7 +67,7 @@ public class FakeWebMethods extends WebMethods {
     }
 
     private void addFake(Class<?> requestClass,
-                             Class<?> responseClass, String responseJson) {
+                         Class<?> responseClass, String responseJson) {
         fakeMappings.put(requestClass, new FakeMapping(responseClass, responseJson));
     }
 

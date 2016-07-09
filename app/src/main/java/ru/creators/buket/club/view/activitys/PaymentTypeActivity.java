@@ -2,14 +2,12 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
@@ -21,7 +19,6 @@ import java.math.BigDecimal;
 import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
-import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;

@@ -6,9 +6,7 @@ import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Fields;
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.model.lists.ListAnswerFlex;
 import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
-import ru.creators.buket.club.web.response.OrdersResponse;
 
 /**
  * Created by mifkamaz on 27/11/15.

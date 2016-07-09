@@ -39,7 +39,7 @@ public class SessionCreateRequest extends BaseRequest<SessionResponse> {
         HttpRequest request = getPostHttpRequest(null);
 
         request.getUrl().put(Rest.UUID, udid);
-        if (deviceToken!=null) {
+        if (deviceToken != null) {
             request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
         }
 

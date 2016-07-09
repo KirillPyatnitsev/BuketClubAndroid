@@ -8,7 +8,6 @@ import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.web.model.OrderContent;
 import ru.creators.buket.club.web.response.OrderResponse;
-import ru.creators.buket.club.web.response.OrdersResponse;
 
 /**
  * Created by mifkamaz on 27/11/15.

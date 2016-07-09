@@ -5,7 +5,6 @@ import android.net.Uri;
 import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.model.ProfileContent;
 import ru.creators.buket.club.web.response.DefaultResponse;
@@ -13,7 +12,7 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 /**
  * Created by mifkamaz on 17/03/16.
  */
-public class ProfilePatchRequest extends BaseRequest<DefaultResponse>{
+public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
 
     private Profile profile;
     private String accessToken;

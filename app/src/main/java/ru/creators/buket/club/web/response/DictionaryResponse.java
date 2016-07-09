@@ -2,9 +2,6 @@ package ru.creators.buket.club.web.response;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import java.util.ArrayList;
-
-import ru.creators.buket.club.model.DictionaryItem;
 import ru.creators.buket.club.consts.Fields;
 import ru.creators.buket.club.model.lists.ListDictionaryItem;
 
@@ -12,7 +9,7 @@ import ru.creators.buket.club.model.lists.ListDictionaryItem;
 /**
  * Created by mifkamaz on 12/12/15.
  */
-public class DictionaryResponse extends DefaultResponse{
+public class DictionaryResponse extends DefaultResponse {
 
     @JsonProperty(Fields.FLOWER_TYPES)
     private ListDictionaryItem dictonaryFlowerTypes;

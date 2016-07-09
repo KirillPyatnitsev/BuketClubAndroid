@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.elirex.fayeclient.FayeClient;
 import com.elirex.fayeclient.FayeClientListener;
 import com.elirex.fayeclient.MetaMessage;
-import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -747,7 +746,7 @@ public class ChoseShopActivity extends BaseActivity implements
                     if (!stop) {
                         pulseAnimationSet1.start();
                         pulseAnimationSet2.start();
-                    }else{
+                    } else {
                         pulseAnimationSet1.end();
                         pulseAnimationSet2.end();
                         if (view1 != null) {

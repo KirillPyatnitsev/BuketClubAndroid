@@ -4,7 +4,6 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import ru.creators.buket.club.consts.Fields;
-import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.lists.ListAnswerFlex;
 
 /**

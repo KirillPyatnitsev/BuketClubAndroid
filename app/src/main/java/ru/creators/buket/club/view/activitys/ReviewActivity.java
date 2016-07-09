@@ -1,14 +1,12 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
-import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -40,7 +38,7 @@ public class ReviewActivity extends BaseActivity {
         return R.id.a_r_coordinator_root;
     }
 
-    private void assignView(){
+    private void assignView() {
         ratingBar = getViewById(R.id.a_r_rating_bar);
         imageArtistIcon = getViewById(R.id.a_r_image_artist_icon);
         editComment = getViewById(R.id.a_r_edit_comment);
@@ -49,13 +47,13 @@ public class ReviewActivity extends BaseActivity {
         imageBack.setVisibility(View.VISIBLE);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (rating<4){
+                if (rating < 4) {
                     editComment.setEnabled(true);
-                }else{
+                } else {
                     editComment.setEnabled(false);
                     editComment.setText("");
                 }
@@ -75,13 +73,13 @@ public class ReviewActivity extends BaseActivity {
         });
     }
 
-    private void sendReview(){
+    private void sendReview() {
         String review = editComment.getText().toString();
-        int rating = (int)ratingBar.getRating();
+        int rating = (int) ratingBar.getRating();
         sendReview(review, rating);
     }
 
-    private void sendReview(String comment, int rating){
+    private void sendReview(String comment, int rating) {
         startLoading();
         WebMethods.getInstance().sendReviewRequest(DataController.getInstance().getSession().getAccessToken(),
                 order.getId(), comment, rating,
@@ -100,7 +98,7 @@ public class ReviewActivity extends BaseActivity {
                 });
     }
 
-    private void goToOrderDetalis(){
+    private void goToOrderDetalis() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 }

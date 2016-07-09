@@ -118,7 +118,7 @@ public class Profile {
     }
 
     @JsonIgnore
-    public Profile getProfileForPatchRequest(){
+    public Profile getProfileForPatchRequest() {
         Profile profile = new Profile();
 
         profile.setFillName(this.getFillName());

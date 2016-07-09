@@ -1,8 +1,6 @@
 package ru.creators.buket.club.view.activitys;
 
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -15,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
@@ -59,7 +56,7 @@ public class BucketsActivity extends BaseActivity {
     private TextView textCostMax;
 
     private MaterialSpinner spinnerFlowerType;
-    private MaterialSpinner spinnerFlowerClor;
+    private MaterialSpinner spinnerFlowerColor;
     private MaterialSpinner spinnerDayEvent;
 
     private GridView gridView;
@@ -75,7 +72,7 @@ public class BucketsActivity extends BaseActivity {
     private ListBouquet listBouquet = DataController.getInstance().getListBouquet();
 
     private ListDictionaryItem dictionaryFlowerTypes = new ListDictionaryItem();
-    private ListDictionaryItem dictionaryFloverColors = new ListDictionaryItem();
+    private ListDictionaryItem dictionaryFlowerColors = new ListDictionaryItem();
     private ListDictionaryItem dictionaryDayEvents = new ListDictionaryItem();
 
     private ArrayAdapter<String> adapterFlowerTypes;
@@ -132,7 +129,7 @@ public class BucketsActivity extends BaseActivity {
         gridView = getViewById(R.id.a_b_grid_view_buckets);
 
         spinnerFlowerType = getViewById(R.id.i_bf_spinner_flowers_type);
-        spinnerFlowerClor = getViewById(R.id.i_bf_spinner_tone_bouquet);
+        spinnerFlowerColor = getViewById(R.id.i_bf_spinner_tone_bouquet);
         spinnerDayEvent = getViewById(R.id.i_bf_spinner_chose_event);
 
         textNotFindBouquets = getViewById(R.id.a_b_text_not_find);
@@ -187,7 +184,7 @@ public class BucketsActivity extends BaseActivity {
             }
         });
 
-        spinnerFlowerClor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spinnerFlowerColor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 currentFlowerColorId = position;
@@ -215,7 +212,7 @@ public class BucketsActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DataController.getInstance().setBouquet(listBouquet.get(position));
-                goToBouquetDetalisActivity();
+                goToBouquetDetailsActivity();
             }
         });
 
@@ -245,7 +242,7 @@ public class BucketsActivity extends BaseActivity {
         startActivity(new Intent(this, OrdersActivity.class));
     }
 
-    private void goToBouquetDetalisActivity() {
+    private void goToBouquetDetailsActivity() {
         startActivity(new Intent(this, BucketDetalisActivity.class));
     }
 
@@ -260,7 +257,7 @@ public class BucketsActivity extends BaseActivity {
             gridAdapterBouquet = new GridAdapterBouquet(listBouquet, this, displaymetrics.widthPixels);
             gridView.setAdapter(gridAdapterBouquet);
 
-            loadAllDictioay();
+            loadDictionaries();
         }
     }
 
@@ -320,10 +317,6 @@ public class BucketsActivity extends BaseActivity {
         textCurrentCostMax.setText(Helper.intToPriceString(max));
     }
 
-    private Context getContext() {
-        return this;
-    }
-
     @Override
     protected int getContentContainerId() {
         return R.id.a_b_relative_content_container;
@@ -348,8 +341,8 @@ public class BucketsActivity extends BaseActivity {
                     dictionaryFlowerTypes.clear();
                     dictionaryFlowerTypes.addAll(dictonaryResponse.getDictonaryFlowerTypes());
                 } else if (dictionaryType.equals(Rest.FLOWER_COLORS)) {
-                    dictionaryFloverColors.clear();
-                    dictionaryFloverColors.addAll(dictonaryResponse.getDictonaryFloverClors());
+                    dictionaryFlowerColors.clear();
+                    dictionaryFlowerColors.addAll(dictonaryResponse.getDictonaryFloverClors());
                 } else if (dictionaryType.equals(Rest.DAY_EVENTS)) {
                     dictionaryDayEvents.clear();
                     dictionaryDayEvents.addAll(dictonaryResponse.getDictonaryDayEvents());
@@ -359,7 +352,7 @@ public class BucketsActivity extends BaseActivity {
         });
     }
 
-    private void loadAllDictioay() {
+    private void loadDictionaries() {
         String accessToken = DataController.getInstance().getSession().getAccessToken();
         getDictionary(accessToken, Rest.FLOWER_TYPES);
         getDictionary(accessToken, Rest.FLOWER_COLORS);
@@ -369,17 +362,17 @@ public class BucketsActivity extends BaseActivity {
     @Override
     protected void allProcessDone() {
         if (dictionaryFlowerTypes.size() != 0 && adapterFlowerTypes == null) {
-            adapterFlowerTypes = new ArrayAdapter<String>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFlowerTypes.getValuesArray());
+            adapterFlowerTypes = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFlowerTypes.getValuesArray());
             spinnerFlowerType.setAdapter(adapterFlowerTypes);
         }
 
-        if (dictionaryFloverColors.size() != 0 && adapterFlowerColors == null) {
-            adapterFlowerColors = new ArrayAdapter<String>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFloverColors.getValuesArray());
-            spinnerFlowerClor.setAdapter(adapterFlowerColors);
+        if (dictionaryFlowerColors.size() != 0 && adapterFlowerColors == null) {
+            adapterFlowerColors = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFlowerColors.getValuesArray());
+            spinnerFlowerColor.setAdapter(adapterFlowerColors);
         }
 
         if (dictionaryDayEvents.size() != 0 && adapterDayEvents == null) {
-            adapterDayEvents = new ArrayAdapter<String>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryDayEvents.getValuesArray());
+            adapterDayEvents = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryDayEvents.getValuesArray());
             spinnerDayEvent.setAdapter(adapterDayEvents);
         }
     }
@@ -398,21 +391,23 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void updateListBouquet(int page) {
-        if (!swipeRefreshLayout.isRefreshing())
+        if (!swipeRefreshLayout.isRefreshing()) {
             startLoading(false);
+        }
         WebMethods.getInstance().loadBouquets(DataController.getInstance().getSession().getAccessToken(),
                 currentFlowerTypeId == -1 ? currentFlowerTypeId : dictionaryFlowerTypes.getItemId(currentFlowerTypeId),
-                currentFlowerColorId == -1 ? currentFlowerColorId : dictionaryFloverColors.getItemId(currentFlowerColorId),
+                currentFlowerColorId == -1 ? currentFlowerColorId : dictionaryFlowerColors.getItemId(currentFlowerColorId),
                 currentDayEventId == -1 ? currentDayEventId : dictionaryDayEvents.getItemId(currentDayEventId),
                 currentMinPrice,
                 currentMaxPrice, page, Pagination.PER_PAGE,
                 new RequestListener<BouquetsResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
 
                     @Override
@@ -428,10 +423,11 @@ public class BucketsActivity extends BaseActivity {
 
                         gridAdapterBouquet.notifyDataSetChanged();
 
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
                 });
     }
@@ -454,8 +450,9 @@ public class BucketsActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(OrdersResponse ordersResponse) {
                         stopLoading();
-                        if (ordersResponse.getListOrder() != null && ordersResponse.getListOrder().size() != 0)
+                        if (ordersResponse.getListOrder() != null && ordersResponse.getListOrder().size() != 0) {
                             removeOrders(ordersResponse.getListOrder());
+                        }
                     }
                 });
     }

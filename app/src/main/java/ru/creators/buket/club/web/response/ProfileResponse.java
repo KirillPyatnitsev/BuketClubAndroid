@@ -8,7 +8,7 @@ import ru.creators.buket.club.model.Profile;
 /**
  * Created by mifkamaz on 12/12/15.
  */
-public class ProfileResponse  extends DefaultResponse{
+public class ProfileResponse extends DefaultResponse {
 
     @JsonProperty(Fields.PROFILE)
     private Profile profile;

@@ -8,7 +8,7 @@ import ru.creators.buket.club.model.Bouquet;
 /**
  * Created by mifkamaz on 13/12/15.
  */
-public class BouquetResponse extends DefaultResponse{
+public class BouquetResponse extends DefaultResponse {
 
     @JsonProperty(Fields.BOUQUET_ITEM)
     private Bouquet bouquet;

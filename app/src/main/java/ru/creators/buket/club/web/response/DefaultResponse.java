@@ -19,8 +19,8 @@ public class DefaultResponse {
     @JsonProperty(Fields.META)
     private Meta meta;
 
-    private boolean isDone(){
-        return error==null;
+    private boolean isDone() {
+        return error == null;
     }
 
     public Error getError() {
@@ -37,7 +37,7 @@ public class DefaultResponse {
         this.status = status;
     }
 
-    public boolean isStatusDone(){
+    public boolean isStatusDone() {
         return status.isStatusDone();
     }
 

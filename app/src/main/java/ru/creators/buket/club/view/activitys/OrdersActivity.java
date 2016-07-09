@@ -1,7 +1,6 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.widget.AbsListView;
@@ -9,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
@@ -50,13 +48,13 @@ public class OrdersActivity extends BaseActivity {
         listOrdersGetRequest(true);
     }
 
-    private void assignView(){
+    private void assignView() {
         listView = getViewById(R.id.a_o_list_view_orders);
         imageBack = getViewById(R.id.i_ab_image_back);
         swipeRefreshLayout = getViewById(R.id.a_o_swipe_refresh);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -103,11 +101,11 @@ public class OrdersActivity extends BaseActivity {
         goToBouquetsActivity();
     }
 
-    private void goToBouquetsActivity(){
+    private void goToBouquetsActivity() {
         startActivity(new Intent(this, BucketsActivity.class));
     }
 
-    private void initView(){
+    private void initView() {
         imageBack.setVisibility(View.VISIBLE);
         listOrderAdapter = new ListOrderAdapter(this, listOrder);
         listView.setAdapter(listOrderAdapter);
@@ -118,20 +116,20 @@ public class OrdersActivity extends BaseActivity {
         return R.id.a_o_coordinator_root;
     }
 
-    private void listOrdersGetRequest(boolean reload){
-        if (reload){
+    private void listOrdersGetRequest(boolean reload) {
+        if (reload) {
             lastLoadedPage = 0;
             pagination = null;
             listOrder.clear();
         }
 
-        if (pagination==null || lastLoadedPage < pagination.getNextPage()){
-            lastLoadedPage = pagination==null ? 1 : pagination.getNextPage();
+        if (pagination == null || lastLoadedPage < pagination.getNextPage()) {
+            lastLoadedPage = pagination == null ? 1 : pagination.getNextPage();
             getOrders(lastLoadedPage);
         }
     }
 
-    private void getOrders(int page){
+    private void getOrders(int page) {
         if (!swipeRefreshLayout.isRefreshing())
             startLoading(false);
         WebMethods.getInstance().getOrders(
@@ -159,11 +157,11 @@ public class OrdersActivity extends BaseActivity {
                 });
     }
 
-    private void goToOrderDetalisActivity(){
+    private void goToOrderDetalisActivity() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 
-    private void goToReviewActivity(){
+    private void goToReviewActivity() {
         startActivity(new Intent(this, ReviewActivity.class));
     }
 }

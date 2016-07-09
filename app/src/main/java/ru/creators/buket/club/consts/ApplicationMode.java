@@ -12,8 +12,8 @@ public class ApplicationMode {
     public static final String COST_FIXED_DESC = "fix_price";
     public static final String COST_FLOATING_DESC = "flexible_price";
 
-    public static String getAppModeDesc(int mode){
-        switch (mode){
+    public static String getAppModeDesc(int mode) {
+        switch (mode) {
             case COST_FIX:
                 return COST_FIXED_DESC;
             case COST_FLEXIBLE:

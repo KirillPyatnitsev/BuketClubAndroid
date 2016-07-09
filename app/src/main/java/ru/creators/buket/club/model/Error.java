@@ -64,8 +64,8 @@ public class Error {
         return message;
     }
 
-    public String getGetCodeDesc(){
-        switch (code){
+    public String getGetCodeDesc() {
+        switch (code) {
             case CODE_11:
                 return CODE_11_DESK;
             case CODE_12:
@@ -107,7 +107,7 @@ public class Error {
         this.message = message;
     }
 
-    public boolean isStatusDone(){
+    public boolean isStatusDone() {
         return code == 0 || code == Error.CODE_200 || code == Error.CODE_201;
     }
 }

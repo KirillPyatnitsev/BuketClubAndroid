@@ -45,31 +45,31 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
 
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
 
-        if (flowerTypeId != -1){
+        if (flowerTypeId != -1) {
             request.getUrl().put(Rest.FLOWER_TYPE_ID, flowerTypeId);
         }
 
-        if (flowerColorId != -1){
+        if (flowerColorId != -1) {
             request.getUrl().put(Rest.FLOWER_COLOR_ID, flowerColorId);
         }
 
-        if (dayEventId != -1){
+        if (dayEventId != -1) {
             request.getUrl().put(Rest.DAY_EVENT_ID, dayEventId);
         }
 
-        if (minPrice != -1){
+        if (minPrice != -1) {
             request.getUrl().put(Rest.MIN_PRICE, minPrice);
         }
 
-        if (maxPrice != -1){
+        if (maxPrice != -1) {
             request.getUrl().put(Rest.MAX_PRICE, maxPrice);
         }
 
-        if (page != -1){
+        if (page != -1) {
             request.getUrl().put(Rest.PAGE, page);
         }
 
-        if (perPage != -1){
+        if (perPage != -1) {
             request.getUrl().put(Rest.PER_PAGE, perPage);
         }
 

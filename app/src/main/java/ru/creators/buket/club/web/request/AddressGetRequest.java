@@ -11,7 +11,7 @@ import java.util.Locale;
 /**
  * Created by mifkamaz on 19/02/16.
  */
-public class AddressGetRequest extends BaseRequest<String>{
+public class AddressGetRequest extends BaseRequest<String> {
     private double latitude;
     private double longitude;
     private Context context;
@@ -40,10 +40,10 @@ public class AddressGetRequest extends BaseRequest<String>{
 
         String ret = "";
 
-        ret += (ret.isEmpty()?"":", ") + (address.getThoroughfare()!=null?address.getThoroughfare():"");
-        ret += (ret.isEmpty()?"":", ") + (address.getAdminArea()!=null?address.getAdminArea():"");
-        ret += (ret.isEmpty()?"":", ") + (address.getPostalCode()!=null?address.getPostalCode():"");
-        ret += (ret.isEmpty()?"":", ") + (address.getCountryName()!=null?address.getCountryName():"");
+        ret += (ret.isEmpty() ? "" : ", ") + (address.getThoroughfare() != null ? address.getThoroughfare() : "");
+        ret += (ret.isEmpty() ? "" : ", ") + (address.getAdminArea() != null ? address.getAdminArea() : "");
+        ret += (ret.isEmpty() ? "" : ", ") + (address.getPostalCode() != null ? address.getPostalCode() : "");
+        ret += (ret.isEmpty() ? "" : ", ") + (address.getCountryName() != null ? address.getCountryName() : "");
 
         return ret;
     }

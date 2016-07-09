@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.net.URLDecoder;
 
 import ru.creators.buket.club.consts.ServerConfig;
-import ru.creators.buket.club.model.*;
 import ru.creators.buket.club.model.Error;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
@@ -24,10 +23,10 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  * Created by mifkamaz on 19/11/15.
  */
 
-public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
+public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    public BaseRequest(Class<T> clazz){
+    public BaseRequest(Class<T> clazz) {
         super(clazz);
     }
 
@@ -38,11 +37,11 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return builder.build();
     }
 
-    protected Uri.Builder getUriWithServerAdress(){
+    protected Uri.Builder getUriWithServerAdress() {
         return Uri.parse(ServerConfig.SERVER_ADRESS).buildUpon();
     }
 
-    protected Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder){
+    protected Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder) {
         uriBuilder.appendPath(ServerConfig.SERVER_API_PREFIX);
         uriBuilder.appendPath(ServerConfig.SERVER_API_VERSION);
         uriBuilder.appendPath(ServerConfig.SERVER_API_VERSION_V1);
@@ -51,18 +50,18 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
 
     protected abstract Uri.Builder addRestAddress(Uri.Builder uriBuilder);
 
-    protected HttpContent jsonStringToHttpContent(String jsonString){
+    protected HttpContent jsonStringToHttpContent(String jsonString) {
         return ByteArrayContent.fromString("application/json", jsonString);
     }
 
-    private HttpContent objectToHttpContent(Object content){
+    private HttpContent objectToHttpContent(Object content) {
         HttpContent httpContent = null;
-        if (content instanceof HttpContent){
+        if (content instanceof HttpContent) {
             httpContent = (HttpContent) content;
-        }else{
+        } else {
             try {
                 httpContent = getHttpContentFromJsonString(toJson(content));
-            }catch (Exception err){
+            } catch (Exception err) {
                 err.printStackTrace();
             }
         }
@@ -124,22 +123,22 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return object;
     }
 
-    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz){
+    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz) {
         DefaultResponse response = null;
 
-        Error status =new Error();
+        Error status = new Error();
         status.setCode(httpResponse.getStatusCode());
 
-        if (status.isStatusDone()){
+        if (status.isStatusDone()) {
             try {
                 String responseString = httpResponse.parseAsString();
                 response = toObject(responseString, clazz);
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 status.setMessage(ex.toString());
             }
         }
 
-        if (response == null){
+        if (response == null) {
             response = new DefaultResponse();
         }
 
@@ -148,16 +147,16 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return response;
     }
 
-    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz, Z response){
+    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz, Z response) {
 
-        Error status =new Error();
+        Error status = new Error();
         status.setCode(httpResponse.getStatusCode());
 
-        if (status.isStatusDone()){
+        if (status.isStatusDone()) {
             try {
                 String responseString = httpResponse.parseAsString();
                 response = toObject(responseString, clazz);
-            }catch (IOException ex){
+            } catch (IOException ex) {
                 status.setMessage(ex.toString());
             }
         }
@@ -167,7 +166,7 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T>{
         return response;
     }
 
-    protected HttpContent getHttpContentFromJsonString(String json){
+    protected HttpContent getHttpContentFromJsonString(String json) {
         return ByteArrayContent.fromString("application/json", json);
     }
 }

@@ -1,14 +1,11 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.methods.params.PhoneParams;
 
 import java.math.BigDecimal;
 
@@ -52,13 +49,13 @@ public class CardInfoFillingActivity extends BaseActivity {
         }
     }
 
-    private void assignView(){
+    private void assignView() {
         editPhone = getViewById(R.id.a_cif_edit_phone);
         textBouquetName = getViewById(R.id.a_cif_text_action_bar_second);
         textBouquetCost = getViewById(R.id.a_cif_text_action_bar_title);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         getViewById(R.id.a_cif_button_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,12 +64,12 @@ public class CardInfoFillingActivity extends BaseActivity {
         });
     }
 
-    private void initView(){
+    private void initView() {
         textBouquetCost.setText(Helper.getStringWithCostPrefix(order.getPrice(), this));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
     }
 
-    private void pay(){
+    private void pay() {
 //        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
         PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
                 .setAmount(new BigDecimal(order.getPrice()))

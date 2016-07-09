@@ -6,7 +6,6 @@ import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.web.response.BouquetResponse;
-import ru.creators.buket.club.web.response.BouquetsResponse;
 
 /**
  * Created by mifkamaz on 27/11/15.

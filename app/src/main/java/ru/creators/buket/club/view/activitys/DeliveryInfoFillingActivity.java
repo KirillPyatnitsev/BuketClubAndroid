@@ -57,7 +57,7 @@ import ru.creators.buket.club.web.response.PhoneCodeResponse;
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks{
+        GoogleApiClient.ConnectionCallbacks {
 
     private ImageView imageBack;
     private ImageView imageLogo;
@@ -110,8 +110,8 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         initView();
         assignListener();
 
-        if (DataController.getInstance().getProfile()!=null && DataController.getInstance().getProfile().getPhone()!=null
-                && !DataController.getInstance().getProfile().getPhone().isEmpty()){
+        if (DataController.getInstance().getProfile() != null && DataController.getInstance().getProfile().getPhone() != null
+                && !DataController.getInstance().getProfile().getPhone().isEmpty()) {
             String phone = DataController.getInstance().getProfile().getPhone().replaceAll("[^\\d.]", "");
 
             phone = phone.substring(1);
@@ -196,17 +196,17 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
                 boolean myLocation = lastLocationSelected && lastUserSelectedAddress.equals(editAddress.getText().toString());
 
-                boolean editLocation = currentPlace!=null && lastUserSelectedAddress.equals(editAddress.getText().toString());
+                boolean editLocation = currentPlace != null && lastUserSelectedAddress.equals(editAddress.getText().toString());
 
                 boolean dataIsDone = addDataToOrder();
 
-                if (dataIsDone){
-                    if (deliveryPickup || myLocation || editLocation){
+                if (dataIsDone) {
+                    if (deliveryPickup || myLocation || editLocation) {
                         sendOrder();
-                    }else{
+                    } else {
                         showSnackBar(R.string.delivery_info_address_error);
                     }
-                }else{
+                } else {
                     showSnackBar(getString(R.string.delivery_info_error));
                 }
             }
@@ -328,7 +328,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
             deliveryTime.add("Выбрать время");
         }
 
-        deliveryTimeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
+        deliveryTimeAdapter = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
 
         spinnerDeliveryTime.setAdapter(deliveryTimeAdapter);
 
@@ -339,7 +339,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         shippingTypes.add(getString(R.string.pickup));
         shippingTypes.add(getString(R.string.delivery));
 
-        shippingTypeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
+        shippingTypeAdapter = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
         spinnerDeliveryType.setAdapter(shippingTypeAdapter);
     }
 
@@ -370,7 +370,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         }
     }
 
-    private void addressGetRequest(double latitude, double longitude){
+    private void addressGetRequest(double latitude, double longitude) {
         WebMethods.getInstance().addressGetRequest(latitude, longitude, this, new RequestListener<String>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -385,7 +385,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         });
     }
 
-    private void phoneVerification(String phone){
+    private void phoneVerification(String phone) {
 //        ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
 //
 //        if (listPhone != null && listPhone.contains(phone)){
@@ -398,7 +398,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     }
 
-    private void phoneVerificationStartPostRequest(final String phone){
+    private void phoneVerificationStartPostRequest(final String phone) {
         WebMethods.getInstance().phoneVerificationStartPostRequest(DataController.getInstance().getSession().getAccessToken(), phone,
                 new RequestListener<PhoneCodeResponse>() {
                     @Override
@@ -417,7 +417,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 });
     }
 
-    private void savePhone(String phone){
+    private void savePhone(String phone) {
         ListString listPhone = PreferenceCache.getObject(this, PreferenceCache.SAVED_PHONES, ListString.class);
         if (listPhone == null) {
             listPhone = new ListString();
@@ -426,7 +426,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         PreferenceCache.putObject(this, PreferenceCache.SAVED_PHONES, listPhone);
     }
 
-    private void showEnterCodeDialog(final String phone){
+    private void showEnterCodeDialog(final String phone) {
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         int maxLength = 4;
@@ -514,7 +514,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 });
     }
 
-    private void showToast(String message){
+    private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

@@ -10,7 +10,7 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 /**
  * Created by mifkamaz on 04/03/16.
  */
-public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultResponse>{
+public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultResponse> {
 
     private String accessToken;
     private String telephone;
@@ -37,7 +37,7 @@ public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultRespo
         request.getUrl().put(Rest.PHONE, telephone);
         request.getUrl().put(Rest.CODE, code);
 
-        if (!code.equals("55555")){
+        if (!code.equals("55555")) {
             throw new Exception();
         }
 

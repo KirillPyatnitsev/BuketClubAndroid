@@ -1,14 +1,11 @@
 package ru.creators.buket.club.view.activitys;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.transitionseverywhere.TransitionManager;
 
 import ru.creators.buket.club.R;
@@ -32,7 +29,7 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         initView();
     }
 
-    private void assignView(){
+    private void assignView() {
         imageOpenFilter = getViewById(R.id.i_ab_image_settings_open);
         imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
         imageBack = getViewById(R.id.i_ab_image_back);
@@ -42,7 +39,7 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         viewActonBarFilter = getViewById(R.id.a_ab_view_filter);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         imageOpenFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,12 +62,12 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         });
     }
 
-    private void initView(){
+    private void initView() {
         imageOpenFilter.setVisibility(View.VISIBLE);
         imageBack.setVisibility(View.VISIBLE);
     }
 
-    private void openFilter(){
+    private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
@@ -91,7 +88,7 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         imageCloseFilter.setVisibility(View.VISIBLE);
     }
 
-    private void closeFilter(){
+    private void closeFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =

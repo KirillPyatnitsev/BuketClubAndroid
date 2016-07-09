@@ -10,7 +10,6 @@ import ru.creators.buket.club.consts.Fields;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.model.Review;
 import ru.creators.buket.club.web.response.DefaultResponse;
-import ru.creators.buket.club.web.response.OrdersResponse;
 
 /**
  * Created by mifkamaz on 27/11/15.
@@ -48,7 +47,7 @@ public class ReviewRequest extends BaseRequest<DefaultResponse> {
         return getResponse(request.execute(), DefaultResponse.class);
     }
 
-    private class ReviewContent{
+    private class ReviewContent {
         @JsonProperty(Fields.REVIEW)
         private Review review;
 

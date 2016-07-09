@@ -8,7 +8,7 @@ import ru.creators.buket.club.model.lists.ListOrder;
 /**
  * Created by mifkamaz on 13/12/15.
  */
-public class OrdersResponse extends DefaultResponse{
+public class OrdersResponse extends DefaultResponse {
 
     @JsonProperty(Fields.ORDERS)
     private ListOrder listOrder;

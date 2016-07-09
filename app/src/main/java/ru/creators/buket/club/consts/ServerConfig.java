@@ -16,9 +16,9 @@ public class ServerConfig {
 
     public static final String SERVER_FAYE = "http://" + SERVER_HOST + ":6840/faye";
     public static final String SERVER_FAYE_ORDER = "/client/orders/order_id/answers";
-    public static final String SERVER_FAYE_ORDER_REPLACEMENT= "order_id";
+    public static final String SERVER_FAYE_ORDER_REPLACEMENT = "order_id";
 
-    public static final String FLURRY_API_KEY= "MDW7F3F52TFGVDYG5T9S";
-    public static final String MIXPANEL_API_KEY= "33820e1b43766840234930ba41432dd2";
+    public static final String FLURRY_API_KEY = "MDW7F3F52TFGVDYG5T9S";
+    public static final String MIXPANEL_API_KEY = "33820e1b43766840234930ba41432dd2";
 
 }

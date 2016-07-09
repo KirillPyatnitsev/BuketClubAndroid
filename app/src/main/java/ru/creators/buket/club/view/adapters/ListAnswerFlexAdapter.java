@@ -11,9 +11,7 @@ import android.widget.TextView;
 
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.AnswerFlex;
-import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.lists.ListAnswerFlex;
-import ru.creators.buket.club.model.lists.ListOrder;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 
@@ -51,7 +49,7 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        if (convertView == null){
+        if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.inflate_artist_bouquet, parent, false);
 
             holder = new ViewHolder();
@@ -64,14 +62,14 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
 
             convertView.setTag(holder);
 
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         AnswerFlex answerFlex = getItem(position);
 
-        if (answerFlex!=null){
-            if (answerFlex.getShop().getImageUrl()!=null){
+        if (answerFlex != null) {
+            if (answerFlex.getShop().getImageUrl() != null) {
                 WebMethods.getInstance().loadImage(context,
                         Helper.addServerPrefix(answerFlex.getShop().getImageUrl()),
                         holder.imageArtistLogo);
@@ -86,11 +84,11 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
         return convertView;
     }
 
-    private <T extends View> T getViewById(int id, View root){
+    private <T extends View> T getViewById(int id, View root) {
         return (T) root.findViewById(id);
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView textArtistName;
         TextView textBouquetCost;
         TextView textDistance;

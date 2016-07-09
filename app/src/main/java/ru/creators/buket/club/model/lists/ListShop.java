@@ -20,7 +20,7 @@ public class ListShop extends ArrayList<Shop> {
 
     public void removeByShopId(int shopId) {
         for (int i = 0; i < this.size(); i++) {
-            if (this.get(i).getId() == shopId){
+            if (this.get(i).getId() == shopId) {
                 this.remove(i);
                 return;
             }

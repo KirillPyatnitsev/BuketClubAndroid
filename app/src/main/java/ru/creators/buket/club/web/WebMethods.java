@@ -1,7 +1,6 @@
 package ru.creators.buket.club.web;
 
 import android.content.Context;
-import android.os.Debug;
 import android.util.Log;
 import android.widget.ImageView;
 

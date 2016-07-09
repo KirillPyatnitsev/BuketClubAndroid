@@ -1,13 +1,10 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.graphics.Canvas;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -17,17 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.barcode.Barcode;
 import com.transitionseverywhere.TransitionManager;
 
 import java.io.IOException;
@@ -77,7 +71,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         return R.id.a_m_coordinator_root;
     }
 
-    private void assignView(){
+    private void assignView() {
         imageBack = getViewById(R.id.i_ab_image_back);
         imageOpenFilter = getViewById(R.id.i_ab_image_settings_open);
         imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
@@ -91,7 +85,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         editAddress = getViewById(R.id.i_mf_edit_address);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         imageOpenFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,7 +135,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     public void onMapClick(LatLng latLng) {
         mMap.clear();
 
-        MarkerOptions options = new MarkerOptions().position( latLng );
+        MarkerOptions options = new MarkerOptions().position(latLng);
 
         address = getAddressFromLatLng(latLng);
 
@@ -164,26 +158,26 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         return true;
     }
 
-    private String getAddressFromLatLng( LatLng latLng ) {
-        Geocoder geocoder = new Geocoder( this );
+    private String getAddressFromLatLng(LatLng latLng) {
+        Geocoder geocoder = new Geocoder(this);
         String address = "";
         try {
             List<Address> addresses = geocoder
-                    .getFromLocation( latLng.latitude, latLng.longitude, 1);
-            if (addresses.get( 0 ).getAddressLine( 0 ) != null){
-                address = addresses.get( 0 ).getAddressLine(0);
-            }else if (addresses.get( 0 ).getThoroughfare() != null){
-                address = addresses.get( 0 ).getThoroughfare();
-            }else{
-                address = addresses.get( 0 ).getAdminArea();
+                    .getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addresses.get(0).getAddressLine(0) != null) {
+                address = addresses.get(0).getAddressLine(0);
+            } else if (addresses.get(0).getThoroughfare() != null) {
+                address = addresses.get(0).getThoroughfare();
+            } else {
+                address = addresses.get(0).getAdminArea();
             }
-        } catch (IOException e ) {
+        } catch (IOException e) {
         }
 
         return address;
     }
 
-    private void openFilter(){
+    private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
@@ -203,7 +197,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         imageCloseFilter.setVisibility(View.VISIBLE);
     }
 
-    private void closeFilter(){
+    private void closeFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
@@ -254,17 +248,17 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
-    private void appendOrderInfo(){
+    private void appendOrderInfo() {
         DataController.getInstance().getOrder().setAddress(address);
         DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
         DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
     }
 
-    private void goToDeliveryInfoFillingAct(){
+    private void goToDeliveryInfoFillingAct() {
         startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
     }
 
-    private class GeocoderTask extends AsyncTask<String, Void, List >{
+    private class GeocoderTask extends AsyncTask<String, Void, List> {
 
         protected List addresses;
 
@@ -296,7 +290,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         @Override
 
         protected void onPostExecute(List addresses) {
-            if(addresses==null || addresses.size()==0){
+            if (addresses == null || addresses.size() == 0) {
 
                 Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
 
@@ -308,7 +302,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
 // Adding Markers on Google Map for each matching address
 
-            for(int i=0;i<addresses.size();i++){
+            for (int i = 0; i < addresses.size(); i++) {
 
                 Address address = (Address) addresses.get(i);
 
@@ -318,9 +312,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
                 String addressText = String.format("%s, %s",
 
-                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
 
-                address.getCountryName());
+                        address.getCountryName());
 
                 Log.d("logging", "address:" + addressText);
 
@@ -334,7 +328,7 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
 // Locate the first location
 
-                if(i==0)
+                if (i == 0)
 
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 

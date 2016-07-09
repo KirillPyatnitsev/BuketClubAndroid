@@ -7,7 +7,7 @@ import ru.creators.buket.club.model.PhoneVerification;
 /**
  * Created by mifkamaz on 16/03/16.
  */
-public class PhoneCodeResponse extends DefaultResponse{
+public class PhoneCodeResponse extends DefaultResponse {
 
     @JsonProperty("phone_verification")
     private PhoneVerification phoneVerification;

@@ -48,7 +48,7 @@ public class ListOrderAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
 
-        if (convertView == null){
+        if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.inflate_order_item, parent, false);
 
             holder = new ViewHolder();
@@ -58,29 +58,29 @@ public class ListOrderAdapter extends BaseAdapter {
             holder.textOrderStatus = getViewById(R.id.i_oi_text_order_status, convertView);
             holder.imageArtistLogo = getViewById(R.id.i_oi_image_artist, convertView);
 
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
 
         Order order = getItem(position);
 
-        if (order!=null && holder!=null){
+        if (order != null && holder != null) {
             holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
             holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
-            if (order.getStatusIndex() != Order.STATUS_FILLING_SHOP_INDEX )
+            if (order.getStatusIndex() != Order.STATUS_FILLING_SHOP_INDEX)
                 WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
         }
 
         return convertView;
     }
 
-    private <T extends View> T getViewById(int id, View root){
+    private <T extends View> T getViewById(int id, View root) {
         return (T) root.findViewById(id);
     }
 
-    private class ViewHolder{
+    private class ViewHolder {
         TextView textBouquetName;
         TextView textBouquetCost;
         TextView textOrderStatus;

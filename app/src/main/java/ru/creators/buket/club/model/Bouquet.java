@@ -163,8 +163,8 @@ public class Bouquet {
         this.upadtedAt = upadtedAt;
     }
 
-    public int getBouquetPriceBySize(int sizeId){
-        switch (sizeId){
+    public int getBouquetPriceBySize(int sizeId) {
+        switch (sizeId) {
             case SIZE_LITTLE:
                 return getSmallSizePrice();
             case SIZE_MEDIUM:
@@ -176,8 +176,8 @@ public class Bouquet {
         }
     }
 
-    public String getBouquetNameBySize(int sizeId){
-        switch (sizeId){
+    public String getBouquetNameBySize(int sizeId) {
+        switch (sizeId) {
             case SIZE_LITTLE:
                 return getSmallSizeName();
             case SIZE_MEDIUM:
@@ -189,8 +189,8 @@ public class Bouquet {
         }
     }
 
-    public static String getSizeDesc(int sizeId){
-        switch (sizeId){
+    public static String getSizeDesc(int sizeId) {
+        switch (sizeId) {
             case SIZE_LITTLE:
                 return SIZE_LITTLE_DESC;
             case SIZE_MEDIUM:

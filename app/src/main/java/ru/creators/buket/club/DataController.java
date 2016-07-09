@@ -73,7 +73,7 @@ public class DataController {
 
     public void setListBouquet(ListBouquet listBouquet) {
         // Ensure that list is not null
-        this.listBouquet = listBouquet == null? new ListBouquet(): listBouquet;
+        this.listBouquet = listBouquet == null ? new ListBouquet() : listBouquet;
     }
 
     public PriceRange getPriceRange() {

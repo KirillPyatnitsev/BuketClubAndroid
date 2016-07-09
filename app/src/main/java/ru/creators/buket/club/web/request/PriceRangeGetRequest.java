@@ -5,8 +5,6 @@ import android.net.Uri;
 import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.model.PriceRange;
-import ru.creators.buket.club.web.response.OrdersResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
 
 /**

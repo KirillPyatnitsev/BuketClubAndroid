@@ -5,14 +5,12 @@ import android.net.Uri;
 import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.model.PhoneVerification;
-import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.PhoneCodeResponse;
 
 /**
  * Created by mifkamaz on 04/03/16.
  */
-public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResponse>{
+public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResponse> {
 
     private String accessToken;
     private String telephone;

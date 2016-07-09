@@ -5,7 +5,6 @@ import android.net.Uri;
 import com.google.api.client.http.HttpRequest;
 
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.web.request.BaseRequest;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
 /**
