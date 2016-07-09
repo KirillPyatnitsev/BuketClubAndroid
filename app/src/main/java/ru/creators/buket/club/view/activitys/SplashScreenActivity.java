@@ -69,23 +69,21 @@ public class SplashScreenActivity extends BaseActivity {
     private Timer timer;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_splash_screen);
-
 
         SharedPreferences sharedPreferences =
                 PreferenceManager.getDefaultSharedPreferences(this);
-        boolean sentToken = sharedPreferences
+        boolean tokenSent = sharedPreferences
                 .getBoolean(QuickstartPreferences.SENT_TOKEN_TO_SERVER, false);
 
-        if (checkPlayServices() && !sentToken) {
+        if (checkPlayServices() && !tokenSent) {
             // Start IntentService to register this application with GCM.
             Intent intent = new Intent(this, RegistrationIntentService.class);
             startService(intent);
         }
 
-        Log.d("Log", getUniqueDeviceId());
+        Log.d(TAG, getUniqueDeviceId());
 
         assignView();
         assignListener();
@@ -94,15 +92,13 @@ public class SplashScreenActivity extends BaseActivity {
             buttonFix.setVisibility(View.VISIBLE);
             buttonFlexible.setVisibility(View.VISIBLE);
         } else {
-            if (sentToken) {
+            if (tokenSent) {
                 startApp();
             }
         }
 
         LocalBroadcastManager.getInstance(this).registerReceiver(gcmRegistrationDone,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
-
-        FlurryAgent.logEvent("BucketsActivity");
     }
 
     @Override

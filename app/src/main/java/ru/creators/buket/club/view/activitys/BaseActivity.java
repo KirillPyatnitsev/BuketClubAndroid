@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.flurry.android.FlurryAgent;
 import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
@@ -31,10 +32,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     private int runningProcessCount = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         DataController.getInstance().setBaseActivity(this);
+
+        this.onCreateInternal();
+
+        String className = this.getLocalClassName();
+        FlurryAgent.logEvent(className);
     }
+
+    protected abstract void onCreateInternal();
 
     protected <T extends View> T getViewById(int id) {
         return (T) findViewById(id);

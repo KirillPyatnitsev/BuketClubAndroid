@@ -120,8 +120,7 @@ public class ChoseShopActivity extends BaseActivity implements
     private PulseScaleAnimation pulseScaleAnimation;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_chose_shop);
 
         MARKER_BID_PRICE = getString(R.string.marker_bid_price);
@@ -152,8 +151,6 @@ public class ChoseShopActivity extends BaseActivity implements
 
         showMap();
         textShowList.setVisibility(View.GONE);
-
-        FlurryAgent.logEvent("ChoseShopActivity");
     }
 
     @Override

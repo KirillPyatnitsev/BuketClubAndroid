@@ -37,15 +37,11 @@ public class OrdersActivity extends BaseActivity {
     private int lastLoadedPage;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_orders);
         assignView();
         assignListener();
         initView();
-
-        FlurryAgent.logEvent("OrdersActivity");
-
     }
 
     @Override

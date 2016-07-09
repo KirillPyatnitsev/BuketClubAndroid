@@ -32,14 +32,12 @@ public class CardInfoFillingActivity extends BaseActivity {
     private TextView textBouquetCost;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_card_info_filling);
 
         assignView();
         assignListener();
         initView();
-        FlurryAgent.logEvent("CardInfoFillingActivity");
     }
 
     @Override

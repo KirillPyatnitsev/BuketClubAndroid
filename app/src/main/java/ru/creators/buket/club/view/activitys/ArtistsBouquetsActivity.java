@@ -24,15 +24,12 @@ public class ArtistsBouquetsActivity extends BaseActivity {
     private View viewActonBarFilter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_artists_bouquets);
 
         assignView();
         assignListener();
         initView();
-
-        FlurryAgent.logEvent("ArtistsBouquetsActivity");
     }
 
     private void assignView(){

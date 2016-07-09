@@ -53,8 +53,7 @@ public class OrderDetailsActivity extends BaseActivity {
     private Order order;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_bouquet_delivery_status_detalis);
 
         Order order = DataController.getInstance().getOrder();
@@ -70,7 +69,6 @@ public class OrderDetailsActivity extends BaseActivity {
             showSnackBar(R.string.oops_error);
             startActivity(new Intent(this, OrdersActivity.class));
         }
-        FlurryAgent.logEvent("OrderDetailsActivity");
     }
 
     @Override

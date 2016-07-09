@@ -29,14 +29,10 @@ public class ReviewActivity extends BaseActivity {
     Order order = DataController.getInstance().getOrder();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_review);
-
         assignView();
         assignListener();
-
-        FlurryAgent.logEvent("ReviewActivity");
     }
 
     @Override

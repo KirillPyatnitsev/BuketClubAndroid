@@ -66,8 +66,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_bucket_detalis);
         if (bouquet!=null){
             assignView();
@@ -78,8 +77,6 @@ public class BucketDetalisActivity extends BaseActivity {
             showSnackBar(R.string.oops_error);
             startActivity(new Intent(this, BucketsActivity.class));
         }
-
-        FlurryAgent.logEvent("BucketDetalisActivity");
     }
 
     @Override

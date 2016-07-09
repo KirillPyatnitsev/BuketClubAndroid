@@ -57,10 +57,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
 
     private LatLng currentLatLng = null;
-    GeocoderTask geocoderTask = new GeocoderTask();
+    private GeocoderTask geocoderTask = new GeocoderTask();
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_map);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

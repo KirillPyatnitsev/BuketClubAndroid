@@ -54,15 +54,13 @@ public class PaymentTypeActivity extends BaseActivity {
     private Order order = DataController.getInstance().getOrder();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_payment_type);
 
         assignView();
         assignListener();
         initView();
 
-        FlurryAgent.logEvent("PaymentTypeActivity");
         if (BuildConfig.DEBUG) {
             yandexPaymentOk();
         } else {

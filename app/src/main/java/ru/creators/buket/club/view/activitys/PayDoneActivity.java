@@ -20,16 +20,13 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 public class PayDoneActivity extends BaseActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_pay_done);
 
         sendOrder();
         if (DataController.getInstance().getOrder().getTypePaymentIndex() == Order.TYPE_PAYMENT_INDEX_CARD) {
             getViewById(R.id.a_pd_text_action_bar_title).setVisibility(View.VISIBLE);
         }
-
-        FlurryAgent.logEvent("PayDoneActivity");
     }
 
     private void startClosingTimer() {
@@ -38,19 +35,13 @@ public class PayDoneActivity extends BaseActivity {
 
             @Override
             public void run() {
-
-                goToOrderDetais();
-
+                goToOrderDetails();
                 // If you want to call Activity then call from here for 5 seconds it automatically call and your image disappear....
             }
         }, 5000);
     }
 
-    private void goToBouquetsActivity() {
-        startActivity(new Intent(this, BucketsActivity.class));
-    }
-
-    private void goToOrderDetais() {
+    private void goToOrderDetails() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 

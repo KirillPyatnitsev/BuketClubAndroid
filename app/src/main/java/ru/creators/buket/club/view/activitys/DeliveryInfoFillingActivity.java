@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -24,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
 import com.google.android.gms.common.ConnectionResult;
@@ -54,9 +51,7 @@ import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.lists.ListString;
 import ru.creators.buket.club.tools.PreferenceCache;
-import ru.creators.buket.club.web.FakeWebMethods;
 import ru.creators.buket.club.web.WebMethods;
-import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.OrderResponse;
 import ru.creators.buket.club.web.response.PhoneCodeResponse;
 
@@ -83,12 +78,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private ArrayList<String> deliveryTime = new ArrayList<>();
     private ArrayList<String> shippingTypes = new ArrayList<>();
 
-    private ArrayAdapter<String> delivetyTimeAdapter;
+    private ArrayAdapter<String> deliveryTimeAdapter;
     private ArrayAdapter<String> shippingTypeAdapter;
 
     Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-    private boolean reseliction = false;
+    private boolean reselection = false;
 
     private Place currentPlace = null;
 
@@ -108,8 +103,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private float LOCATION_REFRESH_DISTANCE = 10;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreateInternal() {
         setContentView(R.layout.activity_delivery_info_filling);
 
         assignView();
@@ -123,7 +117,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
             phone = phone.substring(1);
 
             editPhoneNumber.setText(phone);
-
         }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -133,8 +126,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-        FlurryAgent.logEvent("DeliveryInfoFillingActivity");
     }
 
     @Override
@@ -271,7 +262,9 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 if (position == 0) {
                     currentDate = null;
                 } else {
-                    if (!reseliction) {
+                    if (reselection) {
+                        reselection = false;
+                    } else {
                         new SlideDateTimePicker.Builder(getSupportFragmentManager())
                                 .setListener(slideDateTimeListener)
                                 .setInitialDate(new Date())
@@ -280,8 +273,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                                 .setIndicatorColor(getResources().getColor(R.color.yellow))
                                 .build()
                                 .show();
-                    } else {
-                        reseliction = false;
                     }
                 }
             }
@@ -309,11 +300,11 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         @Override
         public void onDateTimeSet(Date date) {
-            reseliction = true;
+            reselection = true;
             currentDate = date;
             deliveryTime.set(1, formatter.format(currentDate));
-            delivetyTimeAdapter.notifyDataSetChanged();
-//            spinnerDeliveryTime.setAdapter(delivetyTimeAdapter);
+            deliveryTimeAdapter.notifyDataSetChanged();
+//            spinnerDeliveryTime.setAdapter(deliveryTimeAdapter);
 //            spinnerDeliveryTime.setSelection(1);
         }
 
@@ -337,9 +328,9 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
             deliveryTime.add("Выбрать время");
         }
 
-        delivetyTimeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
+        deliveryTimeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
 
-        spinnerDeliveryTime.setAdapter(delivetyTimeAdapter);
+        spinnerDeliveryTime.setAdapter(deliveryTimeAdapter);
 
         spinnerDeliveryTime.setSelection(currentDate == null ? 0 : 1);
 
@@ -348,7 +339,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         shippingTypes.add(getString(R.string.pickup));
         shippingTypes.add(getString(R.string.delivery));
 
-        shippingTypeAdapter = new ArrayAdapter<String>(this,  R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
+        shippingTypeAdapter = new ArrayAdapter<>(this,  R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
         spinnerDeliveryType.setAdapter(shippingTypeAdapter);
     }
 
