@@ -1,22 +1,16 @@
 package ru.creators.buket.club.web.request;
 
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.api.client.http.HttpRequest;
 
-import ru.creators.buket.club.DataController;
-import ru.creators.buket.club.consts.Constants;
 import ru.creators.buket.club.consts.Rest;
-import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.web.response.SessionResponse;
 
 /**
  * Created by mifkamaz on 27/11/15.
  */
 public class SessionCreateRequest extends BaseRequest<SessionResponse> {
-
-    private static final String TAG= Constants.LOG_TAG + "_SessionCreateReq";
 
     private String udid;
     private String password;

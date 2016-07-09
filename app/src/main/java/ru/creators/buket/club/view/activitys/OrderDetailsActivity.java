@@ -20,15 +20,15 @@ import java.text.SimpleDateFormat;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
-import ru.creators.buket.club.consts.Constants;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.OrderResponse;
 
 public class OrderDetailsActivity extends BaseActivity {
 
-    private static final String TAG = Constants.LOG_TAG + "_OrderDetailsActiv";
+    private static final String TAG = "OrderDetailsActiv";
 
     private ImageView imageBack;
 
@@ -47,26 +47,24 @@ public class OrderDetailsActivity extends BaseActivity {
     private ImageView imageMap;
 //    private ImageView imageArtistIcon;
 
-//    private LinearLayout linearPickup;
+    //    private LinearLayout linearPickup;
     private LinearLayout linearOnMap;
 
-    private Order order = DataController.getInstance().getOrder();
+    private Order order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bouquet_delivery_status_detalis);
 
+        Order order = DataController.getInstance().getOrder();
 
-        if (order!=null) {
-
-            Log.d(TAG, order.toString());
-            Log.d(TAG, order.getShop().getName() + " "  + order.getShop().getPhone());
+        if (order != null) {
+            Log.d(TAG, "Order: " + order.toString());
             Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
-
             assignView();
             assignListener();
-            initView();
+            fillView(order);
             updateOrder();
         } else {
             showSnackBar(R.string.oops_error);
@@ -80,7 +78,7 @@ public class OrderDetailsActivity extends BaseActivity {
         return R.id.a_bdsd_coordinator_root;
     }
 
-    private void assignView(){
+    private void assignView() {
         textBouquetName = getViewById(R.id.a_bdsd_text_bouquet_name);
         textBouquetCost = getViewById(R.id.a_bdsd_text_bouquet_cost);
         textAddress = getViewById(R.id.a_bdsd_text_address);
@@ -103,7 +101,7 @@ public class OrderDetailsActivity extends BaseActivity {
 //        linearPickup = getViewById(R.id.a_bdsd_linear_pickup);
     }
 
-    private void assignListener(){
+    private void assignListener() {
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,42 +118,36 @@ public class OrderDetailsActivity extends BaseActivity {
         });
     }
 
-    private void initView(){
-        fillView(order);
-    }
+    private void fillView(Order order) {
+        this.order = order;
 
-    private void fillView(Order order){
         if (order.getBouquetItem() != null) {
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
         }
 
+        String strPrice = Helper.intToPriceString(order.getPrice(), "");
         String format = getString(R.string.default_buket_rub);
-        textBouquetCost.setText(String.format(format, Helper.intToPriceString(order.getPrice())));
+        textBouquetCost.setText(String.format(format, strPrice));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
 
-        if (order.getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
-            textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_ADDRESS));
-        } else {
-            textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_PICKUP));
-//            linearPickup.setVisibility(View.VISIBLE);
+        int deliveryResId = order.getDeliveryTypeResId();
+        textDeliveryType.setText(deliveryResId);
+        //linearPickup.setVisibility(View.VISIBLE);
 
-            if (order.getShop() != null) {
-                linearOnMap.setVisibility(View.VISIBLE);
-                textAddress.setText(order.getShop().getName());
-                textPhone.setText(order.getShop().getPhone());
-                //            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
-            }
-
-        }
-
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Shop shop = order.getShop();
+        forViews(linearOnMap, textAddress, textPhone)
+                .setVisibility(shop == null ? View.INVISIBLE : View.VISIBLE);
+        textAddress.setText(shop == null ? "--" : shop.getName());
+        textPhone.setText(shop == null ? "--" : shop.getPhone());
+        //WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
 
         String deliveryTime = order.getTimeDelivery();
-        textDeliveryTimePrefix.setVisibility(deliveryTime == null? View.INVISIBLE: View.VISIBLE);
+        textDeliveryTimePrefix.setVisibility(deliveryTime == null ? View.INVISIBLE : View.VISIBLE);
         String strTime;
         if (deliveryTime == null) {
             strTime = getString(R.string.text_time_soon_standalone);
         } else {
+            Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             strTime = formatter.format(ISO8601Utils.parse(deliveryTime));
         }
         textDeliveryTime.setText(strTime);
@@ -171,9 +163,13 @@ public class OrderDetailsActivity extends BaseActivity {
 //        textOrderStatus.setText(getString(order.getStatusDescRes()));
     }
 
-    public void updateOrder(){
+    public void updateOrder() {
+        loadOrder(order.getId());
+    }
+
+    private void loadOrder(int orderId) {
         WebMethods.getInstance().orderGetRequest(DataController.getInstance().getSession().getAccessToken(),
-                order.getId(), new RequestListener<OrderResponse>() {
+                orderId, new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 
@@ -181,8 +177,8 @@ public class OrderDetailsActivity extends BaseActivity {
 
                     @Override
                     public void onRequestSuccess(OrderResponse orderResponse) {
-                        if (orderResponse.getOrder()!=null){
-                            order = orderResponse.getOrder();
+                        Order order = orderResponse.getOrder();
+                        if (order != null) {
                             fillView(order);
                         }
                     }
@@ -194,7 +190,7 @@ public class OrderDetailsActivity extends BaseActivity {
         startActivity(new Intent(this, OrdersActivity.class));
     }
 
-    public void mapIntent(float latitude, float longitude){
+    public void mapIntent(float latitude, float longitude) {
         String label = "ABC Label";
         String uriBegin = "geo:" + latitude + "," + longitude;
         String query = latitude + "," + longitude + "(" + label + ")";

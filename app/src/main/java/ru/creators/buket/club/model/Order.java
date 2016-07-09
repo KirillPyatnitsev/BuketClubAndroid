@@ -13,7 +13,6 @@ import ru.creators.buket.club.consts.Fields;
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-//@JsonIgnoreProperties(ignoreUnknown = true)
 public class Order {
 
     public static final String DELIVERY_TYPE_PICKUP = "pickup";
@@ -311,10 +310,11 @@ public class Order {
             case STATUS_FILLING_SHOP_INDEX:
                 return STATUS_FILLING_SHOP_DESC;
             case STATUS_IN_PROCESS_INDEX:
-                if (shippingType.equals(DELIVERY_TYPE_ADDRESS))
+                if (shippingType.equals(DELIVERY_TYPE_ADDRESS)) {
                     return STATUS_IN_PROCESS_DESC;
-                else
+                } else {
                     return STATUS_IN_PROCESS_DESC_PICKUP;
+                }
             case STATUS_DELIVERED_INDEX:
                 return STATUS_DELIVERED_DESC;
             case STATUS_DONE_INDEX:
@@ -362,7 +362,7 @@ public class Order {
     }
 
     @JsonIgnore
-    public int getDeliveryTypeResId(String deliveryType) {
+    public static int getDeliveryTypeResId(String deliveryType) {
         if (deliveryType != null && deliveryType.equals(DELIVERY_TYPE_PICKUP)) {
             return DELIVERY_TYPE_PICKUP_DESK_RES_ID;
         } else {

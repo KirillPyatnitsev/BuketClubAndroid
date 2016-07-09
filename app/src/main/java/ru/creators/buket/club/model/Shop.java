@@ -56,4 +56,12 @@ public class Shop {
     public float getCachedRating() {
         return cachedRating;
     }
+
+    @Override
+    public String toString() {
+        return "Shop{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

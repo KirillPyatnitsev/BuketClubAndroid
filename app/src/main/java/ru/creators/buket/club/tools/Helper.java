@@ -22,23 +22,31 @@ public class Helper {
     public static final String RUBLE_SUFFIX = "\u20BD";
 
     public static String intToPriceString(int price){
-        String priceString = new String();
+        return intToPriceString(price, RUBLE_SUFFIX);
+    }
 
-        String priceReverse = new StringBuilder(Integer.toString(price)).reverse().toString();
+    public static String intToPriceString(int price, String suffix){
+        final int intVal = price >= 0? price: -price;
+        final boolean negative = price < 0;
 
-        String space = " ";
-        for (int i = 0; i < priceReverse.length(); i++) {
-            priceString += priceReverse.charAt(i);
-            if ((i+1) % 3 == 0 && priceReverse.length() != i+1){
-                priceString += space;
+        final String source = Integer.toString(intVal);
+        final int len = source.length();
+        final char space = ' ';
+
+        final StringBuilder reversed = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            if(reversed.length() > 0 && i % 3 == 0) {
+                reversed.append(space);
             }
+            reversed.append(source.charAt(len - i - 1));
         }
+        if(negative) {
+            reversed.append('-');
+        }
+        reversed.reverse().append(suffix);
 
-        priceString = new StringBuilder(priceString).reverse().toString();
-
-        priceString += RUBLE_SUFFIX;
-
-        return priceString;
+        final String result = reversed.toString();
+        return result;
     }
 
     public static Bitmap getBitmapFromView(View view) {

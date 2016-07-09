@@ -63,7 +63,7 @@ public class PaymentTypeActivity extends BaseActivity {
         initView();
 
         FlurryAgent.logEvent("PaymentTypeActivity");
-        if(BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
             yandexPaymentOk();
         } else {
             payYandexMoney();
@@ -75,7 +75,7 @@ public class PaymentTypeActivity extends BaseActivity {
         if (requestCode == REQUEST_CODE_YA_MONEY) {
             if (resultCode == RESULT_OK) {
                 yandexPaymentOk();
-            }else{
+            } else {
                 finish();
             }
         }
@@ -182,7 +182,7 @@ public class PaymentTypeActivity extends BaseActivity {
         }
     }
 
-    private void payYandexMoney(){
+    private void payYandexMoney() {
 //        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
         PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
                 .setAmount(new BigDecimal(order.getPrice()))
@@ -241,7 +241,7 @@ public class PaymentTypeActivity extends BaseActivity {
         });
     }
 
-    private void goToBouquetsActivity(){
+    private void goToBouquetsActivity() {
         startActivity(new Intent(this, BucketsActivity.class));
     }
 }

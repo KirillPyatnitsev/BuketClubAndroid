@@ -2,12 +2,14 @@ package ru.creators.buket.club.web;
 
 import android.content.Context;
 import android.os.Debug;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.octo.android.robospice.retry.DefaultRetryPolicy;
 import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
@@ -52,13 +54,17 @@ import ru.creators.buket.club.web.response.ShopListResponse;
  * Created by mifkamaz on 19/11/15.
  */
 public class WebMethods {
-    private static WebMethods mWebMethods = new WebMethods();
+    private static final String LOG_TAG = "WebMethods";
+
+    private static final WebMethods mWebMethods = new WebMethods();
     private static WebMethods fakeWebMethods = null;
+
+    private static final RetryPolicy NO_RETRY = new DefaultRetryPolicy(0, 0, 0);
 
     public static WebMethods getInstance() {
         WebMethods wm;
-        if(BuildConfig.DEBUG) {
-            if(fakeWebMethods == null) {
+        if (BuildConfig.DEBUG) {
+            if (fakeWebMethods == null) {
                 fakeWebMethods = new FakeWebMethods();
             }
             wm = fakeWebMethods;
@@ -81,11 +87,11 @@ public class WebMethods {
         execute(new SessionCreateRequest(uuid, deviceToken), listener);
     }
 
-    public void loadBouquets(String accessToken, int floverTypeId,
-                             int floverColorId, int dayEventId,
+    public void loadBouquets(String accessToken, int flowerTypeId,
+                             int flowerColorId, int dayEventId,
                              int minPrice, int maxPrice, int page, int perPage,
                              RequestListener<BouquetsResponse> listener) {
-        execute(new BouquetsGetRequest(accessToken, floverTypeId, floverColorId, dayEventId, minPrice, maxPrice, page, perPage), listener);
+        execute(new BouquetsGetRequest(accessToken, flowerTypeId, flowerColorId, dayEventId, minPrice, maxPrice, page, perPage), listener);
     }
 
     public void loadPriceRange(String accessToken, RequestListener<PriceRangeResponse> listener) {
@@ -103,7 +109,7 @@ public class WebMethods {
     public void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
         RequestCreator picasso = Picasso.with(context)
                 .load(url);
-        if(downscale) {
+        if (downscale) {
             picasso.resize(600, 750).onlyScaleDown();
         }
         picasso.into(imageView);
@@ -154,48 +160,44 @@ public class WebMethods {
         execute(new ShopsAllGetRequest(accessToken, page, perPage), listener);
     }
 
-    public void addressGetRequest(double latitude, double longitude, Context context, RequestListener<String> listener){
+    public void addressGetRequest(double latitude, double longitude, Context context, RequestListener<String> listener) {
         execute(new AddressGetRequest(latitude, longitude, context), listener);
     }
 
-    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<PhoneCodeResponse> listener){
+    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<PhoneCodeResponse> listener) {
         execute(new PhoneVerificationStartPostRequest(accessToken, phone), listener);
     }
 
-    public void phoneVerificationFinishPostRequest(String accessToken, String phone, String code,RequestListener<DefaultResponse> listener){
+    public void phoneVerificationFinishPostRequest(String accessToken, String phone, String code, RequestListener<DefaultResponse> listener) {
         execute(new PhoneVerificationFinishPostRequest(accessToken, phone, code), listener);
     }
 
-    public void profilePatchRequest(String accessToken, Profile profile, RequestListener<DefaultResponse> listener){
+    public void profilePatchRequest(String accessToken, Profile profile, RequestListener<DefaultResponse> listener) {
         execute(new ProfilePatchRequest(accessToken, profile), listener);
     }
 
     protected <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {
         if (DataController.getInstance().getBaseActivity().isOnline()) {
-            request.setRetryPolicy(getRetryPolicy());
-            mSpiceManager.execute(request, requestListener);
-        }else{
+            request.setRetryPolicy(NO_RETRY);
+            Log.d(LOG_TAG, "Request: " + request);
+            mSpiceManager.execute(request, new RequestListener<T>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    Log.d(LOG_TAG, "Request failed: " + spiceException);
+                    requestListener.onRequestFailure(spiceException);
+                }
+
+                @Override
+                public void onRequestSuccess(T t) {
+                    Log.d(LOG_TAG, "Request success: " + t);
+                    requestListener.onRequestSuccess(t);
+                }
+            });
+
+        } else {
             DataController.getInstance().getBaseActivity().showSnackBar(R.string.check_internet_connection);
             DataController.getInstance().getBaseActivity().stopLoading();
         }
     }
 
-    private RetryPolicy getRetryPolicy() {
-        return new RetryPolicy() {
-            @Override
-            public int getRetryCount() {
-                return 0;
-            }
-
-            @Override
-            public void retry(SpiceException e) {
-
-            }
-
-            @Override
-            public long getDelayBeforeRetry() {
-                return 0;
-            }
-        };
-    }
 }
