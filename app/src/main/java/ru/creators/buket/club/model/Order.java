@@ -372,10 +372,11 @@ public class Order {
 
     @JsonIgnore
     public int getPaymentTypeDesk() {
-        if (typePayment != null && typePayment.equals(TYPE_PAYMENT_CARD))
+        if (typePayment != null && typePayment.equals(TYPE_PAYMENT_CARD)) {
             return TYPE_PAYMENT_INDEX_CARD_DESK;
-        else
+        } else {
             return TYPE_PAYMENT_INDEX_CASH_DESK;
+        }
     }
 
     public Profile getUser() {

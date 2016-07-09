@@ -10,6 +10,7 @@ import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.retry.RetryPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
@@ -96,10 +97,16 @@ public class WebMethods {
     }
 
     public void loadImage(Context context, String url, final ImageView imageView) {
-        Picasso.with(context)
-                .load(url)
-                .resize(600, 750).onlyScaleDown()
-                .into(imageView);
+        loadImage(context, url, imageView, true);
+    }
+
+    public void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
+        RequestCreator picasso = Picasso.with(context)
+                .load(url);
+        if(downscale) {
+            picasso.resize(600, 750).onlyScaleDown();
+        }
+        picasso.into(imageView);
         imageView.requestLayout();
     }
 

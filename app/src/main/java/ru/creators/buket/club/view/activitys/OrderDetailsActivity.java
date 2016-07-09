@@ -13,6 +13,8 @@ import com.flurry.android.FlurryAgent;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import org.codehaus.jackson.map.util.ISO8601Utils;
+
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
@@ -34,7 +36,8 @@ public class OrderDetailsActivity extends BaseActivity {
     private TextView textBouquetCost;
     private TextView textAddress;
     private TextView textPhone;
-//    private TextView textDeliveryTime;
+    private TextView textDeliveryTime;
+    private TextView textDeliveryTimePrefix;
     private TextView textPayType;
     private TextView textDeliveryType;
 //    private TextView textShopPhone;
@@ -61,7 +64,7 @@ public class OrderDetailsActivity extends BaseActivity {
             Log.d(TAG, order.getShop().getName() + " "  + order.getShop().getPhone());
             Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
 
-            assingView();
+            assignView();
             assignListener();
             initView();
             updateOrder();
@@ -77,12 +80,13 @@ public class OrderDetailsActivity extends BaseActivity {
         return R.id.a_bdsd_coordinator_root;
     }
 
-    private void assingView(){
+    private void assignView(){
         textBouquetName = getViewById(R.id.a_bdsd_text_bouquet_name);
         textBouquetCost = getViewById(R.id.a_bdsd_text_bouquet_cost);
         textAddress = getViewById(R.id.a_bdsd_text_address);
         textPhone = getViewById(R.id.a_bdsd_text_phone);
-//        textDeliveryTime = getViewById(R.id.a_bdsd_text_delivery_time);
+        textDeliveryTime = getViewById(R.id.a_bdsd_text_delivery_time);
+        textDeliveryTimePrefix = getViewById(R.id.a_bdsd_text_delivery_time_prefix);
         textPayType = getViewById(R.id.a_bdsd_text_pay_type);
         textDeliveryType = getViewById(R.id.a_bdsd_text_delivery_type);
 //        textShopPhone = getViewById(R.id.a_bdsd_text_shop_telephone);
@@ -125,20 +129,17 @@ public class OrderDetailsActivity extends BaseActivity {
             WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
         }
 
-
-//        textBouquetCost.setText(Helper.intToPriceString(order.getPrice()) + getString(R.string.default_buket_rub));
-        textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
+        String format = getString(R.string.default_buket_rub);
+        textBouquetCost.setText(String.format(format, Helper.intToPriceString(order.getPrice())));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
 
-
         if (order.getShippingType().equals(Order.DELIVERY_TYPE_ADDRESS)) {
-
             textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_ADDRESS));
         } else {
             textDeliveryType.setText(order.getDeliveryTypeResId(Order.DELIVERY_TYPE_PICKUP));
 //            linearPickup.setVisibility(View.VISIBLE);
 
-            if (order.getShop()!=null) {
+            if (order.getShop() != null) {
                 linearOnMap.setVisibility(View.VISIBLE);
                 textAddress.setText(order.getShop().getName());
                 textPhone.setText(order.getShop().getPhone());
@@ -149,11 +150,15 @@ public class OrderDetailsActivity extends BaseActivity {
 
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        if (order.getTimeDelivery() != null){
-//            textDeliveryTime.setText(formatter.format(ISO8601Utils.parse(order.getTimeDelivery())));
-        }else{
-//            textDeliveryTime.setText(getString(R.string.text_time_soon));
+        String deliveryTime = order.getTimeDelivery();
+        textDeliveryTimePrefix.setVisibility(deliveryTime == null? View.INVISIBLE: View.VISIBLE);
+        String strTime;
+        if (deliveryTime == null) {
+            strTime = getString(R.string.text_time_soon_standalone);
+        } else {
+            strTime = formatter.format(ISO8601Utils.parse(deliveryTime));
         }
+        textDeliveryTime.setText(strTime);
 
         textPayType.setText(getString(order.getPaymentTypeDesk()));
 

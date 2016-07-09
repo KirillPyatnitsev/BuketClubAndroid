@@ -18,6 +18,7 @@ import com.yandex.money.api.methods.params.PaymentParams;
 
 import java.math.BigDecimal;
 
+import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
@@ -62,7 +63,11 @@ public class PaymentTypeActivity extends BaseActivity {
         initView();
 
         FlurryAgent.logEvent("PaymentTypeActivity");
-        payYandexMoney();
+        if(BuildConfig.DEBUG) {
+            yandexPaymentOk();
+        } else {
+            payYandexMoney();
+        }
     }
 
     @Override

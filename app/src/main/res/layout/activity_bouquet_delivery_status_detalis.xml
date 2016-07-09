@@ -19,13 +19,12 @@
 
             <ImageView
                 android:id="@+id/a_bdsd_image_bouquet"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-150dp"
                 android:layout_marginBottom="-60dp"
                 android:layout_alignParentTop="true"
-                android:scaleType="centerCrop"
-                android:background="@color/green" />
+                />
 
             <ImageView
                 android:id="@+id/a_bdsd_image_action_bar_background"
@@ -122,14 +121,17 @@
                             android:id="@+id/a_bdsd_text_delivery_type"
                             style="@style/text_view_normal"
                             android:layout_marginLeft="7dp"
-
                             />
 
+                        <TextView
+                            android:id="@+id/a_bdsd_text_delivery_time_prefix"
+                            style="@style/text_view_normal"
+                            android:text=" в "/>
                         <TextView
                             android:id="@+id/a_bdsd_text_delivery_time"
                             style="@style/text_view_normal"
                             android:textStyle="bold"
-                            android:text=" 19:00"/>
+                            android:text="hh:mm"/>
 
                     </LinearLayout>
 
