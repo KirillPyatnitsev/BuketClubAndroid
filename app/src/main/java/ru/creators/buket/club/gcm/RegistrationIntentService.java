@@ -91,7 +91,7 @@ public class RegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        PreferenceCache.putString(getApplicationContext(), PreferenceCache.SHAREDPRED_GCM_TOKEN_KEY, token);
+        PreferenceCache.putString(getApplicationContext(), PreferenceCache.KEY_GCM_TOKEN, token);
     }
 
     /**

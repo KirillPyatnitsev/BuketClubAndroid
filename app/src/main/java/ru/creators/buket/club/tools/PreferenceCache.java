@@ -9,11 +9,12 @@ import java.io.IOException;
 
 public final class PreferenceCache {
 
-    public static final String KEY_SESSION= "key_session";
-    private final static String mFileName = "buket.club";
-    public static final String SHAREDPRED_GCM_TOKEN_KEY = "buket.club_gcm_token_key";
+    public static final String KEY_SESSION = "key_session";
+    public static final String KEY_GCM_TOKEN = "buket.club_gcm_token_key";
     public static final String SAVED_PHONES = "saved_phones";
-    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final String mFileName = "buket.club";
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private PreferenceCache() {
     }
@@ -40,15 +41,15 @@ public final class PreferenceCache {
         return sharedPref.getString(key, null);
     }
 
-    public static <T> T getObject(Context context, String key, Class<T> clazz){
+    public static <T> T getObject(Context context, String key, Class<T> clazz) {
         String json = getString(context, key);
 
         T object = null;
 
-        if (json!=null){
+        if (json != null) {
             try {
                 object = toObject(json, clazz);
-            }catch (IOException error){
+            } catch (IOException error) {
                 error.printStackTrace();
             }
         }
@@ -56,16 +57,16 @@ public final class PreferenceCache {
         return object;
     }
 
-    public static void putObject(Context context, String key, Object object){
+    public static void putObject(Context context, String key, Object object) {
         try {
             String json = toJson(object);
             putString(context, key, json);
-        }catch (IOException error){
+        } catch (IOException error) {
             error.printStackTrace();
         }
     }
 
-    public static void removeKey(Context context, String key){
+    public static void removeKey(Context context, String key) {
         SharedPreferences.Editor editor = getEditor(context);
         editor.remove(key);
         editor.commit();
@@ -82,7 +83,6 @@ public final class PreferenceCache {
 
     private static String toJson(Object object) throws IOException {
         String json = objectMapper.writeValueAsString(object);
-
         return json;
     }
 

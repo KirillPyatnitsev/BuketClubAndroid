@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -135,7 +133,7 @@ public class SplashScreenActivity extends BaseActivity {
     private void createSession() {
         startLoading(false);
         PreferenceCache.removeKey(this, PreferenceCache.KEY_SESSION);
-        WebMethods.getInstance().createSession(getUniqueDeviceId(), PreferenceCache.getString(this, PreferenceCache.SHAREDPRED_GCM_TOKEN_KEY), new RequestListener<SessionResponse>() {
+        WebMethods.getInstance().createSession(getUniqueDeviceId(), PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN), new RequestListener<SessionResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();

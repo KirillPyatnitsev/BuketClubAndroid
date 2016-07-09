@@ -38,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         this.onCreateInternal();
 
-        String className = this.getLocalClassName();
+        String className = this.getClass().getSimpleName();
         FlurryAgent.logEvent(className);
     }
 

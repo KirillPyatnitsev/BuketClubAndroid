@@ -48,27 +48,25 @@ public class FakeWebMethods extends WebMethods {
     public static String loadResource(String name) {
         String str;
         InputStream in = FakeWebMethods.class.getResourceAsStream(name);
-        if(in != null) {
+        if (in != null) {
             try {
                 InputStreamReader ir = new InputStreamReader(in, "UTF-8");
                 StringBuilder sb = new StringBuilder();
                 char[] buf = new char[1000];
                 int charsRead;
-                while((charsRead = ir.read(buf)) >= 0) {
+                while ((charsRead = ir.read(buf)) >= 0) {
                     sb.append(buf, 0, charsRead);
                 }
                 str = sb.toString();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 throw new RuntimeException("Failed to load: " + e.getMessage(), e);
             }
             return str;
         }
-
-
         return null;
     }
 
-    private <T> void addFake(Class<?> requestClass,
+    private void addFake(Class<?> requestClass,
                              Class<?> responseClass, String responseJson) {
         fakeMappings.put(requestClass, new FakeMapping(responseClass, responseJson));
     }
@@ -87,12 +85,10 @@ public class FakeWebMethods extends WebMethods {
         T result;
         FakeMapping fm = fakeMappings.get(request.getClass());
         if (fm == null) {
-
-            result=null;
-//            throw new RuntimeException("Not implemented!!!");
+            result = null;
         } else {
             try {
-                result = (T) makeObjectFromJson(fm.reponseClass, fm.responseJson);
+                result = (T) makeObjectFromJson(fm.responseClass, fm.responseJson);
             } catch (IOException e) {
                 throw new RuntimeException("Got exception", e);
             }
@@ -109,11 +105,11 @@ public class FakeWebMethods extends WebMethods {
     }
 
     private static class FakeMapping {
-        Class<?> reponseClass;
+        Class<?> responseClass;
         String responseJson;
 
         public FakeMapping(Class<?> reponseClass, String responseJson) {
-            this.reponseClass = reponseClass;
+            this.responseClass = reponseClass;
             this.responseJson = responseJson;
         }
     }
