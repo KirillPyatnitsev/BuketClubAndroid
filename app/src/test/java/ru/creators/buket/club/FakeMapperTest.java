@@ -18,12 +18,6 @@ public class FakeMapperTest {
     private ShopListResponse shops;
 
     @Test
-    public void testShouldLoadResource() {
-        String str = FakeWebMethods.loadResource("/assets/OrderResponse.txt");
-        Assert.assertTrue(str.startsWith("{"));
-    }
-
-    @Test
     public void testShouldMakeTestResponses() throws Exception {
         FakeWebMethods fakeMethods = new FakeWebMethods();
         fakeMethods.setDelay(0);
