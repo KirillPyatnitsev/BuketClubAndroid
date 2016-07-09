@@ -44,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        DataController.getInstance().setBaseActivity(null);
+        DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
     }
 

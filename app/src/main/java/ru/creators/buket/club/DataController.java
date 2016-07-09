@@ -39,6 +39,9 @@ public class DataController {
         this.baseActivity = baseActivity;
     }
 
+    public void removeBaseActivity(BaseActivity baseActivity) {
+    }
+
     public Session getSession() {
         if (session == null) {
             BaseActivity act = this.getBaseActivity();
