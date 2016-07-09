@@ -14,8 +14,8 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
 
-    private Profile profile;
-    private String accessToken;
+    private final Profile profile;
+    private final String accessToken;
 
     public ProfilePatchRequest(String accessToken, Profile profile) {
         super(DefaultResponse.class);
@@ -31,11 +31,8 @@ public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-
-        HttpRequest request = getPathHttpRequest(toJson(new ProfileContent(profile)));
-
+        HttpRequest request = getPathHttpRequest(new ProfileContent(profile));
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
         return getResponse(request.execute(), DefaultResponse.class, new DefaultResponse());
     }
 }

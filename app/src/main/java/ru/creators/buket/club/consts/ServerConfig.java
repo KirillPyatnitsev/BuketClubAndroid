@@ -4,6 +4,9 @@ package ru.creators.buket.club.consts;
  * Created by mifkamaz on 19/11/15.
  */
 public class ServerConfig {
+
+    public static final boolean USE_FAKE_DEBUG_DATA = false;
+
     public static final String SERVER_HOST = "buket.club";
     public static final String SERVER_ADRESS = "http://" + SERVER_HOST;
     //public static final String SERVER_ADRESS = "http://bouquet.vexadev.com";
@@ -20,5 +23,9 @@ public class ServerConfig {
 
     public static final String FLURRY_API_KEY = "MDW7F3F52TFGVDYG5T9S";
     public static final String MIXPANEL_API_KEY = "33820e1b43766840234930ba41432dd2";
+
+    public static final String GCM_DEFAULT_SENDER_ID = "710131429117";
+
+
 
 }

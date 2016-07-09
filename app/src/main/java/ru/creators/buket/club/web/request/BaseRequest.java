@@ -5,6 +5,7 @@ import android.net.Uri;
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpContent;
+import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpiceRequest;
@@ -24,20 +25,21 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 
 public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
-    private ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public BaseRequest(Class<T> clazz) {
         super(clazz);
     }
 
     protected Uri getUri() {
-        Uri.Builder builder = getUriWithServerAdress();
+        Uri.Builder builder = getUriWithServerAddress();
         builder = addSeverConfigToUri(builder);
         builder = addRestAddress(builder);
         return builder.build();
     }
 
-    protected Uri.Builder getUriWithServerAdress() {
+    private Uri.Builder getUriWithServerAddress() {
         return Uri.parse(ServerConfig.SERVER_ADRESS).buildUpon();
     }
 
@@ -50,8 +52,68 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
 
     protected abstract Uri.Builder addRestAddress(Uri.Builder uriBuilder);
 
-    protected HttpContent jsonStringToHttpContent(String jsonString) {
-        return ByteArrayContent.fromString("application/json", jsonString);
+    protected final HttpRequest getPostHttpRequest(Object object) throws IOException {
+        HttpContent content = objectToHttpContent(object);
+        return buildRequest(HttpMethods.POST, content);
+    }
+
+    protected final HttpRequest getPathHttpRequest(Object object) throws IOException {
+        HttpContent content = objectToHttpContent(object);
+        HttpRequest request = buildRequest(HttpMethods.POST, content);
+        request.getHeaders().set("X-HTTP-Method-Override", "PATCH");
+        return request;
+    }
+
+    protected final HttpRequest getGetHttpRequest() throws IOException {
+        return buildRequest(HttpMethods.GET, null);
+    }
+
+    protected final HttpRequest getDeleteHttpRequest() throws IOException {
+        return buildRequest(HttpMethods.DELETE, null);
+    }
+
+    protected final <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz) {
+        DefaultResponse response = getResponse(httpResponse, clazz, new DefaultResponse());
+        return response;
+    }
+
+    protected final <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz, DefaultResponse response) {
+        Error status = new Error();
+        status.setCode(httpResponse.getStatusCode());
+
+        if (status.isStatusDone()) {
+            try {
+                String responseString = httpResponse.parseAsString();
+                response = toObject(responseString, clazz);
+            } catch (IOException ex) {
+                status.setMessage(ex.toString());
+            }
+        }
+
+        response.setStatus(status);
+        return response;
+    }
+
+    private HttpRequest buildRequest(String method, HttpContent content) throws IOException {
+        Uri uri = getUri();
+        HttpRequest request = getHttpRequestFactory().buildRequest(method,
+                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), content);
+        request.getHeaders().setContentType("application/json");
+        return request;
+    }
+
+    private String toJson(Object object) throws IOException {
+        String json = MAPPER.writeValueAsString(object);
+        return json;
+    }
+
+    private <T> T toObject(String json, Class<T> clazz) throws IOException {
+        T object = MAPPER.readValue(json, clazz);
+        return object;
+    }
+
+    private HttpContent getHttpContentFromJsonString(String json) {
+        return ByteArrayContent.fromString("application/json", json);
     }
 
     private HttpContent objectToHttpContent(Object content) {
@@ -60,113 +122,12 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
             httpContent = (HttpContent) content;
         } else {
             try {
-                httpContent = getHttpContentFromJsonString(toJson(content));
+                final String json = toJson(content);
+                httpContent = getHttpContentFromJsonString(json);
             } catch (Exception err) {
                 err.printStackTrace();
             }
         }
         return httpContent;
-    }
-
-    protected HttpRequest getPostHttpRequest(Object object) throws IOException {
-
-        Uri uri = getUri();
-        HttpRequest request
-                = getHttpRequestFactory().buildPostRequest(
-                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), objectToHttpContent(object));
-        return fillHeader(request);
-    }
-
-    protected HttpRequest getPathHttpRequest(String json) throws IOException {
-        Uri uri = getUri();
-        HttpRequest request
-                = getHttpRequestFactory().buildPostRequest(
-                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), getHttpContentFromJsonString(json));
-
-        request.getHeaders().set("X-HTTP-Method-Override", "PATCH");
-
-        return fillHeader(request);
-    }
-
-    protected HttpRequest getGetHttpRequest() throws IOException {
-        Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildGetRequest(new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")));
-        return fillHeader(request);
-    }
-
-    protected HttpRequest getDeleteHttpRequest() throws IOException {
-        Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildDeleteRequest(new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")));
-        return fillHeader(request);
-    }
-
-    protected HttpRequest getPutHttpRequest(HttpContent content) throws IOException {
-        Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildPutRequest(new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), content);
-        return fillHeader(request);
-    }
-
-    private HttpRequest fillHeader(HttpRequest request) {
-        request.getHeaders().setContentType("application/json");
-//        request.getHeaders().set("Content-Type", "text/html");
-        return request;
-    }
-
-    protected String toJson(Object object) throws IOException {
-        String json = objectMapper.writeValueAsString(object);
-
-        return json;
-    }
-
-    protected <T> T toObject(String json, Class<T> clazz) throws IOException {
-        T object = objectMapper.readValue(json, clazz);
-        return object;
-    }
-
-    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz) {
-        DefaultResponse response = null;
-
-        Error status = new Error();
-        status.setCode(httpResponse.getStatusCode());
-
-        if (status.isStatusDone()) {
-            try {
-                String responseString = httpResponse.parseAsString();
-                response = toObject(responseString, clazz);
-            } catch (IOException ex) {
-                status.setMessage(ex.toString());
-            }
-        }
-
-        if (response == null) {
-            response = new DefaultResponse();
-        }
-
-        response.setStatus(status);
-
-        return response;
-    }
-
-    protected <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz, Z response) {
-
-        Error status = new Error();
-        status.setCode(httpResponse.getStatusCode());
-
-        if (status.isStatusDone()) {
-            try {
-                String responseString = httpResponse.parseAsString();
-                response = toObject(responseString, clazz);
-            } catch (IOException ex) {
-                status.setMessage(ex.toString());
-            }
-        }
-
-        response.setStatus(status);
-
-        return response;
-    }
-
-    protected HttpContent getHttpContentFromJsonString(String json) {
-        return ByteArrayContent.fromString("application/json", json);
     }
 }

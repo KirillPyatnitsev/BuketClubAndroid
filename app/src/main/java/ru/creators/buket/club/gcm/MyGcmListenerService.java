@@ -32,8 +32,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
-import ru.creators.buket.club.view.activitys.ChoseShopActivity;
-import ru.creators.buket.club.view.activitys.OrderDetailsActivity;
+import ru.creators.buket.club.view.activitys.BaseActivity;
 import ru.creators.buket.club.view.activitys.OrdersActivity;
 
 
@@ -51,12 +50,9 @@ public class MyGcmListenerService extends GcmListenerService {
     // [START receive_message]
     @Override
     public void onMessageReceived(String from, Bundle data) {
-
         Log.d(TAG, "From: " + from);
-
         sendNotification(data.getString("message"));
     }
-
 
     /**
      * Create and show a simple notification containing the received GCM message.
@@ -64,17 +60,11 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(final String message) {
-
-        if (DataController.getInstance().getBaseActivity() != null) {
-            if (!(DataController.getInstance().getBaseActivity() instanceof ChoseShopActivity)) {
-                DataController.getInstance().getBaseActivity().showSnackBar(message);
-            }
-            if (DataController.getInstance().getBaseActivity() instanceof OrderDetailsActivity) {
-                ((OrderDetailsActivity) DataController.getInstance().getBaseActivity()).updateOrder();
-            }
+        BaseActivity act = DataController.getInstance().getBaseActivity();
+        if (act != null) {
+            act.pushMessageReceived(message);
         } else {
             Intent intent = new Intent(this, OrdersActivity.class);
-
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT);
@@ -96,6 +86,5 @@ public class MyGcmListenerService extends GcmListenerService {
 
             notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
         }
-
     }
 }

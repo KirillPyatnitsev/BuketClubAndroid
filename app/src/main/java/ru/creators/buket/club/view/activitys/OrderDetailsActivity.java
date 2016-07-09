@@ -70,6 +70,12 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     @Override
+    public void pushMessageReceived(String message) {
+        super.pushMessageReceived(message);
+        updateOrder();
+    }
+
+    @Override
     protected int getCoordinatorViewId() {
         return R.id.a_bdsd_coordinator_root;
     }
@@ -159,7 +165,7 @@ public class OrderDetailsActivity extends BaseActivity {
 //        textOrderStatus.setText(getString(order.getStatusDescRes()));
     }
 
-    public void updateOrder() {
+    private void updateOrder() {
         loadOrder(order.getId());
     }
 

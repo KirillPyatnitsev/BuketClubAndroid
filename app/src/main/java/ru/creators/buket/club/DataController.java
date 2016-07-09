@@ -41,8 +41,9 @@ public class DataController {
 
     public Session getSession() {
         if (session == null) {
+            BaseActivity act = this.getBaseActivity();
             session = PreferenceCache.getObject(
-                    baseActivity.getApplicationContext(),
+                    act.getApplicationContext(),
                     PreferenceCache.KEY_SESSION,
                     Session.class);
         }
@@ -51,8 +52,9 @@ public class DataController {
 
     public void setSession(Session session) {
         if (session != null) {
+            BaseActivity act = this.getBaseActivity();
             PreferenceCache.putObject(
-                    baseActivity.getApplicationContext(),
+                    act.getApplicationContext(),
                     PreferenceCache.KEY_SESSION,
                     session);
         }

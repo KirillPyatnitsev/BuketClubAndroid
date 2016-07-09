@@ -16,6 +16,7 @@ import com.squareup.picasso.RequestCreator;
 import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.web.request.AddressGetRequest;
@@ -62,7 +63,7 @@ public class WebMethods {
 
     public static WebMethods getInstance() {
         WebMethods wm;
-        if (BuildConfig.DEBUG) {
+        if (ServerConfig.USE_FAKE_DEBUG_DATA && BuildConfig.DEBUG) {
             if (fakeWebMethods == null) {
                 fakeWebMethods = new FakeWebMethods();
             }

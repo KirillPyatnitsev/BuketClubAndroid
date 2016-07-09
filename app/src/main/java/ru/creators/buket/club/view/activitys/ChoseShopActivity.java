@@ -153,6 +153,11 @@ public class ChoseShopActivity extends BaseActivity implements
     }
 
     @Override
+    public void pushMessageReceived(String message) {
+        // Do not display anything
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if (mGoogleApiClient != null)

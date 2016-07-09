@@ -42,6 +42,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         FlurryAgent.logEvent(className);
     }
 
+    @Override
+    protected void onDestroy() {
+        DataController.getInstance().setBaseActivity(null);
+        super.onDestroy();
+    }
+
     protected abstract void onCreateInternal();
 
     protected <T extends View> T getViewById(int id) {
@@ -178,6 +184,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
+
+    public void pushMessageReceived(String message) {
+        showSnackBar(message);
     }
 
     /**

@@ -32,10 +32,8 @@ public class OrderCreateRequest extends BaseRequest<OrderResponse> {
 
     @Override
     public OrderResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(getHttpContentFromJsonString(toJson(new OrderContent(order))));
-
+        HttpRequest request = getPostHttpRequest(new OrderContent(order));
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
         return (OrderResponse) getResponse(request.execute(), OrderResponse.class, new OrderResponse());
     }
 }

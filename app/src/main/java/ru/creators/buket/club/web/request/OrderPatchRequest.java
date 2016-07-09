@@ -14,9 +14,9 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class OrderPatchRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
-    private Order order;
-    private int orderId;
+    private final String accessToken;
+    private final Order order;
+    private final int orderId;
 
     public OrderPatchRequest(String accessToken, Order order, int orderId) {
         super(DefaultResponse.class);
@@ -24,7 +24,6 @@ public class OrderPatchRequest extends BaseRequest<DefaultResponse> {
         this.order = order;
         this.orderId = orderId;
     }
-
 
     @Override
     protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
@@ -35,11 +34,9 @@ public class OrderPatchRequest extends BaseRequest<DefaultResponse> {
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPathHttpRequest(toJson(new OrderContent(order)));
-
+        HttpRequest request = getPathHttpRequest(new OrderContent(order));
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (DefaultResponse) getResponse(request.execute(), DefaultResponse.class);
+        return getResponse(request.execute(), DefaultResponse.class);
     }
 
 }
