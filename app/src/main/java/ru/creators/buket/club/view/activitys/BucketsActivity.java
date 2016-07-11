@@ -3,6 +3,7 @@ package ru.creators.buket.club.view.activitys;
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -40,6 +41,8 @@ import ru.creators.buket.club.web.response.OrdersResponse;
 import ru.creators.buket.club.web.response.PriceRangeResponse;
 
 public class BucketsActivity extends BaseActivity {
+
+    private static final String TAG ="_BucketsActivity";
 
     private ImageView imageOpenFilter;
     private ImageView imageCloseFilter;
@@ -92,6 +95,7 @@ public class BucketsActivity extends BaseActivity {
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_buckets);
+
 
         assignView();
         assignListener();

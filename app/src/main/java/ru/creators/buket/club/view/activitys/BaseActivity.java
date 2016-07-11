@@ -8,6 +8,8 @@ import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,15 +27,26 @@ import ru.creators.buket.club.tools.Helper;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
+    private static final String TAG = "_BaseActivity";
     protected CoordinatorLayout coordinatorLayout;
 
     private RelativeLayout relativeLoading;
     private ImageView imageLoadingBlur;
     private int runningProcessCount = 0;
 
+    private static int widthScreen;
+    private static int heightcreen;
+
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        widthScreen = displayMetrics.widthPixels;
+        heightcreen = displayMetrics.heightPixels;
+
         DataController.getInstance().setBaseActivity(this);
 
         this.onCreateInternal();
@@ -46,6 +59,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
+    }
+
+    public static int getWidthScreen() {
+        return widthScreen;
+    }
+
+    public static int getHeightcreen() {
+        return heightcreen;
     }
 
     protected abstract void onCreateInternal();

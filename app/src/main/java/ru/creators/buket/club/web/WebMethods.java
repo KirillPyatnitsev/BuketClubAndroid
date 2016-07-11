@@ -19,6 +19,7 @@ import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
+import ru.creators.buket.club.view.activitys.BaseActivity;
 import ru.creators.buket.club.web.request.AddressGetRequest;
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.DictionaryGetRequest;
@@ -107,10 +108,13 @@ public class WebMethods {
     }
 
     public void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
+
+        int widthImage = BaseActivity.getWidthScreen();
+
         RequestCreator picasso = Picasso.with(context)
                 .load(url);
         if (downscale) {
-            picasso.resize(600, 750).onlyScaleDown();
+            picasso.resize(widthImage, (int) (widthImage*1.25)).onlyScaleDown();
         }
         picasso.into(imageView);
         imageView.requestLayout();

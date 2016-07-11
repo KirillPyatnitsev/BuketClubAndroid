@@ -13,6 +13,7 @@ import java.util.Map;
 
 import ru.creators.buket.club.web.request.BouquetsGetRequest;
 import ru.creators.buket.club.web.request.OrderCreateRequest;
+import ru.creators.buket.club.web.request.OrderGetRequest;
 import ru.creators.buket.club.web.request.OrderPatchRequest;
 import ru.creators.buket.club.web.request.OrdersGetRequest;
 import ru.creators.buket.club.web.request.PriceRangeGetRequest;
