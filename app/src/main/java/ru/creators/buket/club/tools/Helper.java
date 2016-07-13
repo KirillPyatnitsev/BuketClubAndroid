@@ -348,22 +348,25 @@ public class Helper {
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;
 
-        if (drawable instanceof BitmapDrawable) {
-            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-            if(bitmapDrawable.getBitmap() != null) {
-                return bitmapDrawable.getBitmap();
+        if (drawable!=null) {
+            if (drawable instanceof BitmapDrawable) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                if(bitmapDrawable.getBitmap() != null) {
+                    return bitmapDrawable.getBitmap();
+                }
             }
+
+            if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+                bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+            } else {
+                bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            }
+
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawable.draw(canvas);
         }
 
-        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
-            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
-        } else {
-            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        }
-
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
         return bitmap;
     }
 
@@ -387,21 +390,25 @@ public class Helper {
         }
 
         Bitmap bitmap = Helper.drawableToBitmap(imageViewBouquet.getDrawable());
-        float heightSizePrint=bitmap.getHeight()/2;
 
-        Canvas canvas = new Canvas(bitmap);
+        if (bitmap!=null) {
+            float heightSizePrint=bitmap.getHeight()/2;
 
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.FILL);
+            Canvas canvas = new Canvas(bitmap);
 
-        paint.setTextSize(heightSizePrint/2);
-        canvas.drawText(size, 50, heightSizePrint  + heightSizePrint/4, paint);
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setStyle(Paint.Style.FILL);
 
-        Drawable drawable = imageViewBouquet.getDrawable();
-        drawable.draw(canvas);
+            paint.setTextSize(heightSizePrint/2);
+            canvas.drawText(size, 50, heightSizePrint  + heightSizePrint/4, paint);
 
-        imageViewBouquet.setImageDrawable(drawable);
+            Drawable drawable = imageViewBouquet.getDrawable();
+            drawable.draw(canvas);
+
+            imageViewBouquet.setImageDrawable(drawable);
+        }
+
 
     }
 

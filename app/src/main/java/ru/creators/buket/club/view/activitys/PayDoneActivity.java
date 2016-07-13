@@ -37,12 +37,13 @@ public class PayDoneActivity extends BaseActivity {
 
     private ImageView imageViewBouquet;
 
+    private Timer timer;
+
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_pay_done);
 
         assignView();
-
         sendOrder();
     }
 
@@ -58,8 +59,8 @@ public class PayDoneActivity extends BaseActivity {
     }
 
     private void startClosingTimer() {
-        Timer t = new Timer();
-        t.schedule(new TimerTask() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
@@ -118,7 +119,8 @@ public class PayDoneActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        return;
+        timer.cancel();
+        goToOrderDetails();
     }
 
     @Override
