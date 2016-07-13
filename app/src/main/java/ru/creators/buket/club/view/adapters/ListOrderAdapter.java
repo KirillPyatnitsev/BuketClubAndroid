@@ -70,7 +70,8 @@ public class ListOrderAdapter extends BaseAdapter {
             holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
             if (order.getStatusIndex() != Order.STATUS_FILLING_SHOP_INDEX)
-                WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
+//                WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
+                Helper.loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
         }
 
         return convertView;

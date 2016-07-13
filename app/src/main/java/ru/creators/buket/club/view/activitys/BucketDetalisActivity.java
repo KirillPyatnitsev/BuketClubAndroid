@@ -150,7 +150,7 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void initView() {
-        WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
+        Helper.loadImage(this, Helper.addServerPrefix(bouquet.getImageUrl()), imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
     }

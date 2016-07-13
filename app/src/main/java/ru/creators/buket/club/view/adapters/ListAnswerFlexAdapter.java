@@ -70,7 +70,10 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
 
         if (answerFlex != null) {
             if (answerFlex.getShop().getImageUrl() != null) {
-                WebMethods.getInstance().loadImage(context,
+//                WebMethods.getInstance().loadImage(context,
+//                        Helper.addServerPrefix(answerFlex.getShop().getImageUrl()),
+//                        holder.imageArtistLogo);
+                                Helper.loadImage(context,
                         Helper.addServerPrefix(answerFlex.getShop().getImageUrl()),
                         holder.imageArtistLogo);
             }

@@ -19,6 +19,8 @@
 
     <color name="background_color_default">@color/white</color>
     <color name="background_color_primary">@color/yellow</color>
+    <color name="background_color_paydone">#EFEFEF</color>
+
 
     <color name="button_color_background_default">@color/yellow</color>
 
@@ -34,4 +36,9 @@
 
     <color name="text_color_bouquet_size_unselected">@color/pink</color>
     <color name="text_color_bouquet_size_selected">@color/white</color>
+
+    <color name="red_price">#f10130</color>
+    <color name="green_border">#1cc220</color>
+
+
 </resources>

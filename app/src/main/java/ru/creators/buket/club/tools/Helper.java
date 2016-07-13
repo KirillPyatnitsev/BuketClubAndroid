@@ -4,12 +4,20 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
+import ru.creators.buket.club.model.Bouquet;
+import ru.creators.buket.club.view.activitys.BaseActivity;
 
 /**
  * Created by mifkamaz on 07/12/15.
@@ -317,4 +325,84 @@ public class Helper {
     public static boolean phoneVerification(String phone) {
         return phone.replaceAll("[^\\d.]", "").length() == 11;
     }
+
+    public static void loadImage(Context context, String url, final ImageView imageView) {
+        loadImage(context, url, imageView, true);
+    }
+
+    public static void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
+
+        int widthImage = BaseActivity.getWidthScreen();
+
+        RequestCreator picasso = Picasso.with(context)
+                .load(url);
+        if (downscale) {
+            picasso.resize(widthImage, (int) (widthImage*1.25)).onlyScaleDown();
+        }
+        picasso.into(imageView);
+        imageView.requestLayout();
+    }
+
+
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static void drawSizeOnImage(int sizeIndex, ImageView imageViewBouquet) {
+
+        String size="L";
+        switch (sizeIndex) {
+            case Bouquet.SIZE_LITTLE: {
+                size="M";
+                break;
+            }
+            case Bouquet.SIZE_MEDIUM: {
+                size="L";
+                break;
+            }
+            case Bouquet.SIZE_GREAT: {
+                size="XL";
+            }
+            default:
+                break;
+        }
+
+        Bitmap bitmap = Helper.drawableToBitmap(imageViewBouquet.getDrawable());
+        float heightSizePrint=bitmap.getHeight()/2;
+
+        Canvas canvas = new Canvas(bitmap);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setStyle(Paint.Style.FILL);
+
+        paint.setTextSize(heightSizePrint/2);
+        canvas.drawText(size, 50, heightSizePrint  + heightSizePrint/4, paint);
+
+        Drawable drawable = imageViewBouquet.getDrawable();
+        drawable.draw(canvas);
+
+        imageViewBouquet.setImageDrawable(drawable);
+
+    }
+
 }

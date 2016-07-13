@@ -153,12 +153,27 @@
     <string name="default_buket_price">1990</string>
     <string name="default_buket_payment_type">Оплата при получении</string>
     <string name="default_buket_delivery_type">Самовывоз</string>
-    <string name="default_buket_address">г. Москва, ул. Новый Арбат, дом 17, корпус 3</string>
+    <string name="default_buket_address">г.Москва, ул. Новый Арбат, дом 5 стр 1</string>
 
     <string name="default_buket_address_shop">Магазин на карте</string>
 
     <string name="default_buket_rub">%1$s руб.</string>
 
     <!-- END -->
+
+    <!-- For page "Thanks for your purchase" -->
+    <string name="title_site">MissFlowers.ru</string>
+    <string name="phone_site">+7 925 119 02 27</string>
+
+    <string name="assembling_bouquet">Идет сборка букета</string>
+    <string name="title_bouquet">Букет из нежных французских роз</string>
+    <string name="composition_bouquet">Хризантема  - 2шт; Роза - 8шт; Гортензия - 2шт; Гербера мини - 5шт;</string>
+    <string name="number_order">Заказ №%1$s</string>
+
+    <string name="price_bouquet">5500</string>
+    <string name="price_bouquet_currency">" руб."</string>
+    <string name="logo">Логотип</string>
+    <!-- END -->
+
 
 </resources>

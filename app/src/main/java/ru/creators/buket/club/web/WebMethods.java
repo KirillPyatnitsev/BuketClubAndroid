@@ -103,23 +103,6 @@ public class WebMethods {
         execute(new ProfileGetRequest(accessToken), listener);
     }
 
-    public void loadImage(Context context, String url, final ImageView imageView) {
-        loadImage(context, url, imageView, true);
-    }
-
-    public void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
-
-        int widthImage = BaseActivity.getWidthScreen();
-
-        RequestCreator picasso = Picasso.with(context)
-                .load(url);
-        if (downscale) {
-            picasso.resize(widthImage, (int) (widthImage*1.25)).onlyScaleDown();
-        }
-        picasso.into(imageView);
-        imageView.requestLayout();
-    }
-
     public void getDictionary(String accessToken, String dictionaryType, RequestListener<DictionaryResponse> listener) {
         execute(new DictionaryGetRequest(accessToken, dictionaryType), listener);
     }
