@@ -175,5 +175,9 @@
     <string name="logo">Логотип</string>
     <!-- END -->
 
+    <string name="confirm_payment">Подтверждение оплаты</string>
+    <string name="failed_payment">Платеж не удался</string>
+    <string name="confirm_payment_hint">Попробуйте повторить платеж. При наличии технической проблемы, пожалуйста, свяжитесь по телефону: +7 (495) 640-89-42</string>
+    <string name="try_pay_again">Попробовать снова</string>
 
 </resources>

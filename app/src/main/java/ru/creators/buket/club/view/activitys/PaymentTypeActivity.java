@@ -6,11 +6,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.transitionseverywhere.TransitionManager;
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PaymentParams;
 
@@ -30,23 +29,13 @@ public class PaymentTypeActivity extends BaseActivity {
     private static final String P2P = "410013897372739";
     private static final int REQUEST_CODE_YA_MONEY = 1488;
 
-    public static final int PAY_CASH = 0;
     public static final int PAY_CARD = 1;
-    public static final int PAY_W1 = 2;
 
     private int currentPayType = PAY_CARD;
 
     private ImageView imageBack;
-
-    private ImageView imagePayCash;
-    private ImageView imagePayCard;
-    private ImageView imagePayW1;
-
-    private LinearLayout linearPayCash;
-    private LinearLayout linearPayCard;
-    private LinearLayout linearPayW1;
-
-    private Button buttonNext;
+    private TextView textViewConfirmPayment;
+    private Button buttonTryAgainPay;
 
     private Order order = DataController.getInstance().getOrder();
 
@@ -55,10 +44,10 @@ public class PaymentTypeActivity extends BaseActivity {
         setContentView(R.layout.activity_payment_type);
 
         assignView();
-        assignListener();
         initView();
 
         if (BuildConfig.DEBUG) {
+//            payYandexMoney();
             yandexPaymentOk();
         } else {
             payYandexMoney();
@@ -71,7 +60,7 @@ public class PaymentTypeActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 yandexPaymentOk();
             } else {
-                finish();
+                textViewConfirmPayment.setText(getString(R.string.failed_payment));
             }
         }
     }
@@ -84,39 +73,12 @@ public class PaymentTypeActivity extends BaseActivity {
 
     private void assignView() {
         imageBack = getViewById(R.id.i_ab_image_back);
-
-        imagePayCash = getViewById(R.id.a_pt_image_pay_cash);
-        imagePayCard = getViewById(R.id.a_pt_image_pay_card);
-        imagePayW1 = getViewById(R.id.a_pt_image_pay_w1);
-
-        linearPayCash = getViewById(R.id.a_pt_linear_pay_cash);
-        linearPayCard = getViewById(R.id.a_pt_linear_pay_card);
-        linearPayW1 = getViewById(R.id.a_pt_linear_pay_w1);
-
-        buttonNext = getViewById(R.id.a_pt_button_next);
+        textViewConfirmPayment = getViewById(R.id.a_pt_text_confirm_payment);
+        buttonTryAgainPay = getViewById(R.id.a_pt_button_try_pay_again);
     }
 
-    private void assignListener() {
-        linearPayCash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPayType(PAY_CASH);
-            }
-        });
-
-        linearPayCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPayType(PAY_CARD);
-            }
-        });
-
-        linearPayW1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setPayType(PAY_W1);
-            }
-        });
+    private void initView() {
+        imageBack.setVisibility(View.VISIBLE);
 
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,66 +87,22 @@ public class PaymentTypeActivity extends BaseActivity {
             }
         });
 
-        buttonNext.setOnClickListener(new View.OnClickListener() {
+        buttonTryAgainPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                goToNextAct();
+                payYandexMoney();
             }
         });
     }
 
-    private void initView() {
-        getImagePay(currentPayType).setBackgroundResource(R.drawable.round_action_bar);
-        imageBack.setVisibility(View.VISIBLE);
-    }
-
-    private void setPayType(int payType) {
-        if (payType != currentPayType) {
-            TransitionManager.beginDelayedTransition(getCoordinatorLayout());
-            getImagePay(payType).setBackgroundResource(R.drawable.round_action_bar);
-            getImagePay(currentPayType).setBackgroundResource(R.drawable.round_pay_type_unselected);
-            currentPayType = payType;
-        }
-    }
-
-    private ImageView getImagePay(int payType) {
-        switch (payType) {
-            case PAY_CARD:
-                return imagePayCard;
-            case PAY_CASH:
-                return imagePayCash;
-            case PAY_W1:
-                return imagePayW1;
-            default:
-                return imagePayCash;
-        }
-    }
-
-    private void goToNextAct() {
-        switch (currentPayType) {
-            case PAY_CARD:
-                payYandexMoney();
-                break;
-            case PAY_CASH:
-                DataController.getInstance().getOrder().setTypePayment(Order.TYPE_PAYMENT_CASH);
-                DataController.getInstance().getOrder().setTypePaymentIndex(Order.TYPE_PAYMENT_INDEX_CASH);
-                startActivity(new Intent(this, PayDoneActivity.class));
-                break;
-            case PAY_W1:
-                startActivity(new Intent(this, PayDoneActivity.class));
-                break;
-
-        }
-    }
-
     private void payYandexMoney() {
-//        String telephone = editPhone.getText().toString().replaceAll("[^\\d.]", "");
-        PaymentParams phoneParams = new P2pTransferParams.Builder(P2P)
+
+        PaymentParams cardParams = new P2pTransferParams.Builder(P2P)
                 .setAmount(new BigDecimal(order.getPrice()))
-                .setMessage("Оплата за " + order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()) + ". Android.")
+                .setMessage("Оплата за заказ №" + order.getId() + ": " + order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()) + ". Android.")
                 .create();
         Intent intent = PaymentActivity.getBuilder(this)
-                .setPaymentParams(phoneParams)
+                .setPaymentParams(cardParams)
                 .setClientId(CLIENT_ID)
                 .build();
         startActivityForResult(intent, REQUEST_CODE_YA_MONEY);
