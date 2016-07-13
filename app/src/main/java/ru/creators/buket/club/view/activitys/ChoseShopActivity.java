@@ -446,8 +446,9 @@ public class ChoseShopActivity extends BaseActivity implements
     private void initView() {
         imageBack.setVisibility(View.VISIBLE);
 
-        if (order.getBouquetItem() != null)
-            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+        if (order.getBouquetItem() != null) {
+            Helper.loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+        }
 
         listAnswerFlex = new ListAnswerFlex();
         listAnswerFlexAdapter = new ListAnswerFlexAdapter(this, listAnswerFlex);

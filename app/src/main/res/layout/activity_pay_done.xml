@@ -4,8 +4,208 @@
     android:id="@+id/a_pd_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+    android:background="@color/background_color_paydone"
+    tools:context="ru.creators.buket.club.view.activitys.PayDoneActivity">
 
+
+    <LinearLayout
+        xmlns:grid="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingRight="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:text="@string/title_site"/>
+
+                <TextView
+                    android:id="@+id/a_pd_shop_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:text="@string/phone_site"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/a_pd_shop_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/black"
+                    android:text="@string/default_buket_address"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_24dp"/>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_24dp"/>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_24dp"/>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_24dp"/>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_favorite_24dp_empty"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="@string/logo"
+                android:src="@drawable/logo"
+                android:scaleType="centerCrop"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/a_pd_image_bouquet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/a_pd_price"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:textStyle="bold"
+                android:text="@string/price_bouquet"
+                android:textSize="22sp"
+                android:textColor="@color/red_price"/>
+
+
+            <TextView
+                android:id="@+id/a_pd_price_currency"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+
+                android:text="@string/price_bouquet_currency"
+                android:textSize="14sp"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/a_pd_title_bouquet"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:textColor="@color/black"
+                    android:text="@string/title_bouquet"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:lines="2"
+                    android:ellipsize="end"
+                    grid:layout_columnWeight="2"/>
+
+                <TextView
+                    android:id="@+id/a_pd_composition_bouquet"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:lines="5"
+                    android:ellipsize="end"
+                    android:text="@string/composition_bouquet"
+                    grid:layout_columnWeight="2"/>
+
+            </LinearLayout>
+            
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="18dp"
+                android:gravity="right"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/a_pd_process_assembling"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:padding="9dp"
+                    android:text="@string/assembling_bouquet"
+                    android:textColor="@color/green_border"
+                    android:textSize="10sp"
+                    android:background="@drawable/button_process"
+                    grid:layout_columnWeight="1"/>
+
+                <TextView
+                    android:id="@+id/a_pd_id_order"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:textColor="@color/black"
+                    android:text="@string/number_order"
+                    android:textStyle="bold"
+                    android:textSize="19sp"
+                    grid:layout_columnWeight="1"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -56,6 +256,6 @@
                 <include layout="@layout/include_progress"/>
 
             </RelativeLayout>
-
+-->
 
 </android.support.design.widget.CoordinatorLayout>

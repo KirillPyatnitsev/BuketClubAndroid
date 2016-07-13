@@ -23,6 +23,9 @@ public class Bouquet {
     @JsonProperty(Fields.ID)
     private int id;
 
+    @JsonProperty(Fields.DESCRIPTION)
+    private String description;
+
     @JsonProperty(Fields.SMALL_SIZE_PRICE)
     private int smallSizePrice;
 
@@ -65,6 +68,14 @@ public class Bouquet {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public int getSmallSizePrice() {
@@ -189,6 +200,19 @@ public class Bouquet {
         }
     }
 
+    public String getBouquetDescriptionBySize(int sizeId) {
+        switch (sizeId) {
+            case SIZE_LITTLE:
+                return getDescription();
+            case SIZE_MEDIUM:
+                return getDescription();
+            case SIZE_GREAT:
+                return getDescription();
+            default:
+                return "";
+        }
+    }
+
     public static String getSizeDesc(int sizeId) {
         switch (sizeId) {
             case SIZE_LITTLE:
@@ -201,4 +225,6 @@ public class Bouquet {
                 return "";
         }
     }
+
+
 }

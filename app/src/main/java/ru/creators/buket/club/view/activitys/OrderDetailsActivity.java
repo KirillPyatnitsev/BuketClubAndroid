@@ -16,8 +16,10 @@ import org.codehaus.jackson.map.util.ISO8601Utils;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
+import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.tools.Helper;
@@ -62,7 +64,7 @@ public class OrderDetailsActivity extends BaseActivity {
             assignView();
             assignListener();
             fillView(order);
-//            updateOrder();
+            updateOrder();
         } else {
             showSnackBar(R.string.oops_error);
             startActivity(new Intent(this, OrdersActivity.class));
@@ -124,7 +126,7 @@ public class OrderDetailsActivity extends BaseActivity {
         this.order = order;
 
         if (order.getBouquetItem() != null) {
-            WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+            Helper.loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
         }
 
         String strPrice = Helper.intToPriceString(order.getPrice(), "");
@@ -168,7 +170,10 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void updateOrder() {
-        loadOrder(order.getId());
+        if (!(ServerConfig.USE_FAKE_DEBUG_DATA && BuildConfig.DEBUG)) {
+            loadOrder(order.getId());
+        }
+
     }
 
     private void loadOrder(int orderId) {
