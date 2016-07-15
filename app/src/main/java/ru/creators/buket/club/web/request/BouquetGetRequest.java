@@ -12,28 +12,19 @@ import ru.creators.buket.club.web.response.BouquetResponse;
  */
 public class BouquetGetRequest extends BaseRequest<BouquetResponse> {
 
-    private String accessToken;
     private int bouquetId;
 
     public BouquetGetRequest(String accessToken, int bouquetId) {
-        super(BouquetResponse.class);
-        this.accessToken = accessToken;
+        super(BouquetResponse.class, accessToken);
         this.bouquetId = bouquetId;
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
+    public BouquetResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = this.buildUri();
         uriBuilder.appendPath(Rest.BOUQUET_ITEMS);
         uriBuilder.appendPath(String.valueOf(bouquetId));
-        return uriBuilder;
-    }
-
-    @Override
-    public BouquetResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (BouquetResponse) getResponse(request.execute(), BouquetResponse.class);
+        HttpRequest request = makeGetRequest(uriBuilder);
+        return executeRequest(request, BouquetResponse.class, new BouquetResponse());
     }
 }

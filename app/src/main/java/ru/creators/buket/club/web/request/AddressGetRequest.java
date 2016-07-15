@@ -17,15 +17,10 @@ public class AddressGetRequest extends BaseRequest<String> {
     private Context context;
 
     public AddressGetRequest(double latitude, double longitude, Context context) {
-        super(String.class);
+        super(String.class, null);
         this.latitude = latitude;
         this.longitude = longitude;
         this.context = context;
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        return uriBuilder;
     }
 
     @Override

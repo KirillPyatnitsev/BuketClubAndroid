@@ -12,30 +12,15 @@ import ru.creators.buket.club.web.response.ProfileResponse;
  */
 public class ProfileGetRequest extends BaseRequest<ProfileResponse> {
 
-    private String accessToken;
-
     public ProfileGetRequest(String accessToken) {
-        super(ProfileResponse.class);
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.PROFILE);
-        return uriBuilder;
+        super(ProfileResponse.class, accessToken);
     }
 
     @Override
     public ProfileResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (ProfileResponse) getResponse(request.execute(), ProfileResponse.class);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.PROFILE);
+        HttpRequest request = makeGetRequest(uriBuilder);
+        return executeRequest(request, ProfileResponse.class);
     }
 }

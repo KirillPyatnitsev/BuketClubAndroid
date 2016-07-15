@@ -14,26 +14,18 @@ import ru.creators.buket.club.web.response.OrderResponse;
  */
 public class OrderCreateRequest extends BaseRequest<OrderResponse> {
 
-    private String accessToken;
     private Order order;
 
     public OrderCreateRequest(String accessToken, Order order) {
-        super(OrderResponse.class);
-        this.accessToken = accessToken;
+        super(OrderResponse.class, accessToken);
         this.order = order;
-    }
-
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.ORDERS);
-        return uriBuilder;
     }
 
     @Override
     public OrderResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(new OrderContent(order));
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-        return (OrderResponse) getResponse(request.execute(), OrderResponse.class, new OrderResponse());
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.ORDERS);
+        HttpRequest request = makePostRequest(uriBuilder, new OrderContent(order));
+        return executeRequest(request, OrderResponse.class);
     }
 }

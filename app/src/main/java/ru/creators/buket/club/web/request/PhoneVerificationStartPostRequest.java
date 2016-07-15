@@ -12,30 +12,20 @@ import ru.creators.buket.club.web.response.PhoneCodeResponse;
  */
 public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResponse> {
 
-    private String accessToken;
     private String telephone;
 
     public PhoneVerificationStartPostRequest(String accessToken, String telephone) {
-        super(PhoneCodeResponse.class);
-        this.accessToken = accessToken;
+        super(PhoneCodeResponse.class, accessToken);
         this.telephone = telephone;
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
+    public PhoneCodeResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.PROFILE);
         uriBuilder.appendPath(Rest.SEND_CODE);
-        return uriBuilder;
-    }
-
-    @Override
-    public PhoneCodeResponse loadDataFromNetwork() throws Exception {
-
-        HttpRequest request = getPostHttpRequest(null);
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
+        HttpRequest request = makePostRequest(uriBuilder, null);
         request.getUrl().put(Rest.PHONE, telephone);
-
-        return (PhoneCodeResponse) getResponse(request.execute(), PhoneCodeResponse.class, new PhoneCodeResponse());
+        return executeRequest(request, PhoneCodeResponse.class);
     }
 }

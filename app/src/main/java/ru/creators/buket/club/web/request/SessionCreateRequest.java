@@ -13,42 +13,24 @@ import ru.creators.buket.club.web.response.SessionResponse;
 public class SessionCreateRequest extends BaseRequest<SessionResponse> {
 
     private String udid;
-    private String password;
     private String deviceToken;
-    private String appMode;
 
     public SessionCreateRequest(String udid, String deviceToken) {
-        super(SessionResponse.class);
+        super(SessionResponse.class, null);
         this.udid = udid;
         this.deviceToken = deviceToken;
     }
 
     @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.SESSIONS);
-        return uriBuilder;
-    }
-
-    @Override
     public SessionResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(null);
-
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.SESSIONS);
+        HttpRequest request = makePostRequest(uriBuilder, null);
         request.getUrl().put(Rest.UUID, udid);
         if (deviceToken != null) {
             request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
         }
-
-//        Log.d(TAG, "deviceToken: "  + String.valueOf(deviceToken));
-//        Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
-
-
         request.getUrl().put(Rest.DEVICE_TYPE, Rest.DEVICE_TYPE_ANDROID);
-
-        return (SessionResponse) getResponse(request.execute(), SessionResponse.class);
+        return executeRequest(request, SessionResponse.class);
     }
 }

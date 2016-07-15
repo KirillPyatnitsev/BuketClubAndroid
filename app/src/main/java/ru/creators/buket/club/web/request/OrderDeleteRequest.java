@@ -12,30 +12,20 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class OrderDeleteRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
     private int orderId;
 
     public OrderDeleteRequest(String accessToken, int orderId) {
-        super(DefaultResponse.class);
-        this.accessToken = accessToken;
+        super(DefaultResponse.class, accessToken);
         this.orderId = orderId;
-    }
-
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.ORDERS);
-        uriBuilder.appendPath(Integer.toString(orderId));
-        return uriBuilder;
     }
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getDeleteHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return getResponse(request.execute(), DefaultResponse.class);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.ORDERS);
+        uriBuilder.appendPath(Integer.toString(orderId));
+        HttpRequest request = makeDeleteRequest(uriBuilder);
+        return executeRequest(request, DefaultResponse.class);
     }
 
 }

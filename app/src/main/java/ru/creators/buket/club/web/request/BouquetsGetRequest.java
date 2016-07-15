@@ -12,7 +12,6 @@ import ru.creators.buket.club.web.response.BouquetsResponse;
  */
 public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
 
-    private String accessToken;
     private int flowerTypeId = -1;
     private int flowerColorId = -1;
     private int dayEventId = -1;
@@ -22,8 +21,7 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
     private int perPage = -1;
 
     public BouquetsGetRequest(String accessToken, int floverTypeId, int floverColorId, int dayEventId, int minPrice, int maxPrice, int page, int perPage) {
-        super(BouquetsResponse.class);
-        this.accessToken = accessToken;
+        super(BouquetsResponse.class, accessToken);
         this.flowerTypeId = floverTypeId;
         this.flowerColorId = floverColorId;
         this.dayEventId = dayEventId;
@@ -34,16 +32,10 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.BOUQUET_ITEMS);
-        return uriBuilder;
-    }
-
-    @Override
     public BouquetsResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.BOUQUET_ITEMS);
+        HttpRequest request = makeGetRequest(uriBuilder);
 
         if (flowerTypeId != -1) {
             request.getUrl().put(Rest.FLOWER_TYPE_ID, flowerTypeId);
@@ -73,6 +65,6 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
             request.getUrl().put(Rest.PER_PAGE, perPage);
         }
 
-        return (BouquetsResponse) getResponse(request.execute(), BouquetsResponse.class, new BouquetsResponse());
+        return executeRequest(request, BouquetsResponse.class, new BouquetsResponse());
     }
 }

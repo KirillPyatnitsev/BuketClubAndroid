@@ -12,30 +12,15 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class SessionDeleteRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
-
     public SessionDeleteRequest(String accessToken) {
-        super(DefaultResponse.class);
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.SESSIONS);
-        return uriBuilder;
+        super(DefaultResponse.class, accessToken);
     }
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getDeleteHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return getResponse(request.execute(), DefaultResponse.class);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.SESSIONS);
+        HttpRequest request = makeDeleteRequest(uriBuilder);
+        return executeRequest(request, DefaultResponse.class);
     }
 }

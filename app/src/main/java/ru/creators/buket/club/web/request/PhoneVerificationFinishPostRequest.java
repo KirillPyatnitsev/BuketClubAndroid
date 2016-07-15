@@ -12,28 +12,20 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
     private String telephone;
     private String code;
 
     public PhoneVerificationFinishPostRequest(String accessToken, String telephone, String code) {
-        super(DefaultResponse.class);
-        this.accessToken = accessToken;
+        super(DefaultResponse.class, accessToken);
         this.telephone = telephone;
         this.code = code;
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        return uriBuilder;
-    }
-
-    @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = buildUri();
+        HttpRequest request = makePostRequest(uriBuilder, null);
 
-        HttpRequest request = getPostHttpRequest(null);
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
         request.getUrl().put(Rest.PHONE, telephone);
         request.getUrl().put(Rest.CODE, code);
 

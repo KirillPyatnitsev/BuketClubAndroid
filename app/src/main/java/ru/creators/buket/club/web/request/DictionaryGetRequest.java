@@ -12,32 +12,18 @@ import ru.creators.buket.club.web.response.DictionaryResponse;
  */
 public class DictionaryGetRequest extends BaseRequest<DictionaryResponse> {
 
-    private String accessToken;
     private String dictionaryType;
 
     public DictionaryGetRequest(String accessToken, String dictionaryType) {
-        super(DictionaryResponse.class);
+        super(DictionaryResponse.class, accessToken);
         this.dictionaryType = dictionaryType;
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(dictionaryType);
-        return uriBuilder;
     }
 
     @Override
     public DictionaryResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (DictionaryResponse) getResponse(request.execute(), DictionaryResponse.class);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(dictionaryType);
+        HttpRequest request = makeGetRequest(uriBuilder);
+        return executeRequest(request, DictionaryResponse.class, new DictionaryResponse());
     }
 }

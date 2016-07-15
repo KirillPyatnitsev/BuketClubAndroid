@@ -1,6 +1,7 @@
 package ru.creators.buket.club.web.request;
 
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.api.client.http.ByteArrayContent;
 import com.google.api.client.http.GenericUrl;
@@ -15,8 +16,11 @@ import org.codehaus.jackson.map.ObjectMapper;
 import java.io.IOException;
 import java.net.URLDecoder;
 
+import ru.creators.buket.club.AppException;
+import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Error;
+import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
 
@@ -26,50 +30,52 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 
 public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
 
+    private static final String TAG = "BaseRequest";
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public BaseRequest(Class<T> clazz) {
+    private final String accessToken;
+
+    public BaseRequest(Class<T> clazz, String accessToken) {
         super(clazz);
+        this.accessToken = accessToken;
     }
 
-    protected Uri getUri() {
+    protected final Uri.Builder buildUri() {
         Uri.Builder builder = getUriWithServerAddress();
         builder = addSeverConfigToUri(builder);
-        builder = addRestAddress(builder);
-        return builder.build();
+        return builder;
     }
 
-    private Uri.Builder getUriWithServerAddress() {
+    private final Uri.Builder getUriWithServerAddress() {
         return Uri.parse(ServerConfig.SERVER_ADRESS).buildUpon();
     }
 
-    protected Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder) {
+    private final Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder) {
         uriBuilder.appendPath(ServerConfig.SERVER_API_PREFIX);
         uriBuilder.appendPath(ServerConfig.SERVER_API_VERSION);
         uriBuilder.appendPath(ServerConfig.SERVER_API_VERSION_V1);
         return uriBuilder;
     }
 
-    protected abstract Uri.Builder addRestAddress(Uri.Builder uriBuilder);
-
-    protected final HttpRequest getPostHttpRequest(Object object) throws IOException {
+    protected final HttpRequest makePostRequest(Uri.Builder builder, Object object) throws IOException {
         HttpContent content = objectToHttpContent(object);
-        return buildRequest(HttpMethods.POST, content);
+        return buildRequest(HttpMethods.POST, builder, content);
     }
 
-    protected final HttpRequest getPathHttpRequest(Object object) throws IOException {
+    protected final HttpRequest makePatchRequest(Uri.Builder uri, Object object) throws IOException {
         HttpContent content = objectToHttpContent(object);
-        HttpRequest request = buildRequest(HttpMethods.POST, content);
+        HttpRequest request = buildRequest(HttpMethods.POST, uri, content);
         request.getHeaders().set("X-HTTP-Method-Override", "PATCH");
         return request;
     }
 
-    protected final HttpRequest getGetHttpRequest() throws IOException {
-        return buildRequest(HttpMethods.GET, null);
+    protected final HttpRequest makeGetRequest(Uri.Builder uri) throws IOException {
+        return buildRequest(HttpMethods.GET, uri, null);
     }
 
-    protected final HttpRequest getDeleteHttpRequest() throws IOException {
-        return buildRequest(HttpMethods.DELETE, null);
+    protected final HttpRequest makeDeleteRequest(Uri.Builder uri) throws IOException {
+        return buildRequest(HttpMethods.DELETE, uri, null);
     }
 
     protected final <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz) {
@@ -94,12 +100,30 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
         return response;
     }
 
-    private HttpRequest buildRequest(String method, HttpContent content) throws IOException {
-        Uri uri = getUri();
-        HttpRequest request = getHttpRequestFactory().buildRequest(method,
-                new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII")), content);
+    private HttpRequest buildRequest(String method, Uri.Builder builder, HttpContent content) throws IOException {
+        Uri uri = builder.build();
+        GenericUrl url = new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII"));
+        HttpRequest request = getHttpRequestFactory().buildRequest(method, url, content);
         request.getHeaders().setContentType("application/json");
         return request;
+    }
+
+    protected <Z extends DefaultResponse> Z executeRequest(HttpRequest request, Class<Z> responseClass) throws IOException {
+        Z resp = null;
+        try {
+            resp = responseClass.newInstance();
+        } catch (Exception e) {
+            throw new AppException("Failed to create response instance", e);
+        }
+        return executeRequest(request, responseClass, resp);
+    }
+
+    protected <Z extends DefaultResponse> Z executeRequest(HttpRequest request, Class<Z> clazz, Z response) throws IOException {
+        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
+        Log.d(TAG, "REQUEST: " + request.getContent());
+        Z z = (Z) getResponse(request.execute(), clazz, response);
+        Log.d(TAG, "RESPONSE: " + z);
+        return z;
     }
 
     private String toJson(Object object) throws IOException {

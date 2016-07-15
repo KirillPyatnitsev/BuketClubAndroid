@@ -14,34 +14,18 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 public class SessionUpdateRequest extends BaseRequest<DefaultResponse> {
 
     private String deviceToken;
-    private String accessToken;
 
     public SessionUpdateRequest(String accessToken, String deviceToken) {
-        super(DefaultResponse.class);
+        super(DefaultResponse.class, accessToken);
         this.deviceToken = deviceToken;
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.SESSIONS);
-        return uriBuilder;
     }
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPathHttpRequest(null);
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.SESSIONS);
+        HttpRequest request = makePatchRequest(uriBuilder, null);
         request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
-
-        HttpResponse response = request.execute();
-
-        return getResponse(response, DefaultResponse.class);
+        return executeRequest(request, DefaultResponse.class);
     }
 }

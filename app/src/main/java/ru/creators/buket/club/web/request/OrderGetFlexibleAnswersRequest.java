@@ -13,29 +13,20 @@ import ru.creators.buket.club.web.response.ListAnswerFlexResponse;
  */
 public class OrderGetFlexibleAnswersRequest extends BaseRequest<ListAnswerFlexResponse> {
 
-    private String accessToken;
     private int orderId;
 
     public OrderGetFlexibleAnswersRequest(String accessToken, int orderId) {
-        super(ListAnswerFlexResponse.class);
-        this.accessToken = accessToken;
+        super(ListAnswerFlexResponse.class, accessToken);
         this.orderId = orderId;
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
+    public ListAnswerFlexResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.ORDERS);
         uriBuilder.appendPath(Integer.toString(orderId));
         uriBuilder.appendPath(Fields.ANSWERS);
-        return uriBuilder;
-    }
-
-    @Override
-    public ListAnswerFlexResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (ListAnswerFlexResponse) getResponse(request.execute(), ListAnswerFlexResponse.class, new ListAnswerFlexResponse());
+        HttpRequest request = makeGetRequest(uriBuilder);
+        return executeRequest(request, ListAnswerFlexResponse.class);
     }
 }

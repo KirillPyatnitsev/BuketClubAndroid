@@ -5,7 +5,7 @@ package ru.creators.buket.club.consts;
  */
 public class ServerConfig {
 
-    public static final boolean USE_FAKE_DEBUG_DATA = true;
+    public static final boolean USE_FAKE_DEBUG_DATA = false;
 
     public static final String SERVER_HOST = "buket.club";
     public static final String SERVER_ADRESS = "http://" + SERVER_HOST;

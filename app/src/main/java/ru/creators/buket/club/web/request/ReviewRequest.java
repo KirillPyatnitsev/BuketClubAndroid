@@ -16,35 +16,25 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class ReviewRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
     private int orderId;
     private String comment;
     private int rating;
 
     public ReviewRequest(String accessToken, int orderId, String comment, int rating) {
-        super(DefaultResponse.class);
-        this.accessToken = accessToken;
+        super(DefaultResponse.class, accessToken);
         this.orderId = orderId;
         this.comment = comment;
         this.rating = rating;
     }
 
-
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
+    public DefaultResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.ORDERS);
         uriBuilder.appendPath(Integer.toString(orderId));
         uriBuilder.appendPath(Rest.REVIEWS);
-        return uriBuilder;
-    }
-
-    @Override
-    public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(new ReviewContent(new Review(rating, comment)));
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return getResponse(request.execute(), DefaultResponse.class);
+        HttpRequest request = makePostRequest(uriBuilder, new ReviewContent(new Review(rating, comment)));
+        return executeRequest(request, DefaultResponse.class);
     }
 
     private class ReviewContent {

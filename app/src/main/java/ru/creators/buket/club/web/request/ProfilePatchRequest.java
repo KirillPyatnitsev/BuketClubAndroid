@@ -15,24 +15,17 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
 
     private final Profile profile;
-    private final String accessToken;
 
     public ProfilePatchRequest(String accessToken, Profile profile) {
-        super(DefaultResponse.class);
+        super(DefaultResponse.class, accessToken);
         this.profile = profile;
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.PROFILE);
-        return uriBuilder;
     }
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPathHttpRequest(new ProfileContent(profile));
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-        return getResponse(request.execute(), DefaultResponse.class, new DefaultResponse());
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.PROFILE);
+        HttpRequest request = makePatchRequest(uriBuilder, new ProfileContent(profile));
+        return executeRequest(request, DefaultResponse.class);
     }
 }

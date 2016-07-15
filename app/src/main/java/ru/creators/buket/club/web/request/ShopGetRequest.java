@@ -12,28 +12,19 @@ import ru.creators.buket.club.web.response.ShopResponse;
  */
 public class ShopGetRequest extends BaseRequest<ShopResponse> {
 
-    private String accessToken;
     private int id;
 
     public ShopGetRequest(String accessToken, int id) {
-        super(ShopResponse.class);
-        this.accessToken = accessToken;
+        super(ShopResponse.class, accessToken);
         this.id = id;
     }
 
     @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
+    public ShopResponse loadDataFromNetwork() throws Exception {
+        Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.SHOPS);
         uriBuilder.appendPath(Integer.toString(id));
-        return uriBuilder;
-    }
-
-    @Override
-    public ShopResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getGetHttpRequest();
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return (ShopResponse) getResponse(request.execute(), ShopResponse.class);
+        HttpRequest request = makeGetRequest(uriBuilder);
+        return executeRequest(request, ShopResponse.class);
     }
 }

@@ -12,31 +12,16 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class GenerateTypePriceRequest extends BaseRequest<DefaultResponse> {
 
-    private String accessToken;
-
     public GenerateTypePriceRequest(String accessToken) {
-        super(DefaultResponse.class);
-        this.accessToken = accessToken;
-    }
-
-    @Override
-    protected Uri getUri() {
-        return super.getUri();
-    }
-
-    @Override
-    protected Uri.Builder addRestAddress(Uri.Builder uriBuilder) {
-        uriBuilder.appendPath(Rest.PROFILE);
-        uriBuilder.appendPath(Rest.GENERATE_TYPE_PRICE);
-        return uriBuilder;
+        super(DefaultResponse.class, accessToken);
     }
 
     @Override
     public DefaultResponse loadDataFromNetwork() throws Exception {
-        HttpRequest request = getPostHttpRequest(null);
-
-        request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-
-        return getResponse(request.execute(), DefaultResponse.class);
+        Uri.Builder uriBuilder = buildUri();
+        uriBuilder.appendPath(Rest.PROFILE);
+        uriBuilder.appendPath(Rest.GENERATE_TYPE_PRICE);
+        HttpRequest request = makePostRequest(uriBuilder, null);
+        return executeRequest(request, DefaultResponse.class);
     }
 }
