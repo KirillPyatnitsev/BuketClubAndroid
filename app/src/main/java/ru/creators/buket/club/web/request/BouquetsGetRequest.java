@@ -20,10 +20,10 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
     private int page = -1;
     private int perPage = -1;
 
-    public BouquetsGetRequest(String accessToken, int floverTypeId, int floverColorId, int dayEventId, int minPrice, int maxPrice, int page, int perPage) {
-        super(BouquetsResponse.class, accessToken);
-        this.flowerTypeId = floverTypeId;
-        this.flowerColorId = floverColorId;
+    public BouquetsGetRequest(int flowerTypeId, int flowerColorId, int dayEventId, int minPrice, int maxPrice, int page, int perPage) {
+        super(BouquetsResponse.class);
+        this.flowerTypeId = flowerTypeId;
+        this.flowerColorId = flowerColorId;
         this.dayEventId = dayEventId;
         this.minPrice = minPrice;
         this.maxPrice = maxPrice;
@@ -65,6 +65,6 @@ public class BouquetsGetRequest extends BaseRequest<BouquetsResponse> {
             request.getUrl().put(Rest.PER_PAGE, perPage);
         }
 
-        return executeRequest(request, BouquetsResponse.class, new BouquetsResponse());
+        return executeRequest(request);
     }
 }

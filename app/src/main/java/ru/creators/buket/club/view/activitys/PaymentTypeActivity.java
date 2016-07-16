@@ -139,7 +139,7 @@ public class PaymentTypeActivity extends BaseActivity {
 
     private void removeOrderRequest(int orderId) {
         startLoading();
-        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+        WebMethods.getInstance().removeOrderRequest(orderId, new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();

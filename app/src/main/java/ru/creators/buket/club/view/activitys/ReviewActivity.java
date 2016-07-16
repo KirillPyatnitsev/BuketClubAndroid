@@ -81,8 +81,7 @@ public class ReviewActivity extends BaseActivity {
 
     private void sendReview(String comment, int rating) {
         startLoading();
-        WebMethods.getInstance().sendReviewRequest(DataController.getInstance().getSession().getAccessToken(),
-                order.getId(), comment, rating,
+        WebMethods.getInstance().sendReviewRequest(order.getId(), comment, rating,
                 new RequestListener<DefaultResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {

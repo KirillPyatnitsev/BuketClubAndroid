@@ -16,8 +16,8 @@ public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
 
     private final Profile profile;
 
-    public ProfilePatchRequest(String accessToken, Profile profile) {
-        super(DefaultResponse.class, accessToken);
+    public ProfilePatchRequest(Profile profile) {
+        super(DefaultResponse.class);
         this.profile = profile;
     }
 
@@ -26,6 +26,6 @@ public class ProfilePatchRequest extends BaseRequest<DefaultResponse> {
         Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.PROFILE);
         HttpRequest request = makePatchRequest(uriBuilder, new ProfileContent(profile));
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 }

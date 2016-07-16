@@ -519,8 +519,8 @@ public class ChoseShopActivity extends BaseActivity implements
     private void updateArtistsList() {
         if (!swipeRefreshLayout.isRefreshing())
             startLoading(false);
-        WebMethods.getInstance().getFlexAnswers(
-                DataController.getInstance().getSession().getAccessToken(), order.getId(), new RequestListener<ListAnswerFlexResponse>() {
+        WebMethods.getInstance().getFlexAnswers(order.getId(),
+                new RequestListener<ListAnswerFlexResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         if (!swipeRefreshLayout.isRefreshing())
@@ -561,7 +561,7 @@ public class ChoseShopActivity extends BaseActivity implements
 
     private void removeOrderRequest(int orderId) {
         startLoading();
-        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+        WebMethods.getInstance().removeOrderRequest(orderId, new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
@@ -578,8 +578,8 @@ public class ChoseShopActivity extends BaseActivity implements
 
     private void getShopListRequest(int page, int perPage) {
         startLoading();
-        WebMethods.getInstance().listShopGetRequest(DataController.getInstance().getSession().getAccessToken(),
-                page, perPage, new RequestListener<ShopListResponse>() {
+        WebMethods.getInstance().listShopGetRequest(page, perPage,
+                new RequestListener<ShopListResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         stopLoading();

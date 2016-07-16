@@ -46,10 +46,12 @@ public class Order {
     private static final int STATUS_DONE_DESC = R.string.text_order_done;
 
     @JsonProperty(Fields.ID)
-    private int id;
+    private Integer id;
 
+    /*
     @JsonProperty(Fields.USER_ID)
     private int userId;
+    */
 
     @JsonProperty(Fields.PRICE)
     private int price;
@@ -76,10 +78,10 @@ public class Order {
     private String address;
 
     @JsonProperty(Fields.ADDRESS_LAT)
-    private double addressLat;
+    private Double addressLat;
 
     @JsonProperty(Fields.ADDRESS_LNG)
-    private double addressLng;
+    private Double addressLng;
 
     @JsonProperty(Fields.TIME_DELIVERY)
     private String timeDelivery;
@@ -103,7 +105,7 @@ public class Order {
     private String createdAt;
 
     @JsonProperty(Fields.UPDATED_AT)
-    private String upadtedAt;
+    private String updatedAt;
 
     @JsonProperty(Fields.USER)
     private Profile user;
@@ -144,7 +146,7 @@ public class Order {
         this.shopId = shopId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -152,6 +154,7 @@ public class Order {
         this.id = id;
     }
 
+    /*
     public int getUserId() {
         return userId;
     }
@@ -159,6 +162,7 @@ public class Order {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+    */
 
     public int getPrice() {
         return price;
@@ -224,19 +228,19 @@ public class Order {
         this.address = address;
     }
 
-    public double getAddressLat() {
+    public Double getAddressLat() {
         return addressLat;
     }
 
-    public void setAddressLat(double addressLat) {
+    public void setAddressLat(Double addressLat) {
         this.addressLat = addressLat;
     }
 
-    public double getAddressLng() {
+    public Double getAddressLng() {
         return addressLng;
     }
 
-    public void setAddressLng(double addressLng) {
+    public void setAddressLng(Double addressLng) {
         this.addressLng = addressLng;
     }
 
@@ -280,12 +284,12 @@ public class Order {
         this.createdAt = createdAt;
     }
 
-    public String getUpadtedAt() {
-        return upadtedAt;
+    public String getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpadtedAt(String upadtedAt) {
-        this.upadtedAt = upadtedAt;
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public int getBouquetItemId() {
@@ -379,6 +383,7 @@ public class Order {
         }
     }
 
+    /*
     public Profile getUser() {
         return user;
     }
@@ -386,13 +391,13 @@ public class Order {
     public void setUser(Profile user) {
         this.user = user;
     }
-
+    */
 
     @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
-                ", userId=" + userId +
+                //", userId=" + userId +
                 ", price=" + price +
                 ", size='" + size + '\'' +
                 ", sizeIndex=" + sizeIndex +
@@ -410,7 +415,7 @@ public class Order {
                 ", shop=" + shop +
                 ", shopId='" + shopId + '\'' +
                 ", createdAt='" + createdAt + '\'' +
-                ", upadtedAt='" + upadtedAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
                 ", user=" + user +
                 ", typePayment='" + typePayment + '\'' +
                 ", shippingType='" + shippingType + '\'' +

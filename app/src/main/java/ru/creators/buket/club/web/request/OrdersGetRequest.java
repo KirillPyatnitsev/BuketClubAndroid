@@ -15,8 +15,8 @@ public class OrdersGetRequest extends BaseRequest<OrdersResponse> {
     private int page;
     private int perPage;
 
-    public OrdersGetRequest(String accessToken, int page, int perPage) {
-        super(OrdersResponse.class, accessToken);
+    public OrdersGetRequest(int page, int perPage) {
+        super(OrdersResponse.class);
         this.page = page;
         this.perPage = perPage;
     }
@@ -31,6 +31,6 @@ public class OrdersGetRequest extends BaseRequest<OrdersResponse> {
         request.getUrl().put(Rest.PAGE, page);
         request.getUrl().put(Rest.PER_PAGE, perPage);
 
-        return executeRequest(request, OrdersResponse.class);
+        return executeRequest(request);
     }
 }

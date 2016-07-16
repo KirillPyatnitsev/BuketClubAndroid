@@ -132,8 +132,7 @@ public class OrdersActivity extends BaseActivity {
     private void getOrders(int page) {
         if (!swipeRefreshLayout.isRefreshing())
             startLoading(false);
-        WebMethods.getInstance().getOrders(
-                DataController.getInstance().getSession().getAccessToken(), page, Pagination.PER_PAGE,
+        WebMethods.getInstance().getOrders(page, Pagination.PER_PAGE,
                 new RequestListener<OrdersResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {

@@ -14,8 +14,8 @@ public class DictionaryGetRequest extends BaseRequest<DictionaryResponse> {
 
     private String dictionaryType;
 
-    public DictionaryGetRequest(String accessToken, String dictionaryType) {
-        super(DictionaryResponse.class, accessToken);
+    public DictionaryGetRequest(String dictionaryType) {
+        super(DictionaryResponse.class);
         this.dictionaryType = dictionaryType;
     }
 
@@ -24,6 +24,6 @@ public class DictionaryGetRequest extends BaseRequest<DictionaryResponse> {
         Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(dictionaryType);
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, DictionaryResponse.class, new DictionaryResponse());
+        return executeRequest(request);
     }
 }

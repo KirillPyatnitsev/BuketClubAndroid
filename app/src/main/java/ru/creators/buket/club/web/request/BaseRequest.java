@@ -13,13 +13,19 @@ import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpice
 
 import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.creators.buket.club.AppException;
+import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Error;
+import ru.creators.buket.club.model.Session;
+import ru.creators.buket.club.tools.Stopwatch;
 import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
@@ -28,17 +34,20 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  * Created by mifkamaz on 19/11/15.
  */
 
-public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
+public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpClientSpiceRequest<T> {
 
-    private static final String TAG = "BaseRequest";
+    private static final String TAG = ServerConfig.TAG_PREFIX + "BaseRequest";
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final String accessToken;
 
-    public BaseRequest(Class<T> clazz, String accessToken) {
+    private static final AtomicInteger nextRequestIndex = new AtomicInteger(1);
+
+    public BaseRequest(Class<T> clazz) {
         super(clazz);
-        this.accessToken = accessToken;
+        Session session = DataController.getInstance().getSession();
+        this.accessToken = session == null? null: session.getAccessToken();
     }
 
     protected final Uri.Builder buildUri() {
@@ -78,28 +87,6 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
         return buildRequest(HttpMethods.DELETE, uri, null);
     }
 
-    protected final <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz) {
-        DefaultResponse response = getResponse(httpResponse, clazz, new DefaultResponse());
-        return response;
-    }
-
-    protected final <Z extends DefaultResponse> DefaultResponse getResponse(HttpResponse httpResponse, Class<Z> clazz, DefaultResponse response) {
-        Error status = new Error();
-        status.setCode(httpResponse.getStatusCode());
-
-        if (status.isStatusDone()) {
-            try {
-                String responseString = httpResponse.parseAsString();
-                response = toObject(responseString, clazz);
-            } catch (IOException ex) {
-                status.setMessage(ex.toString());
-            }
-        }
-
-        response.setStatus(status);
-        return response;
-    }
-
     private HttpRequest buildRequest(String method, Uri.Builder builder, HttpContent content) throws IOException {
         Uri uri = builder.build();
         GenericUrl url = new GenericUrl(URLDecoder.decode(uri.toString(), "ASCII"));
@@ -108,22 +95,50 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
         return request;
     }
 
-    protected <Z extends DefaultResponse> Z executeRequest(HttpRequest request, Class<Z> responseClass) throws IOException {
-        Z resp = null;
-        try {
-            resp = responseClass.newInstance();
-        } catch (Exception e) {
-            throw new AppException("Failed to create response instance", e);
-        }
-        return executeRequest(request, responseClass, resp);
+    protected T executeRequest(HttpRequest request) throws IOException {
+        Class<T> resultType = this.getResultType();
+        return executeRequest(request, resultType);
     }
 
-    protected <Z extends DefaultResponse> Z executeRequest(HttpRequest request, Class<Z> clazz, Z response) throws IOException {
+    private T executeRequest(HttpRequest request, Class<T> clazz) throws IOException {
         request.getUrl().put(Rest.ACCESS_TOKEN, accessToken);
-        Log.d(TAG, "REQUEST: " + request.getContent());
-        Z z = (Z) getResponse(request.execute(), clazz, response);
-        Log.d(TAG, "RESPONSE: " + z);
+        HttpContent content = request.getContent();
+
+        int requestId = nextRequestIndex.getAndIncrement();
+        Log.d(TAG, "REQUEST " + requestId + ": " + request.getRequestMethod() + " " + request.getUrl()
+                + (content == null? "":  " " + contentToString(content)));
+
+        T z = null;
+        Stopwatch stopwatch = new Stopwatch();
+        try {
+            HttpResponse httpResponse = request.execute();
+            String duration = stopwatch.getMillisString();
+            Error status = new Error();
+            status.setCode(httpResponse.getStatusCode());
+
+            String str = httpResponse.parseAsString();
+            z = toObject(str, clazz);
+            z.setStatus(status);
+
+            Log.d(TAG, "RESPONSE " + requestId + ": " + duration + " " + str);
+        } catch(Exception e) {
+            String msg = e.toString();
+            if(msg.length() > 1000) {
+                msg = msg.substring(0, 1000);
+            }
+            msg = msg.replace('\n', ' ');
+            Log.e(TAG, "EXCEPTION " + requestId + ": " + stopwatch + " " + msg);
+            throw e;
+        }
         return z;
+    }
+
+    private String contentToString(HttpContent content) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        content.writeTo(out);
+        byte[] data = out.toByteArray();
+        String str = new String(data);
+        return str;
     }
 
     private String toJson(Object object) throws IOException {
@@ -149,7 +164,7 @@ public abstract class BaseRequest<T> extends GoogleHttpClientSpiceRequest<T> {
                 final String json = toJson(content);
                 httpContent = getHttpContentFromJsonString(json);
             } catch (Exception err) {
-                err.printStackTrace();
+                Log.e(TAG, "JSON encoding exception: " + err);
             }
         }
         return httpContent;

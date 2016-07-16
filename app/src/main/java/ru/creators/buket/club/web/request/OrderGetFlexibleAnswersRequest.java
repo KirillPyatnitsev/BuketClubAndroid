@@ -15,8 +15,8 @@ public class OrderGetFlexibleAnswersRequest extends BaseRequest<ListAnswerFlexRe
 
     private int orderId;
 
-    public OrderGetFlexibleAnswersRequest(String accessToken, int orderId) {
-        super(ListAnswerFlexResponse.class, accessToken);
+    public OrderGetFlexibleAnswersRequest(int orderId) {
+        super(ListAnswerFlexResponse.class);
         this.orderId = orderId;
     }
 
@@ -27,6 +27,6 @@ public class OrderGetFlexibleAnswersRequest extends BaseRequest<ListAnswerFlexRe
         uriBuilder.appendPath(Integer.toString(orderId));
         uriBuilder.appendPath(Fields.ANSWERS);
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, ListAnswerFlexResponse.class);
+        return executeRequest(request);
     }
 }

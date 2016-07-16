@@ -177,8 +177,8 @@ public class OrderDetailsActivity extends BaseActivity {
     }
 
     private void loadOrder(int orderId) {
-        WebMethods.getInstance().orderGetRequest(DataController.getInstance().getSession().getAccessToken(),
-                orderId, new RequestListener<OrderResponse>() {
+        WebMethods.getInstance().orderGetRequest(orderId,
+                new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 

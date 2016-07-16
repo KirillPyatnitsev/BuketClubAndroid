@@ -15,8 +15,8 @@ public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultRespo
     private String telephone;
     private String code;
 
-    public PhoneVerificationFinishPostRequest(String accessToken, String telephone, String code) {
-        super(DefaultResponse.class, accessToken);
+    public PhoneVerificationFinishPostRequest(String telephone, String code) {
+        super(DefaultResponse.class);
         this.telephone = telephone;
         this.code = code;
     }
@@ -25,15 +25,11 @@ public class PhoneVerificationFinishPostRequest extends BaseRequest<DefaultRespo
     public DefaultResponse loadDataFromNetwork() throws Exception {
         Uri.Builder uriBuilder = buildUri();
         HttpRequest request = makePostRequest(uriBuilder, null);
-
         request.getUrl().put(Rest.PHONE, telephone);
         request.getUrl().put(Rest.CODE, code);
-
         if (!code.equals("55555")) {
             throw new Exception();
         }
-
         return new DefaultResponse();
-//        return getResponse(request.execute(), DefaultResponse.class, new DefaultResponse());
     }
 }

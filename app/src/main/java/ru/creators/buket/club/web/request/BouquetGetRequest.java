@@ -14,8 +14,8 @@ public class BouquetGetRequest extends BaseRequest<BouquetResponse> {
 
     private int bouquetId;
 
-    public BouquetGetRequest(String accessToken, int bouquetId) {
-        super(BouquetResponse.class, accessToken);
+    public BouquetGetRequest(int bouquetId) {
+        super(BouquetResponse.class);
         this.bouquetId = bouquetId;
     }
 
@@ -25,6 +25,6 @@ public class BouquetGetRequest extends BaseRequest<BouquetResponse> {
         uriBuilder.appendPath(Rest.BOUQUET_ITEMS);
         uriBuilder.appendPath(String.valueOf(bouquetId));
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, BouquetResponse.class, new BouquetResponse());
+        return executeRequest(request);
     }
 }

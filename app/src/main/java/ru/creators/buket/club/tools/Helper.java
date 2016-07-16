@@ -322,7 +322,7 @@ public class Helper {
         return dist;
     }
 
-    public static boolean phoneVerification(String phone) {
+    public static boolean isPhoneNumberValid(String phone) {
         return phone.replaceAll("[^\\d.]", "").length() == 11;
     }
 

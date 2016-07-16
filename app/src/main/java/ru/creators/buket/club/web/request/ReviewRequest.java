@@ -20,8 +20,8 @@ public class ReviewRequest extends BaseRequest<DefaultResponse> {
     private String comment;
     private int rating;
 
-    public ReviewRequest(String accessToken, int orderId, String comment, int rating) {
-        super(DefaultResponse.class, accessToken);
+    public ReviewRequest(int orderId, String comment, int rating) {
+        super(DefaultResponse.class);
         this.orderId = orderId;
         this.comment = comment;
         this.rating = rating;
@@ -34,7 +34,7 @@ public class ReviewRequest extends BaseRequest<DefaultResponse> {
         uriBuilder.appendPath(Integer.toString(orderId));
         uriBuilder.appendPath(Rest.REVIEWS);
         HttpRequest request = makePostRequest(uriBuilder, new ReviewContent(new Review(rating, comment)));
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 
     private class ReviewContent {

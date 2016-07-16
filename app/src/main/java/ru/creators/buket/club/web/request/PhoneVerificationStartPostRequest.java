@@ -14,8 +14,8 @@ public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResp
 
     private String telephone;
 
-    public PhoneVerificationStartPostRequest(String accessToken, String telephone) {
-        super(PhoneCodeResponse.class, accessToken);
+    public PhoneVerificationStartPostRequest(String telephone) {
+        super(PhoneCodeResponse.class);
         this.telephone = telephone;
     }
 
@@ -26,6 +26,6 @@ public class PhoneVerificationStartPostRequest extends BaseRequest<PhoneCodeResp
         uriBuilder.appendPath(Rest.SEND_CODE);
         HttpRequest request = makePostRequest(uriBuilder, null);
         request.getUrl().put(Rest.PHONE, telephone);
-        return executeRequest(request, PhoneCodeResponse.class);
+        return executeRequest(request);
     }
 }

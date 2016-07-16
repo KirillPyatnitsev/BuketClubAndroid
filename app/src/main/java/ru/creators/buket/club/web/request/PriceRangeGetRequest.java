@@ -12,16 +12,16 @@ import ru.creators.buket.club.web.response.PriceRangeResponse;
  */
 public class PriceRangeGetRequest extends BaseRequest<PriceRangeResponse> {
 
-    public PriceRangeGetRequest(String accessToken) {
-        super(PriceRangeResponse.class, accessToken);
+    public PriceRangeGetRequest() {
+        super(PriceRangeResponse.class);
     }
 
     @Override
     public PriceRangeResponse loadDataFromNetwork() throws Exception {
         Uri.Builder uriBuilder = buildUri();
-        uriBuilder.appendPath(Rest.PRICE_RANGE);
         uriBuilder.appendPath(Rest.BOUQUET_ITEMS);
+        uriBuilder.appendPath(Rest.PRICE_RANGE);
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, PriceRangeResponse.class);
+        return executeRequest(request);
     }
 }

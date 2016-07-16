@@ -25,6 +25,7 @@ import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
 import ru.creators.buket.club.consts.Rest;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Pagination;
 import ru.creators.buket.club.model.PriceRange;
@@ -42,7 +43,7 @@ import ru.creators.buket.club.web.response.PriceRangeResponse;
 
 public class BucketsActivity extends BaseActivity {
 
-    private static final String TAG ="_BucketsActivity";
+    private static final String TAG = ServerConfig.TAG_PREFIX + "BucketsActivity";
 
     private ImageView imageOpenFilter;
     private ImageView imageCloseFilter;
@@ -100,7 +101,7 @@ public class BucketsActivity extends BaseActivity {
         assignView();
         assignListener();
 
-        loadPriceRange(DataController.getInstance().getSession().getAccessToken());
+        loadPriceRange();
 
         listBouquetsGetResponse(true);
 
@@ -331,25 +332,25 @@ public class BucketsActivity extends BaseActivity {
         return R.id.a_b_blur_image;
     }
 
-    private void getDictionary(String accessToken, final String dictionaryType) {
+    private void getDictionary(final String dictionaryType) {
         startLoading(false);
-        WebMethods.getInstance().getDictionary(accessToken, dictionaryType, new RequestListener<DictionaryResponse>() {
+        WebMethods.getInstance().getDictionary(dictionaryType, new RequestListener<DictionaryResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
             }
 
             @Override
-            public void onRequestSuccess(DictionaryResponse dictonaryResponse) {
+            public void onRequestSuccess(DictionaryResponse dictionaryResponse) {
                 if (dictionaryType.equals(Rest.FLOWER_TYPES)) {
                     dictionaryFlowerTypes.clear();
-                    dictionaryFlowerTypes.addAll(dictonaryResponse.getDictonaryFlowerTypes());
+                    dictionaryFlowerTypes.addAll(dictionaryResponse.getDictonaryFlowerTypes());
                 } else if (dictionaryType.equals(Rest.FLOWER_COLORS)) {
                     dictionaryFlowerColors.clear();
-                    dictionaryFlowerColors.addAll(dictonaryResponse.getDictonaryFloverClors());
+                    dictionaryFlowerColors.addAll(dictionaryResponse.getDictonaryFloverClors());
                 } else if (dictionaryType.equals(Rest.DAY_EVENTS)) {
                     dictionaryDayEvents.clear();
-                    dictionaryDayEvents.addAll(dictonaryResponse.getDictonaryDayEvents());
+                    dictionaryDayEvents.addAll(dictionaryResponse.getDictonaryDayEvents());
                 }
                 stopLoading();
             }
@@ -357,10 +358,9 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void loadDictionaries() {
-        String accessToken = DataController.getInstance().getSession().getAccessToken();
-        getDictionary(accessToken, Rest.FLOWER_TYPES);
-        getDictionary(accessToken, Rest.FLOWER_COLORS);
-        getDictionary(accessToken, Rest.DAY_EVENTS);
+        getDictionary(Rest.FLOWER_TYPES);
+        getDictionary(Rest.FLOWER_COLORS);
+        getDictionary(Rest.DAY_EVENTS);
     }
 
     @Override
@@ -398,7 +398,7 @@ public class BucketsActivity extends BaseActivity {
         if (!swipeRefreshLayout.isRefreshing()) {
             startLoading(false);
         }
-        WebMethods.getInstance().loadBouquets(DataController.getInstance().getSession().getAccessToken(),
+        WebMethods.getInstance().loadBouquets(
                 currentFlowerTypeId == -1 ? currentFlowerTypeId : dictionaryFlowerTypes.getItemId(currentFlowerTypeId),
                 currentFlowerColorId == -1 ? currentFlowerColorId : dictionaryFlowerColors.getItemId(currentFlowerColorId),
                 currentDayEventId == -1 ? currentDayEventId : dictionaryDayEvents.getItemId(currentDayEventId),
@@ -443,8 +443,7 @@ public class BucketsActivity extends BaseActivity {
 
     private void getOrders() {
         startLoading(false);
-        WebMethods.getInstance().getOrders(
-                DataController.getInstance().getSession().getAccessToken(), 1, 100,
+        WebMethods.getInstance().getOrders(1, 100,
                 new RequestListener<OrdersResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -471,7 +470,7 @@ public class BucketsActivity extends BaseActivity {
 
     private void removeOrderRequest(int orderId) {
         startLoading();
-        WebMethods.getInstance().removeOrderRequest(DataController.getInstance().getSession().getAccessToken(), orderId, new RequestListener<DefaultResponse>() {
+        WebMethods.getInstance().removeOrderRequest(orderId, new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
@@ -484,9 +483,9 @@ public class BucketsActivity extends BaseActivity {
         });
     }
 
-    private void loadPriceRange(String accessToken) {
+    private void loadPriceRange() {
         startLoading(false);
-        WebMethods.getInstance().loadPriceRange(accessToken, new RequestListener<PriceRangeResponse>() {
+        WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();

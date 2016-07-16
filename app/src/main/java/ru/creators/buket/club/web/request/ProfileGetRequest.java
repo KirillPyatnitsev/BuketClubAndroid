@@ -12,8 +12,8 @@ import ru.creators.buket.club.web.response.ProfileResponse;
  */
 public class ProfileGetRequest extends BaseRequest<ProfileResponse> {
 
-    public ProfileGetRequest(String accessToken) {
-        super(ProfileResponse.class, accessToken);
+    public ProfileGetRequest() {
+        super(ProfileResponse.class);
     }
 
     @Override
@@ -21,6 +21,6 @@ public class ProfileGetRequest extends BaseRequest<ProfileResponse> {
         Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.PROFILE);
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, ProfileResponse.class);
+        return executeRequest(request);
     }
 }

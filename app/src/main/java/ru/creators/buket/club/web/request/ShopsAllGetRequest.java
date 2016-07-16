@@ -15,8 +15,8 @@ public class ShopsAllGetRequest extends BaseRequest<ShopListResponse> {
     private int page;
     private int perPage;
 
-    public ShopsAllGetRequest(String accessToken, int page, int perPage) {
-        super(ShopListResponse.class, accessToken);
+    public ShopsAllGetRequest(int page, int perPage) {
+        super(ShopListResponse.class);
         this.page = page;
         this.perPage = perPage;
     }
@@ -28,6 +28,6 @@ public class ShopsAllGetRequest extends BaseRequest<ShopListResponse> {
         HttpRequest request = makeGetRequest(uriBuilder);
         request.getUrl().put(Rest.PAGE, page);
         request.getUrl().put(Rest.PER_PAGE, perPage);
-        return executeRequest(request, ShopListResponse.class);
+        return executeRequest(request);
     }
 }

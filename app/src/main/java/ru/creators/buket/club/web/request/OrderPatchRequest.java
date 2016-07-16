@@ -17,8 +17,8 @@ public class OrderPatchRequest extends BaseRequest<DefaultResponse> {
     private final Order order;
     private final int orderId;
 
-    public OrderPatchRequest(String accessToken, Order order, int orderId) {
-        super(DefaultResponse.class, accessToken);
+    public OrderPatchRequest(Order order, int orderId) {
+        super(DefaultResponse.class);
         this.order = order;
         this.orderId = orderId;
     }
@@ -29,7 +29,7 @@ public class OrderPatchRequest extends BaseRequest<DefaultResponse> {
         uriBuilder.appendPath(Rest.ORDERS);
         uriBuilder.appendPath(Integer.toString(orderId));
         HttpRequest request = makePatchRequest(uriBuilder, new OrderContent(order));
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 
 }

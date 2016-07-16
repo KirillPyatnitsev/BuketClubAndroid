@@ -15,8 +15,8 @@ public class SessionUpdateRequest extends BaseRequest<DefaultResponse> {
 
     private String deviceToken;
 
-    public SessionUpdateRequest(String accessToken, String deviceToken) {
-        super(DefaultResponse.class, accessToken);
+    public SessionUpdateRequest(String deviceToken) {
+        super(DefaultResponse.class);
         this.deviceToken = deviceToken;
     }
 
@@ -26,6 +26,6 @@ public class SessionUpdateRequest extends BaseRequest<DefaultResponse> {
         uriBuilder.appendPath(Rest.SESSIONS);
         HttpRequest request = makePatchRequest(uriBuilder, null);
         request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 }

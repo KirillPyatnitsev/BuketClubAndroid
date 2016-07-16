@@ -14,8 +14,8 @@ public class OrderDeleteRequest extends BaseRequest<DefaultResponse> {
 
     private int orderId;
 
-    public OrderDeleteRequest(String accessToken, int orderId) {
-        super(DefaultResponse.class, accessToken);
+    public OrderDeleteRequest(int orderId) {
+        super(DefaultResponse.class);
         this.orderId = orderId;
     }
 
@@ -25,7 +25,7 @@ public class OrderDeleteRequest extends BaseRequest<DefaultResponse> {
         uriBuilder.appendPath(Rest.ORDERS);
         uriBuilder.appendPath(Integer.toString(orderId));
         HttpRequest request = makeDeleteRequest(uriBuilder);
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 
 }

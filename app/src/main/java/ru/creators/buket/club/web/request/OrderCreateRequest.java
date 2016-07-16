@@ -16,8 +16,8 @@ public class OrderCreateRequest extends BaseRequest<OrderResponse> {
 
     private Order order;
 
-    public OrderCreateRequest(String accessToken, Order order) {
-        super(OrderResponse.class, accessToken);
+    public OrderCreateRequest(Order order) {
+        super(OrderResponse.class);
         this.order = order;
     }
 
@@ -26,6 +26,6 @@ public class OrderCreateRequest extends BaseRequest<OrderResponse> {
         Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.ORDERS);
         HttpRequest request = makePostRequest(uriBuilder, new OrderContent(order));
-        return executeRequest(request, OrderResponse.class);
+        return executeRequest(request);
     }
 }

@@ -55,7 +55,7 @@ import ru.creators.buket.club.web.response.ShopListResponse;
  * Created by mifkamaz on 19/11/15.
  */
 public class WebMethods {
-    private static final String LOG_TAG = "WebMethods";
+    private static final String LOG_TAG = ServerConfig.TAG_PREFIX + "WebMethods";
 
     private static final WebMethods mWebMethods = new WebMethods();
     private static WebMethods fakeWebMethods = null;
@@ -88,83 +88,84 @@ public class WebMethods {
         execute(new SessionCreateRequest(uuid, deviceToken), listener);
     }
 
-    public void loadBouquets(String accessToken, int flowerTypeId,
+    public void loadBouquets(int flowerTypeId,
                              int flowerColorId, int dayEventId,
                              int minPrice, int maxPrice, int page, int perPage,
                              RequestListener<BouquetsResponse> listener) {
-        execute(new BouquetsGetRequest(accessToken, flowerTypeId, flowerColorId, dayEventId, minPrice, maxPrice, page, perPage), listener);
+        execute(new BouquetsGetRequest(flowerTypeId, flowerColorId, dayEventId, minPrice, maxPrice, page, perPage), listener);
     }
 
-    public void loadPriceRange(String accessToken, RequestListener<PriceRangeResponse> listener) {
-        execute(new PriceRangeGetRequest(accessToken), listener);
+    public void loadPriceRange(RequestListener<PriceRangeResponse> listener) {
+        execute(new PriceRangeGetRequest(), listener);
     }
 
-    public void getProfile(String accessToken, RequestListener<ProfileResponse> listener) {
-        execute(new ProfileGetRequest(accessToken), listener);
+    public void getProfile(RequestListener<ProfileResponse> listener) {
+        execute(new ProfileGetRequest(), listener);
     }
 
-    public void getDictionary(String accessToken, String dictionaryType, RequestListener<DictionaryResponse> listener) {
-        execute(new DictionaryGetRequest(accessToken, dictionaryType), listener);
+    public void getDictionary(String dictionaryType, RequestListener<DictionaryResponse> listener) {
+        execute(new DictionaryGetRequest(dictionaryType), listener);
     }
 
-    public void sendOrder(String accessToken, Order order, RequestListener<OrderResponse> listener) {
-        execute(new OrderCreateRequest(accessToken, order), listener);
+    public void sendOrder(Order order, RequestListener<OrderResponse> listener) {
+        execute(new OrderCreateRequest(order), listener);
     }
 
-    public void getOrders(String accessToken, int page, int perPage, RequestListener<OrdersResponse> listener) {
-        execute(new OrdersGetRequest(accessToken, page, perPage), listener);
+    public void getOrders(int page, int perPage, RequestListener<OrdersResponse> listener) {
+        execute(new OrdersGetRequest(page, perPage), listener);
     }
 
-    public void generateTypePrice(String accessToken, RequestListener<DefaultResponse> listener) {
-        execute(new GenerateTypePriceRequest(accessToken), listener);
+    public void generateTypePrice(RequestListener<DefaultResponse> listener) {
+        execute(new GenerateTypePriceRequest(), listener);
     }
 
-    public void getFlexAnswers(String accessToken, int orderId, RequestListener<ListAnswerFlexResponse> listener) {
-        execute(new OrderGetFlexibleAnswersRequest(accessToken, orderId), listener);
+    public void getFlexAnswers(int orderId, RequestListener<ListAnswerFlexResponse> listener) {
+        execute(new OrderGetFlexibleAnswersRequest(orderId), listener);
     }
 
-    public void orderPathRequest(String accessToken, Order order, int orderId, RequestListener<DefaultResponse> listener) {
-        execute(new OrderPatchRequest(accessToken, order, orderId), listener);
+    public void orderPathRequest(Order order, int orderId, RequestListener<DefaultResponse> listener) {
+        execute(new OrderPatchRequest(order, orderId), listener);
     }
 
-    public void sendReviewRequest(String accessToken, int orderId, String comment, int rating, RequestListener<DefaultResponse> listener) {
-        execute(new ReviewRequest(accessToken, orderId, comment, rating), listener);
+    public void sendReviewRequest(int orderId, String comment, int rating, RequestListener<DefaultResponse> listener) {
+        execute(new ReviewRequest(orderId, comment, rating), listener);
     }
 
-    public void orderGetRequest(String accessToken, int orderId, RequestListener<OrderResponse> listener) {
-        execute(new OrderGetRequest(accessToken, orderId), listener);
+    public void orderGetRequest(int orderId, RequestListener<OrderResponse> listener) {
+        execute(new OrderGetRequest(orderId), listener);
     }
 
-    public void sessionUpdateRequest(String accessToken, String deviceToken, RequestListener<DefaultResponse> listener) {
-        execute(new SessionUpdateRequest(accessToken, deviceToken), listener);
+    public void sessionUpdateRequest(String deviceToken, RequestListener<DefaultResponse> listener) {
+        execute(new SessionUpdateRequest(deviceToken), listener);
     }
 
-    public void removeOrderRequest(String accessToken, int orderId, RequestListener<DefaultResponse> listener) {
-        execute(new OrderDeleteRequest(accessToken, orderId), listener);
+    public void removeOrderRequest(int orderId, RequestListener<DefaultResponse> listener) {
+        execute(new OrderDeleteRequest(orderId), listener);
     }
 
-    public void listShopGetRequest(String accessToken, int page, int perPage, RequestListener<ShopListResponse> listener) {
-        execute(new ShopsAllGetRequest(accessToken, page, perPage), listener);
+    public void listShopGetRequest(int page, int perPage, RequestListener<ShopListResponse> listener) {
+        execute(new ShopsAllGetRequest(page, perPage), listener);
     }
 
     public void addressGetRequest(double latitude, double longitude, Context context, RequestListener<String> listener) {
         execute(new AddressGetRequest(latitude, longitude, context), listener);
     }
 
-    public void phoneVerificationStartPostRequest(String accessToken, String phone, RequestListener<PhoneCodeResponse> listener) {
-        execute(new PhoneVerificationStartPostRequest(accessToken, phone), listener);
+    public void phoneVerificationStartPostRequest(String phone, RequestListener<PhoneCodeResponse> listener) {
+        execute(new PhoneVerificationStartPostRequest(phone), listener);
     }
 
-    public void phoneVerificationFinishPostRequest(String accessToken, String phone, String code, RequestListener<DefaultResponse> listener) {
-        execute(new PhoneVerificationFinishPostRequest(accessToken, phone, code), listener);
+    public void phoneVerificationFinishPostRequest(String phone, String code, RequestListener<DefaultResponse> listener) {
+        execute(new PhoneVerificationFinishPostRequest(phone, code), listener);
     }
 
-    public void profilePatchRequest(String accessToken, Profile profile, RequestListener<DefaultResponse> listener) {
-        execute(new ProfilePatchRequest(accessToken, profile), listener);
+    public void profilePatchRequest(Profile profile, RequestListener<DefaultResponse> listener) {
+        execute(new ProfilePatchRequest(profile), listener);
     }
 
     protected <T> void execute(final SpiceRequest<T> request, final RequestListener<T> requestListener) {
-        if (DataController.getInstance().getBaseActivity().isOnline()) {
+        BaseActivity activity = DataController.getInstance().getBaseActivity();
+        if (activity.isOnline()) {
             request.setRetryPolicy(NO_RETRY);
             Log.d(LOG_TAG, "Request: " + request);
             mSpiceManager.execute(request, new RequestListener<T>() {
@@ -182,8 +183,8 @@ public class WebMethods {
             });
 
         } else {
-            DataController.getInstance().getBaseActivity().showSnackBar(R.string.check_internet_connection);
-            DataController.getInstance().getBaseActivity().stopLoading();
+            activity.showSnackBar(R.string.check_internet_connection);
+            activity.stopLoading();
         }
     }
 

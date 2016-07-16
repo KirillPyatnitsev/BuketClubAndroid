@@ -14,8 +14,8 @@ public class ShopGetRequest extends BaseRequest<ShopResponse> {
 
     private int id;
 
-    public ShopGetRequest(String accessToken, int id) {
-        super(ShopResponse.class, accessToken);
+    public ShopGetRequest(int id) {
+        super(ShopResponse.class);
         this.id = id;
     }
 
@@ -25,6 +25,6 @@ public class ShopGetRequest extends BaseRequest<ShopResponse> {
         uriBuilder.appendPath(Rest.SHOPS);
         uriBuilder.appendPath(Integer.toString(id));
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, ShopResponse.class);
+        return executeRequest(request);
     }
 }

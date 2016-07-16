@@ -16,7 +16,7 @@ public class SessionCreateRequest extends BaseRequest<SessionResponse> {
     private String deviceToken;
 
     public SessionCreateRequest(String udid, String deviceToken) {
-        super(SessionResponse.class, null);
+        super(SessionResponse.class);
         this.udid = udid;
         this.deviceToken = deviceToken;
     }
@@ -31,6 +31,6 @@ public class SessionCreateRequest extends BaseRequest<SessionResponse> {
             request.getUrl().put(Rest.DEVICE_TOKEN, deviceToken);
         }
         request.getUrl().put(Rest.DEVICE_TYPE, Rest.DEVICE_TYPE_ANDROID);
-        return executeRequest(request, SessionResponse.class);
+        return executeRequest(request);
     }
 }

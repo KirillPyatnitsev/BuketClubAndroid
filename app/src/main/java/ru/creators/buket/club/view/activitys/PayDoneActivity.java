@@ -88,8 +88,7 @@ public class PayDoneActivity extends BaseActivity {
             }
         };
 
-        WebMethods.getInstance().orderPathRequest(DataController.getInstance().getSession().getAccessToken(),
-                DataController.getInstance().getOrder().getOrderForServer(),
+        WebMethods.getInstance().orderPathRequest(DataController.getInstance().getOrder().getOrderForServer(),
                 DataController.getInstance().getOrder().getId(), listenerPath);
 
         Order order = DataController.getInstance().getOrder();

@@ -399,7 +399,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     private void phoneVerificationStartPostRequest(final String phone) {
-        WebMethods.getInstance().phoneVerificationStartPostRequest(DataController.getInstance().getSession().getAccessToken(), phone,
+        WebMethods.getInstance().phoneVerificationStartPostRequest(phone,
                 new RequestListener<PhoneCodeResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -467,8 +467,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         DataController.getInstance().getOrder().setCode(code);
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                DataController.getInstance().getOrder().getOrderForServer(),
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getOrder().getOrderForServer(),
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -496,8 +495,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private void sendOrder() {
         startLoading(false);
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getSession().getAccessToken(),
-                DataController.getInstance().getOrder().getOrderForServer(),
+        WebMethods.getInstance().sendOrder(DataController.getInstance().getOrder().getOrderForServer(),
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {

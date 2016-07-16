@@ -14,8 +14,8 @@ public class OrderGetRequest extends BaseRequest<OrderResponse> {
 
     private int id;
 
-    public OrderGetRequest(String accessToken, int id) {
-        super(OrderResponse.class, accessToken);
+    public OrderGetRequest(int id) {
+        super(OrderResponse.class);
         this.id = id;
     }
 
@@ -25,6 +25,6 @@ public class OrderGetRequest extends BaseRequest<OrderResponse> {
         uriBuilder.appendPath(Rest.ORDERS);
         uriBuilder.appendPath(Integer.toString(id));
         HttpRequest request = makeGetRequest(uriBuilder);
-        return executeRequest(request, OrderResponse.class);
+        return executeRequest(request);
     }
 }

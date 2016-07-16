@@ -12,8 +12,8 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class GenerateTypePriceRequest extends BaseRequest<DefaultResponse> {
 
-    public GenerateTypePriceRequest(String accessToken) {
-        super(DefaultResponse.class, accessToken);
+    public GenerateTypePriceRequest() {
+        super(DefaultResponse.class);
     }
 
     @Override
@@ -22,6 +22,6 @@ public class GenerateTypePriceRequest extends BaseRequest<DefaultResponse> {
         uriBuilder.appendPath(Rest.PROFILE);
         uriBuilder.appendPath(Rest.GENERATE_TYPE_PRICE);
         HttpRequest request = makePostRequest(uriBuilder, null);
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 }

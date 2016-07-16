@@ -12,8 +12,8 @@ import ru.creators.buket.club.web.response.DefaultResponse;
  */
 public class SessionDeleteRequest extends BaseRequest<DefaultResponse> {
 
-    public SessionDeleteRequest(String accessToken) {
-        super(DefaultResponse.class, accessToken);
+    public SessionDeleteRequest() {
+        super(DefaultResponse.class);
     }
 
     @Override
@@ -21,6 +21,6 @@ public class SessionDeleteRequest extends BaseRequest<DefaultResponse> {
         Uri.Builder uriBuilder = buildUri();
         uriBuilder.appendPath(Rest.SESSIONS);
         HttpRequest request = makeDeleteRequest(uriBuilder);
-        return executeRequest(request, DefaultResponse.class);
+        return executeRequest(request);
     }
 }

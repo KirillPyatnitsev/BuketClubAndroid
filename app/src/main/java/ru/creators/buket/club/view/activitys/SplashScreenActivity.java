@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -24,6 +25,7 @@ import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.gcm.QuickstartPreferences;
 import ru.creators.buket.club.gcm.RegistrationIntentService;
 import ru.creators.buket.club.model.PriceRange;
@@ -46,7 +48,7 @@ public class SplashScreenActivity extends BaseActivity {
     private static final boolean TEST_APPLICATION_MODE = false;
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private static final String TAG = "SplashScreenActivity";
+    private static final String TAG = ServerConfig.TAG_PREFIX + "SplashScreen";
 
     private Session session;
     private Profile profile;
@@ -141,11 +143,11 @@ public class SplashScreenActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(SessionResponse sessionResponse) {
-                saveSession(sessionResponse.getSession());
-                session = sessionResponse.getSession();
+                Session session = sessionResponse.getSession();
+                saveSession(session);
+                SplashScreenActivity.this.session = session;
                 stopLoading();
-
-                getProfile(session.getAccessToken());
+                getProfile();
             }
         });
     }
@@ -189,11 +191,11 @@ public class SplashScreenActivity extends BaseActivity {
         if (this.phone == null || !this.phone.equals(phone)) {
             if (name.isEmpty()) {
                 showSnackBar(R.string.name_not_entered);
-            } else if (!Helper.phoneVerification(phone)) {
-                showSnackBar(R.string.phone_not_entered);
-            } else {
+            } else if (Helper.isPhoneNumberValid(phone)) {
                 this.phone = phone;
                 phoneVerificationStartPostRequest(phone, name);
+            } else {
+                showSnackBar(R.string.phone_not_entered);
             }
         } else {
             String code = editCode.getText().toString();
@@ -211,17 +213,18 @@ public class SplashScreenActivity extends BaseActivity {
         if (session == null) {
             createSession();
         } else {
-            getProfile(session.getAccessToken());
+            getProfile();
         }
     }
 
     private void saveSession(Session session) {
-        PreferenceCache.putObject(this, PreferenceCache.KEY_SESSION, session);
+        DataController.getInstance().setSession(session);
+        //PreferenceCache.putObject(this, PreferenceCache.KEY_SESSION, session);
     }
 
-    private void loadBouquets(String accessToken) {
+    private void loadBouquets() {
         startLoading(false);
-        WebMethods.getInstance().loadBouquets(accessToken, -1, -1, -1, -1, -1, 1, 200,
+        WebMethods.getInstance().loadBouquets(-1, -1, -1, -1, -1, 1, 200,
                 new RequestListener<BouquetsResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -236,9 +239,9 @@ public class SplashScreenActivity extends BaseActivity {
                 });
     }
 
-    private void loadPriceRange(String accessToken) {
+    private void loadPriceRange() {
         startLoading(false);
-        WebMethods.getInstance().loadPriceRange(accessToken, new RequestListener<PriceRangeResponse>() {
+        WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
@@ -252,9 +255,9 @@ public class SplashScreenActivity extends BaseActivity {
         });
     }
 
-    private void getProfile(final String accessToken) {
+    private void getProfile() {
         startLoading(false);
-        WebMethods.getInstance().getProfile(accessToken, new RequestListener<ProfileResponse>() {
+        WebMethods.getInstance().getProfile(new RequestListener<ProfileResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 createSession();
@@ -263,24 +266,27 @@ public class SplashScreenActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(ProfileResponse profileResponse) {
-                stopLoading();
-
-                profile = profileResponse.getProfile();
-
-//                if (currentAppMode != 100 && profile.getTypePriceIndex() != currentAppMode) {
-                if (profile.getTypePriceIndex() != Profile.TYPE_PRICE_FIX) {
-                    generateTypePrice(accessToken);
+                Profile profile = profileResponse.getProfile();
+                SplashScreenActivity.this.profile = profile;
+                if(profile == null) {
+                    Crashlytics.log("profile == null");
                 } else {
-                    loadBouquets(accessToken);
-                    loadPriceRange(accessToken);
+                    if (profile.getTypePriceIndex() != Profile.TYPE_PRICE_FIX) {
+                        generateTypePrice();
+                    } else {
+                        loadBouquets();
+                        loadPriceRange();
+                    }
+
                 }
+                stopLoading();
             }
         });
     }
 
-    private void generateTypePrice(final String accessToken) {
+    private void generateTypePrice() {
         startLoading(false);
-        WebMethods.getInstance().generateTypePrice(accessToken, new RequestListener<DefaultResponse>() {
+        WebMethods.getInstance().generateTypePrice(new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
                 stopLoading();
@@ -288,7 +294,7 @@ public class SplashScreenActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
-                getProfile(accessToken);
+                getProfile();
                 stopLoading();
             }
         });
@@ -342,7 +348,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void phoneVerificationStartPostRequest(final String phone, final String name) {
-        WebMethods.getInstance().phoneVerificationStartPostRequest(DataController.getInstance().getSession().getAccessToken(), phone,
+        WebMethods.getInstance().phoneVerificationStartPostRequest(phone,
                 new RequestListener<PhoneCodeResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -370,9 +376,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void profilePatchRequest(Profile profile) {
-        WebMethods.getInstance().profilePatchRequest(
-                DataController.getInstance().getSession().getAccessToken(),
-                profile.getProfileForPatchRequest(),
+        WebMethods.getInstance().profilePatchRequest(profile.getProfileForPatchRequest(),
                 new RequestListener<DefaultResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
