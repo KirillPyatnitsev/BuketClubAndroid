@@ -462,7 +462,7 @@ public class BucketsActivity extends BaseActivity {
 
     private void removeOrders(ListOrder listOrder) {
         for (Order order : listOrder) {
-            if (order.getStatusIndex() == Order.STATUS_FILLING_SHOP_INDEX) {
+            if (order.isFillingShop()) {
                 removeOrderRequest(order.getId());
             }
         }

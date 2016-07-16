@@ -332,11 +332,13 @@ public class Helper {
 
     public static void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
 
+        // TODO: Decouple from BaseActivity
         int widthImage = BaseActivity.getWidthScreen();
 
         RequestCreator picasso = Picasso.with(context)
                 .load(url);
         if (downscale) {
+            // TODO: remove the magic number
             picasso.resize(widthImage, (int) (widthImage*1.25)).onlyScaleDown();
         }
         picasso.into(imageView);

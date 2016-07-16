@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.model.lists.ListOrder;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
@@ -69,9 +70,11 @@ public class ListOrderAdapter extends BaseAdapter {
             holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
             holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
-            if (order.getStatusIndex() != Order.STATUS_FILLING_SHOP_INDEX)
-//                WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
-                Helper.loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
+            Shop shop = order.getShop();
+            if (shop != null && shop.getImageUrl() != null) {
+                //WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
+                Helper.loadImage(context, Helper.addServerPrefix(shop.getImageUrl()), holder.imageArtistLogo);
+            }
         }
 
         return convertView;

@@ -66,7 +66,7 @@ public class Order {
     private String status;
 
     @JsonProperty(Fields.STATUS_INDEX)
-    private int statusIndex;
+    private Integer statusIndex;
 
     @JsonProperty(Fields.RECIPIENT_NAME)
     private String recipientName;
@@ -196,11 +196,11 @@ public class Order {
         this.status = status;
     }
 
-    public int getStatusIndex() {
+    public Integer getStatusIndex() {
         return statusIndex;
     }
 
-    public void setStatusIndex(int statusIndex) {
+    public void setStatusIndex(Integer statusIndex) {
         this.statusIndex = statusIndex;
     }
 
@@ -366,6 +366,11 @@ public class Order {
     }
 
     @JsonIgnore
+    public boolean isFillingShop() {
+        return this.statusIndex != null && this.statusIndex == Order.STATUS_FILLING_SHOP_INDEX;
+    }
+
+    @JsonIgnore
     public static int getDeliveryTypeResId(String deliveryType) {
         if (deliveryType != null && deliveryType.equals(DELIVERY_TYPE_PICKUP)) {
             return DELIVERY_TYPE_PICKUP_DESK_RES_ID;
@@ -423,4 +428,5 @@ public class Order {
                 ", code='" + code + '\'' +
                 '}';
     }
+
 }
