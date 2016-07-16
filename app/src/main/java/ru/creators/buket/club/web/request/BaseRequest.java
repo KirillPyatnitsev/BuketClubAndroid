@@ -46,7 +46,8 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
 
     public BaseRequest(Class<T> clazz) {
         super(clazz);
-        Session session = DataController.getInstance().getSession();
+        DataController instance = DataController.getInstance();
+        Session session = instance == null? null: instance.getSession();
         this.accessToken = session == null? null: session.getAccessToken();
     }
 

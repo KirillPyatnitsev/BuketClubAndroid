@@ -24,8 +24,8 @@ public class FakeMapperTest {
 
         shops = null;
 
-        fakeMethods.listShopGetRequest("",
-                1, 25, new RequestListener<ShopListResponse>() {
+        fakeMethods.listShopGetRequest(1, 25,
+                new RequestListener<ShopListResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
 

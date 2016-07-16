@@ -1,5 +1,10 @@
 package ru.creators.buket.club;
 
+import android.util.Log;
+
+import com.crashlytics.android.Crashlytics;
+
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.PriceRange;
@@ -13,6 +18,9 @@ import ru.creators.buket.club.view.activitys.BaseActivity;
  * Created by mifkamaz on 12/12/15.
  */
 public class DataController {
+
+    private static final String TAG = ServerConfig.TAG_PREFIX + "DataController";
+
     private static final DataController ourInstance = new DataController();
 
     public static DataController getInstance() {
@@ -45,10 +53,14 @@ public class DataController {
     public Session getSession() {
         if (session == null) {
             BaseActivity act = this.getBaseActivity();
-            session = PreferenceCache.getObject(
-                    act.getApplicationContext(),
-                    PreferenceCache.KEY_SESSION,
-                    Session.class);
+            if(act != null) {
+                session = PreferenceCache.getObject(
+                        act.getApplicationContext(),
+                        PreferenceCache.KEY_SESSION,
+                        Session.class);
+            } else {
+                //Log.e(TAG, "Activity is null"); // Will complain in tests (method is not mocked)
+            }
         }
         return session;
     }
