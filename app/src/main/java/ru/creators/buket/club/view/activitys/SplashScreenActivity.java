@@ -74,7 +74,7 @@ public class SplashScreenActivity extends BaseActivity {
             startService(intent);
         }
 
-        Log.d(TAG, getUniqueDeviceId());
+        Log.d(TAG, "deviceId: " + getUniqueDeviceId());
 
         assignView();
         assignListener();
@@ -105,11 +105,6 @@ public class SplashScreenActivity extends BaseActivity {
             }
         }
     };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
     @Override
     protected void onPause() {
@@ -155,8 +150,8 @@ public class SplashScreenActivity extends BaseActivity {
                         Session session = sessionResponse.getSession();
                         saveSession(session);
                         SplashScreenActivity.this.session = session;
-                        stopLoading();
                         getProfile();
+                        stopLoading();
                     }
                 });
     }
