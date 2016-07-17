@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,11 +22,12 @@ import java.util.List;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.tools.Helper;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private static final String TAG = "_BaseActivity";
+    private static final String TAG = ServerConfig.TAG_PREFIX + "BaseActivity";
     protected CoordinatorLayout coordinatorLayout;
 
     private RelativeLayout relativeLoading;
@@ -36,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: " + this.getClass().getName());
         super.onCreate(savedInstanceState);
 
         DataController.getInstance().setBaseActivity(this);
@@ -50,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
+        Log.d(TAG, "onDestroy: " + this.getClass().getName());
     }
 
     protected abstract void onCreateInternal();
@@ -155,11 +157,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected void allProcessDone() {
 
-    }
-
-    protected String getUniqueDeviceId() {
-        return Settings.Secure.getString(getContentResolver(),
-                Settings.Secure.ANDROID_ID);
     }
 
     protected ViewComposite forViews(View... views) {

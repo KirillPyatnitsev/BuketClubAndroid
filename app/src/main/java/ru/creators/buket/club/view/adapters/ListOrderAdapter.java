@@ -13,7 +13,6 @@ import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.model.lists.ListOrder;
 import ru.creators.buket.club.tools.Helper;
-import ru.creators.buket.club.web.WebMethods;
 
 /**
  * Created by mifkamaz on 14/12/15.

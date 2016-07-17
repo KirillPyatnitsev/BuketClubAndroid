@@ -113,6 +113,7 @@ public class Fields {
     public static final String ADDRESS = "address";
     public static final String ADDRESS_LAT = "address_lat";
     public static final String ADDRESS_LNG = "address_lng";
+    public static final String ADDRESS_TEXT = "address_text";
     public static final String RECIPIENT_NAME = "recipient_name";
     public static final String RECIPIENT_PHONE = "recipient_phone";
     public static final String BOUQUET_ITEM = "bouquet_item";

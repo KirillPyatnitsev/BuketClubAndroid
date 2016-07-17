@@ -123,7 +123,7 @@ public class WebMethods {
         execute(new OrderGetFlexibleAnswersRequest(orderId), listener);
     }
 
-    public void orderPathRequest(Order order, int orderId, RequestListener<DefaultResponse> listener) {
+    public void orderPatchRequest(Order order, int orderId, RequestListener<DefaultResponse> listener) {
         execute(new OrderPatchRequest(order, orderId), listener);
     }
 

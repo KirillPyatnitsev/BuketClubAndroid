@@ -1,9 +1,5 @@
 package ru.creators.buket.club;
 
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
-
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.model.Order;
@@ -32,7 +28,7 @@ public class DataController {
 
     private Session session;
     private Profile profile;
-    private ListBouquet listBouquet = new ListBouquet();
+    private final ListBouquet listBouquet = new ListBouquet();
     private PriceRange priceRange;
     private Bouquet bouquet;
     private Order order;
@@ -84,13 +80,8 @@ public class DataController {
         this.profile = profile;
     }
 
-    public ListBouquet getListBouquet() {
+    public ListBouquet getBouquetList() {
         return listBouquet;
-    }
-
-    public void setListBouquet(ListBouquet listBouquet) {
-        // Ensure that list is not null
-        this.listBouquet = listBouquet == null ? new ListBouquet() : listBouquet;
     }
 
     public PriceRange getPriceRange() {

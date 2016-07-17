@@ -12,7 +12,6 @@ import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.model.lists.ListBouquet;
 import ru.creators.buket.club.tools.Helper;
-import ru.creators.buket.club.web.WebMethods;
 
 /**
  * Created by mifkamaz on 13/12/15.

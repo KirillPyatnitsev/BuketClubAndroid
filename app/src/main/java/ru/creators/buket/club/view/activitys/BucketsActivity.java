@@ -21,6 +21,7 @@ import com.transitionseverywhere.TransitionManager;
 import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
+import ru.creators.buket.club.AppException;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ApplicationMode;
@@ -72,12 +73,11 @@ public class BucketsActivity extends BaseActivity {
 
     private RangeSeekBar rangeSeekBarCost;
 
-    private PriceRange priceRange = DataController.getInstance().getPriceRange();
-    private ListBouquet listBouquet = DataController.getInstance().getListBouquet();
+    private final ListBouquet listBouquet = DataController.getInstance().getBouquetList();
 
-    private ListDictionaryItem dictionaryFlowerTypes = new ListDictionaryItem();
-    private ListDictionaryItem dictionaryFlowerColors = new ListDictionaryItem();
-    private ListDictionaryItem dictionaryDayEvents = new ListDictionaryItem();
+    private final ListDictionaryItem dictionaryFlowerTypes = new ListDictionaryItem();
+    private final ListDictionaryItem dictionaryFlowerColors = new ListDictionaryItem();
+    private final ListDictionaryItem dictionaryDayEvents = new ListDictionaryItem();
 
     private ArrayAdapter<String> adapterFlowerTypes;
     private ArrayAdapter<String> adapterFlowerColors;
@@ -97,12 +97,12 @@ public class BucketsActivity extends BaseActivity {
     protected void onCreateInternal() {
         setContentView(R.layout.activity_buckets);
 
-
         assignView();
         assignListener();
+        initView();
 
         loadPriceRange();
-
+        loadDictionaries();
         listBouquetsGetResponse(true);
 
         if (DataController.getInstance().getSession().getAppMode() == ApplicationMode.COST_FLEXIBLE) {
@@ -140,6 +140,24 @@ public class BucketsActivity extends BaseActivity {
         textNotFindBouquets = getViewById(R.id.a_b_text_not_find);
 
         swipeRefreshLayout = getViewById(R.id.a_b_swipe_refresh);
+    }
+
+    private void initView() {
+        imageOpenFilter.setVisibility(View.VISIBLE);
+        imageOrders.setVisibility(View.VISIBLE);
+
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        gridAdapterBouquet = new GridAdapterBouquet(listBouquet, this, displaymetrics.widthPixels);
+        gridView.setAdapter(gridAdapterBouquet);
+
+        adapterFlowerTypes = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text);
+        adapterFlowerColors = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text);
+        adapterDayEvents = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text);
+
+        spinnerFlowerType.setAdapter(adapterFlowerTypes);
+        spinnerFlowerColor.setAdapter(adapterFlowerColors);
+        spinnerDayEvent.setAdapter(adapterDayEvents);
     }
 
     private void assignListener() {
@@ -251,32 +269,13 @@ public class BucketsActivity extends BaseActivity {
         startActivity(new Intent(this, BucketDetalisActivity.class));
     }
 
-    private void initView() {
-        if (priceRange != null && listBouquet != null) {
-            imageOpenFilter.setVisibility(View.VISIBLE);
-            imageOrders.setVisibility(View.VISIBLE);
-            setSpinnerData(priceRange.getMinPrice(), priceRange.getMaxPrice());
-
-            DisplayMetrics displaymetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-            gridAdapterBouquet = new GridAdapterBouquet(listBouquet, this, displaymetrics.widthPixels);
-            gridView.setAdapter(gridAdapterBouquet);
-
-            loadDictionaries();
-        }
-    }
-
+    // TODO: Combine openFilter/closeFilter into single method toggleFilter(on/off)
     private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open),
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 
@@ -291,13 +290,10 @@ public class BucketsActivity extends BaseActivity {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_close),
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+                new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_close), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 
@@ -332,7 +328,9 @@ public class BucketsActivity extends BaseActivity {
         return R.id.a_b_blur_image;
     }
 
-    private void getDictionary(final String dictionaryType) {
+    private void getDictionary(final String dictionaryType,
+                               final ListDictionaryItem list,
+                               final ArrayAdapter<String> adapter) {
         startLoading(false);
         WebMethods.getInstance().getDictionary(dictionaryType, new RequestListener<DictionaryResponse>() {
             @Override
@@ -342,43 +340,30 @@ public class BucketsActivity extends BaseActivity {
 
             @Override
             public void onRequestSuccess(DictionaryResponse dictionaryResponse) {
+                ListDictionaryItem loadedItems;
                 if (dictionaryType.equals(Rest.FLOWER_TYPES)) {
-                    dictionaryFlowerTypes.clear();
-                    dictionaryFlowerTypes.addAll(dictionaryResponse.getDictonaryFlowerTypes());
+                    loadedItems = dictionaryResponse.getDictonaryFlowerTypes();
                 } else if (dictionaryType.equals(Rest.FLOWER_COLORS)) {
-                    dictionaryFlowerColors.clear();
-                    dictionaryFlowerColors.addAll(dictionaryResponse.getDictonaryFloverClors());
+                    loadedItems = dictionaryResponse.getDictonaryFloverClors();
                 } else if (dictionaryType.equals(Rest.DAY_EVENTS)) {
-                    dictionaryDayEvents.clear();
-                    dictionaryDayEvents.addAll(dictionaryResponse.getDictonaryDayEvents());
+                    loadedItems = dictionaryResponse.getDictonaryDayEvents();
+                } else {
+                    throw new AppException("Unknown dictionary received: " + dictionaryType);
                 }
+                list.clear();
+                list.addAll(loadedItems);
+                adapter.clear();
+                String[] itemsForAdapter = loadedItems.getValuesArray();
+                adapter.addAll(itemsForAdapter);
                 stopLoading();
             }
         });
     }
 
     private void loadDictionaries() {
-        getDictionary(Rest.FLOWER_TYPES);
-        getDictionary(Rest.FLOWER_COLORS);
-        getDictionary(Rest.DAY_EVENTS);
-    }
-
-    @Override
-    protected void allProcessDone() {
-        if (dictionaryFlowerTypes.size() != 0 && adapterFlowerTypes == null) {
-            adapterFlowerTypes = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFlowerTypes.getValuesArray());
-            spinnerFlowerType.setAdapter(adapterFlowerTypes);
-        }
-
-        if (dictionaryFlowerColors.size() != 0 && adapterFlowerColors == null) {
-            adapterFlowerColors = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryFlowerColors.getValuesArray());
-            spinnerFlowerColor.setAdapter(adapterFlowerColors);
-        }
-
-        if (dictionaryDayEvents.size() != 0 && adapterDayEvents == null) {
-            adapterDayEvents = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, dictionaryDayEvents.getValuesArray());
-            spinnerDayEvent.setAdapter(adapterDayEvents);
-        }
+        getDictionary(Rest.FLOWER_TYPES, dictionaryFlowerTypes, adapterFlowerTypes);
+        getDictionary(Rest.FLOWER_COLORS, dictionaryFlowerColors, adapterFlowerColors);
+        getDictionary(Rest.DAY_EVENTS, dictionaryDayEvents, adapterDayEvents);
     }
 
     private void listBouquetsGetResponse(boolean reloadList) {
@@ -484,20 +469,33 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void loadPriceRange() {
-        startLoading(false);
-        WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                stopLoading();
-            }
+        PriceRange range = DataController.getInstance().getPriceRange();
+        if(range == null) {
+            startLoading(false);
+            WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
+                @Override
+                public void onRequestFailure(SpiceException spiceException) {
+                    stopLoading();
+                }
 
-            @Override
-            public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
-                priceRange = priceRangeResponse.getPriceRange();
-                initView();
-                stopLoading();
-            }
-        });
+                @Override
+                public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
+                    PriceRange loadedRange = priceRangeResponse.getPriceRange();
+                    if(loadedRange == null) {
+                        Log.e(TAG, "Failed to load price range");
+                    } else {
+                        showPriceRange(loadedRange);
+                    }
+                    stopLoading();
+                }
+            });
+        } else {
+            showPriceRange(range);
+        }
     }
 
+    private void showPriceRange(PriceRange priceRange) {
+        setSpinnerData(priceRange.getMinPrice(), priceRange.getMaxPrice());
+        DataController.getInstance().setPriceRange(priceRange);
+    }
 }

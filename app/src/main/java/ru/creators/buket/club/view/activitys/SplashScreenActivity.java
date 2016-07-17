@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
@@ -20,26 +22,19 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.transitionseverywhere.TransitionManager;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.gcm.QuickstartPreferences;
 import ru.creators.buket.club.gcm.RegistrationIntentService;
-import ru.creators.buket.club.model.PriceRange;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.Session;
-import ru.creators.buket.club.model.lists.ListBouquet;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.tools.PreferenceCache;
 import ru.creators.buket.club.view.custom.maskededittext.MaskedEditText;
 import ru.creators.buket.club.web.WebMethods;
-import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 import ru.creators.buket.club.web.response.PhoneCodeResponse;
-import ru.creators.buket.club.web.response.PriceRangeResponse;
 import ru.creators.buket.club.web.response.ProfileResponse;
 import ru.creators.buket.club.web.response.SessionResponse;
 
@@ -52,8 +47,6 @@ public class SplashScreenActivity extends BaseActivity {
 
     private Session session;
     private Profile profile;
-    private PriceRange priceRange;
-    private ListBouquet listBouquet;
 
     private Button buttonFlexible;
     private Button buttonFix;
@@ -65,8 +58,6 @@ public class SplashScreenActivity extends BaseActivity {
     private MaskedEditText editPhone;
 
     private String phone;
-
-    private Timer timer;
 
     @Override
     protected void onCreateInternal() {
@@ -116,9 +107,25 @@ public class SplashScreenActivity extends BaseActivity {
     };
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(gcmRegistrationDone);
         super.onPause();
+    }
+
+    private void queueShowResend() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+                textResendCode.setVisibility(View.VISIBLE);
+            }
+        }, 45000);
     }
 
     private void assignView() {
@@ -135,21 +142,23 @@ public class SplashScreenActivity extends BaseActivity {
     private void createSession() {
         startLoading(false);
         PreferenceCache.removeKey(this, PreferenceCache.KEY_SESSION);
-        WebMethods.getInstance().createSession(getUniqueDeviceId(), PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN), new RequestListener<SessionResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                stopLoading();
-            }
+        WebMethods.getInstance().createSession(getUniqueDeviceId(),
+                PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN),
+                new RequestListener<SessionResponse>() {
+                    @Override
+                    public void onRequestFailure(SpiceException spiceException) {
+                        stopLoading();
+                    }
 
-            @Override
-            public void onRequestSuccess(SessionResponse sessionResponse) {
-                Session session = sessionResponse.getSession();
-                saveSession(session);
-                SplashScreenActivity.this.session = session;
-                stopLoading();
-                getProfile();
-            }
-        });
+                    @Override
+                    public void onRequestSuccess(SessionResponse sessionResponse) {
+                        Session session = sessionResponse.getSession();
+                        saveSession(session);
+                        SplashScreenActivity.this.session = session;
+                        stopLoading();
+                        getProfile();
+                    }
+                });
     }
 
     private void assignListener() {
@@ -219,40 +228,6 @@ public class SplashScreenActivity extends BaseActivity {
 
     private void saveSession(Session session) {
         DataController.getInstance().setSession(session);
-        //PreferenceCache.putObject(this, PreferenceCache.KEY_SESSION, session);
-    }
-
-    private void loadBouquets() {
-        startLoading(false);
-        WebMethods.getInstance().loadBouquets(-1, -1, -1, -1, -1, 1, 200,
-                new RequestListener<BouquetsResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        stopLoading();
-                    }
-
-                    @Override
-                    public void onRequestSuccess(BouquetsResponse bouquetsResponse) {
-                        listBouquet = bouquetsResponse.getListBouquet();
-                        stopLoading();
-                    }
-                });
-    }
-
-    private void loadPriceRange() {
-        startLoading(false);
-        WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                stopLoading();
-            }
-
-            @Override
-            public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
-                priceRange = priceRangeResponse.getPriceRange();
-                stopLoading();
-            }
-        });
     }
 
     private void getProfile() {
@@ -273,11 +248,7 @@ public class SplashScreenActivity extends BaseActivity {
                 } else {
                     if (profile.getTypePriceIndex() != Profile.TYPE_PRICE_FIX) {
                         generateTypePrice();
-                    } else {
-                        loadBouquets();
-                        loadPriceRange();
                     }
-
                 }
                 stopLoading();
             }
@@ -302,12 +273,10 @@ public class SplashScreenActivity extends BaseActivity {
 
     @Override
     protected void allProcessDone() {
-        if (session != null && profile != null && priceRange != null && listBouquet != null) {
+        if (session != null && profile != null) {
             session.setAppMode(profile.getTypePriceIndex());
             saveSession(session);
             DataController.getInstance().setSession(session);
-            DataController.getInstance().setListBouquet(listBouquet);
-            DataController.getInstance().setPriceRange(priceRange);
             DataController.getInstance().setProfile(profile);
 
             if (profile.getPhone() != null && !profile.getPhone().isEmpty()) {
@@ -357,7 +326,7 @@ public class SplashScreenActivity extends BaseActivity {
 
                     @Override
                     public void onRequestSuccess(PhoneCodeResponse phoneCodeResponse) {
-                        startTimer();
+                        queueShowResend();
                         if (phoneCodeResponse.getPhoneVerification() != null &&
                                 phoneCodeResponse.getPhoneVerification().getCode() != null) {
                             Profile profile = new Profile();
@@ -391,21 +360,8 @@ public class SplashScreenActivity extends BaseActivity {
         );
     }
 
-    private void startTimer() {
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                TransitionManager.beginDelayedTransition(getCoordinatorLayout());
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textResendCode.setVisibility(View.VISIBLE);
-                    }
-                });
-            }
-        }, 45000);
+    private String getUniqueDeviceId() {
+        String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        return id;
     }
-
 }

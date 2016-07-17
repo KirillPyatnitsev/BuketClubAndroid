@@ -23,6 +23,9 @@ public class Shop {
     @JsonProperty(Fields.ADDRESS_LNG)
     private float addressLng;
 
+    @JsonProperty(Fields.ADDRESS_TEXT)
+    private String addressText;
+
     @JsonProperty(Fields.IMAGE_URL)
     private String imageUrl;
 
@@ -47,6 +50,10 @@ public class Shop {
 
     public float getAddressLng() {
         return addressLng;
+    }
+
+    public String getAddressText() {
+        return addressText;
     }
 
     public String getImageUrl() {

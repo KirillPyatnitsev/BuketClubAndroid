@@ -1,14 +1,9 @@
 package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -18,6 +13,7 @@ import java.util.TimerTask;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.tools.Helper;
@@ -26,7 +22,7 @@ import ru.creators.buket.club.web.response.DefaultResponse;
 
 public class PayDoneActivity extends BaseActivity {
 
-    private static final String TAG = "_PayDoneActivity";
+    private static final String TAG = ServerConfig.TAG_PREFIX + "PayDoneActivity";
 
     private TextView textViewPriceBouquet;
     private TextView textViewTitleBouquet;
@@ -37,12 +33,18 @@ public class PayDoneActivity extends BaseActivity {
 
     private ImageView imageViewBouquet;
 
-    private Timer timer;
+    private Timer timer = null;
+
+    private Order order;
 
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_pay_done);
+        order = DataController.getInstance().getOrder();
 
+        if(order == null) {
+            this.finish();
+        }
         assignView();
         sendOrder();
     }
@@ -67,7 +69,7 @@ public class PayDoneActivity extends BaseActivity {
                 goToOrderDetails();
                 // If you want to call Activity then call from here for 5 seconds it automatically call and your image disappear....
             }
-        }, 15000);
+        }, 5000);
     }
 
     private void goToOrderDetails() {
@@ -76,51 +78,44 @@ public class PayDoneActivity extends BaseActivity {
 
     private void sendOrder() {
 
-        RequestListener<DefaultResponse> listenerPath = new RequestListener<DefaultResponse>() {
+        WebMethods.getInstance().orderPatchRequest(order.getOrderForServer(), order.getId(), new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
-
+                Toast.makeText(PayDoneActivity.this, "Есть проблемы с размещением заказа!", Toast.LENGTH_LONG).show();
+                startClosingTimer();
             }
 
             @Override
             public void onRequestSuccess(DefaultResponse defaultResponse) {
                 startClosingTimer();
             }
-        };
+        });
 
-        WebMethods.getInstance().orderPathRequest(DataController.getInstance().getOrder().getOrderForServer(),
-                DataController.getInstance().getOrder().getId(), listenerPath);
+        int sizeIndex = order.getSizeIndex();
+        textViewPriceBouquet.setText(String.valueOf(order.getPrice()));
+        textViewTitleBouquet.setText(order.getBouquetItem().getBouquetNameBySize(sizeIndex));
+        textViewCompositionBouquet.setText(order.getBouquetItem().getBouquetDescriptionBySize(sizeIndex));
+        textViewOrderId.setText(getString(R.string.number_order, order.getId()));
 
-        Order order = DataController.getInstance().getOrder();
+        int size = this.getWindowWidth();
+        Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
+                .centerCrop().into(imageViewBouquet);
 
-        if (order != null) {
+        Helper.drawSizeOnImage(order.getSizeIndex(), imageViewBouquet);
 
-            int sizeIndex = order.getSizeIndex();
-
-            textViewPriceBouquet.setText(String.valueOf(order.getPrice()));
-            textViewTitleBouquet.setText(order.getBouquetItem().getBouquetNameBySize(sizeIndex));
-            textViewCompositionBouquet.setText(order.getBouquetItem().getBouquetDescriptionBySize(sizeIndex));
-            textViewOrderId.setText(getString(R.string.number_order, order.getId()));
-
-            int size = this.getWindowWidth();
-            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
-                    .centerCrop().into(imageViewBouquet);
-
-            Helper.drawSizeOnImage(order.getSizeIndex(), imageViewBouquet);
-
-            Shop shop = order.getShop();
-
-            if (shop != null) {
-                textViewShopAddress.setText(shop.getName());
-                textViewShopPhone.setText(shop.getPhone());
-            }
+        Shop shop = order.getShop();
+        if (shop != null) {
+            textViewShopAddress.setText(shop.getName());
+            textViewShopPhone.setText(shop.getPhone());
         }
 
     }
 
     @Override
     public void onBackPressed() {
-        timer.cancel();
+        if(timer != null) {
+            timer.cancel();
+        }
         goToOrderDetails();
     }
 

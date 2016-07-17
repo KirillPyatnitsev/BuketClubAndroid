@@ -8,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.util.Size;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -19,8 +18,6 @@ import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Bouquet;
-import ru.creators.buket.club.view.activitys.BaseActivity;
-import ru.creators.buket.club.web.WebMethods;
 
 /**
  * Created by mifkamaz on 07/12/15.
