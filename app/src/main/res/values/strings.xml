@@ -72,7 +72,7 @@
 
     <string name="text_successful_pay_exc">Успешная оплата!</string>
     <string name="text_thank_exc">Спасибо!</string>
-    <string name="text_invite_friend_and_exc">Пригласи друга и получи 500 рублей на следующий букет!</string>
+    <string name="text_invite_friend_and_exc">Пригласи друга \n и получите по 500 ₽ на следующий букет!</string>
 
 
     <string name="text_your_order">Ваш заказ</string>
@@ -168,7 +168,7 @@
     <string name="assembling_bouquet">Идет сборка букета</string>
     <string name="title_bouquet">Букет из нежных французских роз</string>
     <string name="composition_bouquet">Хризантема  - 2шт; Роза - 8шт; Гортензия - 2шт; Гербера мини - 5шт;</string>
-    <string name="number_order">Заказ №%1$s</string>
+    <string name="number_order">№%1$s</string>
 
     <string name="price_bouquet">5500</string>
     <string name="price_bouquet_currency">" руб."</string>

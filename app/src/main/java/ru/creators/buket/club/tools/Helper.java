@@ -334,7 +334,7 @@ public class Helper {
             picasso.setIndicatorsEnabled(true);
         }
         RequestCreator creator = picasso.load(full);
-        creator.placeholder(R.drawable.image_placeholder);
+        //creator.placeholder(R.drawable.image_placeholder);
         return creator;
     }
 

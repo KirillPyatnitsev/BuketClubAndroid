@@ -57,6 +57,7 @@ public class GridAdapterBouquet extends BaseAdapter {
         }
         int size = parent.getWidth() / 2;
         Helper.loadImage(context, getItem(position).getImageUrl()).resize(size, size)
+                .placeholder(R.drawable.image_placeholder)
                 .centerCrop().into(imageView);
         return imageView;
     }

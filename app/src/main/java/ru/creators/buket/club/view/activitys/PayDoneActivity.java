@@ -24,14 +24,14 @@ public class PayDoneActivity extends BaseActivity {
 
     private static final String TAG = ServerConfig.TAG_PREFIX + "PayDoneActivity";
 
-    private TextView textViewPriceBouquet;
-    private TextView textViewTitleBouquet;
-    private TextView textViewCompositionBouquet;
+    //private TextView textViewPriceBouquet;
+    //private TextView textViewTitleBouquet;
+    //private TextView textViewCompositionBouquet;
     private TextView textViewOrderId;
-    private TextView textViewShopAddress;
-    private TextView textViewShopPhone;
+    //private TextView textViewShopAddress;
+    //private TextView textViewShopPhone;
 
-    private ImageView imageViewBouquet;
+    //private ImageView imageViewBouquet;
 
     private Timer timer = null;
 
@@ -50,14 +50,14 @@ public class PayDoneActivity extends BaseActivity {
     }
 
     private void assignView() {
-        textViewPriceBouquet = getViewById(R.id.a_pd_price);
-        textViewTitleBouquet = getViewById(R.id.a_pd_title_bouquet);
-        textViewCompositionBouquet = getViewById(R.id.a_pd_composition_bouquet);
+        //textViewPriceBouquet = getViewById(R.id.a_pd_price);
+        //textViewTitleBouquet = getViewById(R.id.a_pd_title_bouquet);
+        //textViewCompositionBouquet = getViewById(R.id.a_pd_composition_bouquet);
         textViewOrderId = getViewById(R.id.a_pd_id_order);
-        textViewShopAddress = getViewById(R.id.a_pd_shop_address);
-        textViewShopPhone = getViewById(R.id.a_pd_shop_phone);
+        //textViewShopAddress = getViewById(R.id.a_pd_shop_address);
+        //textViewShopPhone = getViewById(R.id.a_pd_shop_phone);
 
-        imageViewBouquet = getViewById(R.id.a_pd_image_bouquet);
+        //imageViewBouquet = getViewById(R.id.a_pd_image_bouquet);
     }
 
     private void startClosingTimer() {
@@ -92,22 +92,21 @@ public class PayDoneActivity extends BaseActivity {
         });
 
         int sizeIndex = order.getSizeIndex();
-        textViewPriceBouquet.setText(String.valueOf(order.getPrice()));
-        textViewTitleBouquet.setText(order.getBouquetItem().getBouquetNameBySize(sizeIndex));
-        textViewCompositionBouquet.setText(order.getBouquetItem().getBouquetDescriptionBySize(sizeIndex));
+        //textViewPriceBouquet.setText(String.valueOf(order.getPrice()));
+        //textViewTitleBouquet.setText(order.getBouquetItem().getBouquetNameBySize(sizeIndex));
+        //textViewCompositionBouquet.setText(order.getBouquetItem().getBouquetDescriptionBySize(sizeIndex));
         textViewOrderId.setText(getString(R.string.number_order, order.getId()));
 
-        int size = this.getWindowWidth();
-        Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
-                .centerCrop().into(imageViewBouquet);
+        //int size = this.getWindowWidth();
+        //Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
+        //        .centerCrop().into(imageViewBouquet);
+        //Helper.drawSizeOnImage(order.getSizeIndex(), imageViewBouquet);
 
-        Helper.drawSizeOnImage(order.getSizeIndex(), imageViewBouquet);
-
-        Shop shop = order.getShop();
-        if (shop != null) {
-            textViewShopAddress.setText(shop.getName());
-            textViewShopPhone.setText(shop.getPhone());
-        }
+        //Shop shop = order.getShop();
+        //if (shop != null) {
+        //    textViewShopAddress.setText(shop.getName());
+        //    textViewShopPhone.setText(shop.getPhone());
+        //}
 
     }
 
