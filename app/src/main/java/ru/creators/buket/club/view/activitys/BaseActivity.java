@@ -34,18 +34,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private ImageView imageLoadingBlur;
     private int runningProcessCount = 0;
 
-    private static int widthScreen;
-    private static int heightcreen;
-
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        widthScreen = displayMetrics.widthPixels;
-        heightcreen = displayMetrics.heightPixels;
 
         DataController.getInstance().setBaseActivity(this);
 
@@ -59,14 +50,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
-    }
-
-    public static int getWidthScreen() {
-        return widthScreen;
-    }
-
-    public static int getHeightcreen() {
-        return heightcreen;
     }
 
     protected abstract void onCreateInternal();
@@ -209,6 +192,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public void pushMessageReceived(String message) {
         showSnackBar(message);
+    }
+
+    protected int getWindowWidth() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int width = displayMetrics.widthPixels;
+        return width;
     }
 
     /**

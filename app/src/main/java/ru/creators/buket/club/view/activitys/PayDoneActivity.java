@@ -102,7 +102,9 @@ public class PayDoneActivity extends BaseActivity {
             textViewCompositionBouquet.setText(order.getBouquetItem().getBouquetDescriptionBySize(sizeIndex));
             textViewOrderId.setText(getString(R.string.number_order, order.getId()));
 
-            Helper.loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageViewBouquet);
+            int size = this.getWindowWidth();
+            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
+                    .centerCrop().into(imageViewBouquet);
 
             Helper.drawSizeOnImage(order.getSizeIndex(), imageViewBouquet);
 

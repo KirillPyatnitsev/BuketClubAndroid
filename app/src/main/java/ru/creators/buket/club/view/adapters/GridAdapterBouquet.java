@@ -68,10 +68,9 @@ public class GridAdapterBouquet extends BaseAdapter {
         } else {
             imageView = (ImageView) convertView;
         }
-
-//        WebMethods.getInstance().loadImage(context,
-//                Helper.addServerPrefix(getItem(position).getImageUrl()), imageView);
-        Helper.loadImage(context, Helper.addServerPrefix(getItem(position).getImageUrl()), imageView);
+        int size = parent.getWidth() / 2;
+        Helper.loadImage(context, getItem(position).getImageUrl()).resize(size, size)
+                .centerCrop().into(imageView);
         return imageView;
     }
 

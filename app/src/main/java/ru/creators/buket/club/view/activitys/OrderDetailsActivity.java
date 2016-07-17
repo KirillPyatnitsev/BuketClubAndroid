@@ -126,7 +126,9 @@ public class OrderDetailsActivity extends BaseActivity {
         this.order = order;
 
         if (order.getBouquetItem() != null) {
-            Helper.loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+            int size = this.getWindowWidth();
+            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, 0)
+                    .into(imageBouquet);
         }
 
         String strPrice = Helper.intToPriceString(order.getPrice(), "");
@@ -139,8 +141,6 @@ public class OrderDetailsActivity extends BaseActivity {
         //linearPickup.setVisibility(View.VISIBLE);
 
         Shop shop = order.getShop();
-
-//        Log.d(TAG, shop.toString());
         forViews(linearOnMap, textAddress, textPhone)
                 .setVisibility(shop == null ? View.INVISIBLE : View.VISIBLE);
         textAddress.setText(shop == null ? "--" : shop.getName());

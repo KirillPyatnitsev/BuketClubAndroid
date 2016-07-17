@@ -8,16 +8,19 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.util.Size;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
+import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Bouquet;
 import ru.creators.buket.club.view.activitys.BaseActivity;
+import ru.creators.buket.club.web.WebMethods;
 
 /**
  * Created by mifkamaz on 07/12/15.
@@ -326,26 +329,16 @@ public class Helper {
         return phone.replaceAll("[^\\d.]", "").length() == 11;
     }
 
-    public static void loadImage(Context context, String url, final ImageView imageView) {
-        loadImage(context, url, imageView, true);
-    }
-
-    public static void loadImage(Context context, String url, final ImageView imageView, boolean downscale) {
-
-        // TODO: Decouple from BaseActivity
-        int widthImage = BaseActivity.getWidthScreen();
-
-        RequestCreator picasso = Picasso.with(context)
-                .load(url);
-        if (downscale) {
-            // TODO: remove the magic number
-            picasso.resize(widthImage, (int) (widthImage*1.25)).onlyScaleDown();
+    public static RequestCreator loadImage(Context context, String url) {
+        String full = Helper.addServerPrefix(url);
+        Picasso picasso = Picasso.with(context);
+        if(BuildConfig.DEBUG) {
+            picasso.setLoggingEnabled(true);
+            picasso.setIndicatorsEnabled(true);
         }
-        picasso.into(imageView);
-        imageView.requestLayout();
+        RequestCreator creator = picasso.load(full);
+        return creator;
     }
-
-
 
     public static Bitmap drawableToBitmap (Drawable drawable) {
         Bitmap bitmap = null;

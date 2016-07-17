@@ -72,8 +72,9 @@ public class ListOrderAdapter extends BaseAdapter {
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
             Shop shop = order.getShop();
             if (shop != null && shop.getImageUrl() != null) {
-                //WebMethods.getInstance().loadImage(context, Helper.addServerPrefix(order.getShop().getImageUrl()), holder.imageArtistLogo);
-                Helper.loadImage(context, Helper.addServerPrefix(shop.getImageUrl()), holder.imageArtistLogo);
+                int size = parent.getWidth() / 3;
+                Helper.loadImage(context, shop.getImageUrl()).resize(size, size).centerCrop()
+                        .into(holder.imageArtistLogo);
             }
         }
 

@@ -447,7 +447,9 @@ public class ChoseShopActivity extends BaseActivity implements
         imageBack.setVisibility(View.VISIBLE);
 
         if (order.getBouquetItem() != null) {
-            Helper.loadImage(this, Helper.addServerPrefix(order.getBouquetItem().getImageUrl()), imageBouquet);
+            int size = this.getWindowWidth();
+            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, size)
+                    .centerCrop().into(imageBouquet);
         }
 
         listAnswerFlex = new ListAnswerFlex();

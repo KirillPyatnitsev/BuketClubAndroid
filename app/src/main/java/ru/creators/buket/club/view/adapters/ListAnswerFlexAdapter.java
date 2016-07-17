@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.AnswerFlex;
+import ru.creators.buket.club.model.Shop;
 import ru.creators.buket.club.model.lists.ListAnswerFlex;
 import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
@@ -69,13 +70,11 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
         AnswerFlex answerFlex = getItem(position);
 
         if (answerFlex != null) {
-            if (answerFlex.getShop().getImageUrl() != null) {
-//                WebMethods.getInstance().loadImage(context,
-//                        Helper.addServerPrefix(answerFlex.getShop().getImageUrl()),
-//                        holder.imageArtistLogo);
-                                Helper.loadImage(context,
-                        Helper.addServerPrefix(answerFlex.getShop().getImageUrl()),
-                        holder.imageArtistLogo);
+            Shop shop = answerFlex.getShop();
+            if (shop != null && shop.getImageUrl() != null) {
+                int size = parent.getWidth();
+                Helper.loadImage(context, shop.getImageUrl()).resize(size, size)
+                        .centerCrop().into(holder.imageArtistLogo);
             }
 
             holder.textArtistName.setText(answerFlex.getShop().getName());
