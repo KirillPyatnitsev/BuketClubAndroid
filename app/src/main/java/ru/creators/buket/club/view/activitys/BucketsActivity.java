@@ -180,8 +180,8 @@ public class BucketsActivity extends BaseActivity {
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
                 int min = (int) minValue;
                 int max = (int) maxValue;
-                textCurrentCostMin.setText(Helper.intToPriceString(min));
-                textCurrentCostMax.setText(Helper.intToPriceString(max));
+                textCurrentCostMin.setText(Helper.intToPriceString(min, BucketsActivity.this));
+                textCurrentCostMax.setText(Helper.intToPriceString(max, BucketsActivity.this));
                 if (currentMaxPrice != max || currentMinPrice != min) {
                     currentMaxPrice = max;
                     currentMinPrice = min;
@@ -313,11 +313,11 @@ public class BucketsActivity extends BaseActivity {
         rangeSeekBarCost.setSelectedMinValue(min);
         rangeSeekBarCost.setSelectedMaxValue(max);
 
-        textCostMix.setText(Helper.intToPriceString(min));
-        textCostMax.setText(Helper.intToPriceString(max));
+        textCostMix.setText(Helper.intToPriceString(min, this));
+        textCostMax.setText(Helper.intToPriceString(max, this));
 
-        textCurrentCostMin.setText(Helper.intToPriceString(min));
-        textCurrentCostMax.setText(Helper.intToPriceString(max));
+        textCurrentCostMin.setText(Helper.intToPriceString(min, this));
+        textCurrentCostMax.setText(Helper.intToPriceString(max, this));
     }
 
     @Override

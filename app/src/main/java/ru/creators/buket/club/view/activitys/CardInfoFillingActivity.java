@@ -65,7 +65,7 @@ public class CardInfoFillingActivity extends BaseActivity {
     }
 
     private void initView() {
-        textBouquetCost.setText(Helper.getStringWithCostPrefix(order.getPrice(), this));
+        textBouquetCost.setText(Helper.intToPriceString(order.getPrice(), this));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
     }
 

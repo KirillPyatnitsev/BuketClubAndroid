@@ -72,7 +72,7 @@
 
     <string name="text_successful_pay_exc">Успешная оплата!</string>
     <string name="text_thank_exc">Спасибо!</string>
-    <string name="text_invite_friend_and_exc">Пригласи друга \n и получите по 500 ₽ на следующий букет!</string>
+    <string name="text_invite_friend_and_exc">Пригласи друга\nи получите по 500 руб. на следующий букет!</string>
 
 
     <string name="text_your_order">Ваш заказ</string>
@@ -84,7 +84,7 @@
     <string name="text_rate_bouquet_exp">Оцените букет!</string>
     <string name="text_leave_a_comment">Оставьте комментарий</string>
 
-    <string name="text_prefix_ruble">₽</string>
+    <string name="text_prefix_ruble"> руб.</string>
 
     <string name="text_time_soon">Ближайшее</string>
     <string name="text_time_soon_standalone">Ближайшее время</string>

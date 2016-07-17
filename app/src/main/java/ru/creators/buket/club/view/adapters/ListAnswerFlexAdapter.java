@@ -77,7 +77,7 @@ public class ListAnswerFlexAdapter extends BaseAdapter {
             }
 
             holder.textArtistName.setText(answerFlex.getShop().getName());
-            holder.textBouquetCost.setText(Helper.getStringWithCostPrefix(answerFlex.getPrice(), context));
+            holder.textBouquetCost.setText(Helper.intToPriceString(answerFlex.getPrice(), context));
             holder.ratingBar.setRating(answerFlex.getShop().getCachedRating());
             holder.textDistance.setText(distToString(answerFlex.getDistance()));
         }

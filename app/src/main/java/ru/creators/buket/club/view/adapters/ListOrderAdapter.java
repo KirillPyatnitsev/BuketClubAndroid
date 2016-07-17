@@ -67,7 +67,7 @@ public class ListOrderAdapter extends BaseAdapter {
 
         if (order != null && holder != null) {
             holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
-            holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice()));
+            holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice(), context));
             holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
             Shop shop = order.getShop();
             if (shop != null && shop.getImageUrl() != null) {

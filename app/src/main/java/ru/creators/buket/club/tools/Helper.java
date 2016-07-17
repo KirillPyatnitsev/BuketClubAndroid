@@ -23,14 +23,10 @@ import ru.creators.buket.club.model.Bouquet;
  * Created by mifkamaz on 07/12/15.
  */
 public class Helper {
-    public static String getStringWithCostPrefix(int cost, Context context) {
-        return String.valueOf(cost).concat(context.getString(R.string.text_prefix_ruble));
-    }
 
-    public static final String RUBLE_SUFFIX = "\u20BD";
-
-    public static String intToPriceString(int price) {
-        return intToPriceString(price, RUBLE_SUFFIX);
+    public static String intToPriceString(int price, Context context) {
+        final String suffix = context.getString(R.string.text_prefix_ruble);
+        return intToPriceString(price, suffix);
     }
 
     public static String intToPriceString(int price, String suffix) {

@@ -150,9 +150,9 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void initView() {
         int size = this.getWindowWidth();
-        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, (int)(size * 1.2))
+        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, 0)
                 .centerCrop().into(imageBouquet);
-        textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
+        textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice(), this));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
     }
 
@@ -164,13 +164,13 @@ public class BucketDetalisActivity extends BaseActivity {
             currentSize = sizeId;
             switch (sizeId) {
                 case Bouquet.SIZE_LITTLE:
-                    textPrice.setText(Helper.intToPriceString(bouquet.getSmallSizePrice()));
+                    textPrice.setText(Helper.intToPriceString(bouquet.getSmallSizePrice(), this));
                     break;
                 case Bouquet.SIZE_MEDIUM:
-                    textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice()));
+                    textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice(), this));
                     break;
                 case Bouquet.SIZE_GREAT:
-                    textPrice.setText(Helper.intToPriceString(bouquet.getLargeSizePrice()));
+                    textPrice.setText(Helper.intToPriceString(bouquet.getLargeSizePrice(), this));
                     break;
             }
         }
