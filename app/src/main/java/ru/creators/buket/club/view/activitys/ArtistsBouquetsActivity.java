@@ -67,17 +67,13 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         imageBack.setVisibility(View.VISIBLE);
     }
 
+    // TODO: Combine openFilter/closeFilter into single method toggleFilter(on/off)
     private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open),
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 
@@ -93,12 +89,12 @@ public class ArtistsBouquetsActivity extends BaseActivity {
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_ab_close), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
+        backgroundImageLayoutParams.setMargins( // TODO: either leave this one or the above line
                 getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
                 getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_ab_close),
                 getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+                0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 

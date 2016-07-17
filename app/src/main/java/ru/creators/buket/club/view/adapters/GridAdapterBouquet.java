@@ -20,22 +20,13 @@ public class GridAdapterBouquet extends BaseAdapter {
 
     private ListBouquet listBouquet;
     private Context context;
-    private LayoutInflater layoutInflater;
 
-    private int screenWidth;
     private int imageSize;
-
-    private int imageMargin;
 
     public GridAdapterBouquet(ListBouquet listBouquet, Context context, int screenWidth) {
         this.listBouquet = listBouquet;
         this.context = context;
-        this.screenWidth = screenWidth;
-
-        imageMargin = context.getResources().getDimensionPixelOffset(R.dimen.margin_smaller);
-
         imageSize = screenWidth / 2;
-//        imageSize = screenWidth/2 - imageMargin;
     }
 
     @Override
@@ -59,11 +50,8 @@ public class GridAdapterBouquet extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(context);
-
-
             imageView.setLayoutParams(new GridView.LayoutParams(imageSize, imageSize));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
         } else {
             imageView = (ImageView) convertView;
         }

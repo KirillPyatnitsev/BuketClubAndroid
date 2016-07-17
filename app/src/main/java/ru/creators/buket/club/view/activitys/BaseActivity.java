@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected CoordinatorLayout coordinatorLayout;
 
     private RelativeLayout relativeLoading;
-    private ImageView imageLoadingBlur;
+    //private ImageView imageLoadingBlur;
     private int runningProcessCount = 0;
 
     @Override
@@ -48,7 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    protected final void onDestroy() {
         DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
         Log.d(TAG, "onDestroy: " + this.getClass().getName());
@@ -56,7 +56,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract void onCreateInternal();
 
-    protected <T extends View> T getViewById(int id) {
+    protected final <T extends View> T getViewById(int id) {
         return (T) findViewById(id);
     }
 
@@ -66,19 +66,18 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected abstract int getCoordinatorViewId();
 
-    protected CoordinatorLayout getCoordinatorLayout() {
+    protected final CoordinatorLayout getCoordinatorLayout() {
         if (coordinatorLayout == null) {
             assignRootView();
         }
-
         return coordinatorLayout;
     }
 
-    public void showSnackBar(int stringResId) {
+    public final void showSnackBar(int stringResId) {
         showSnackBar(getString(stringResId));
     }
 
-    public void showSnackBar(String message) {
+    public final void showSnackBar(String message) {
         Snackbar.make(getCoordinatorLayout(), message, Snackbar.LENGTH_LONG).show();
     }
 
@@ -90,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return 0;
     }
 
-    protected void showBlur() {
+    protected final void showBlur() {
 //        if (getImageBlurId()!=0 && getContentContainerId()!=0){
 //            Bitmap blur = Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20);
 //            ImageView imageViewBlur = getViewById(getImageBlurId());
@@ -103,16 +102,15 @@ public abstract class BaseActivity extends AppCompatActivity {
 //        }
     }
 
-    protected void hideBlur() {
-        if (getImageBlurId() != 0 && getContentContainerId() != 0) {
-            ImageView imageViewBlur = getViewById(getImageBlurId());
-            View viewForHide = getViewById(getContentContainerId());
-
-            TransitionManager.beginDelayedTransition(coordinatorLayout);
-            viewForHide.setVisibility(View.VISIBLE);
-            imageViewBlur.setVisibility(View.GONE);
-
-        }
+    protected final void hideBlur() {
+//        if (getImageBlurId() != 0 && getContentContainerId() != 0) {
+//            ImageView imageViewBlur = getViewById(getImageBlurId());
+//            View viewForHide = getViewById(getContentContainerId());
+//
+//            TransitionManager.beginDelayedTransition(coordinatorLayout);
+//            viewForHide.setVisibility(View.VISIBLE);
+//            imageViewBlur.setVisibility(View.GONE);
+//        }
     }
 
     private RelativeLayout getRelativeLoading() {
@@ -122,30 +120,14 @@ public abstract class BaseActivity extends AppCompatActivity {
         return relativeLoading;
     }
 
-    private ImageView getImageLoadingBlur() {
-        if (imageLoadingBlur == null) {
-            imageLoadingBlur = getViewById(R.id.i_p_image_blur);
-        }
-        return imageLoadingBlur;
-    }
-
-    protected void startLoading() {
-        startLoading(false);
-    }
-
-
-    protected void startLoading(boolean showBlur) {
-        showBlur = false;
+    protected final void startLoading() {
         if (runningProcessCount == 0) {
             getRelativeLoading().setVisibility(View.VISIBLE);
-            if (showBlur) {
-                getImageLoadingBlur().setImageBitmap(Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20));
-            }
         }
         runningProcessCount++;
     }
 
-    public void stopLoading() {
+    public final void stopLoading() {
         if (runningProcessCount != 0) {
             runningProcessCount--;
         }
@@ -156,10 +138,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void allProcessDone() {
-
+        // Override to perform actions when all requests are done
     }
 
-    protected ViewComposite forViews(View... views) {
+    protected final ViewComposite forViews(View... views) {
         return new ViewComposite(views);
     }
 
@@ -180,7 +162,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onPause();
     }
 
-    public boolean isOnline() {
+    public final boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();

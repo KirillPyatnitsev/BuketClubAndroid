@@ -178,11 +178,13 @@ public class BucketsActivity extends BaseActivity {
         rangeSeekBarCost.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener() {
             @Override
             public void onRangeSeekBarValuesChanged(RangeSeekBar bar, Object minValue, Object maxValue) {
-                textCurrentCostMin.setText(Helper.intToPriceString((int) minValue));
-                textCurrentCostMax.setText(Helper.intToPriceString((int) maxValue));
-                if (currentMaxPrice != (int) maxValue || currentMinPrice != (int) minValue) {
-                    currentMaxPrice = (int) maxValue;
-                    currentMinPrice = (int) minValue;
+                int min = (int) minValue;
+                int max = (int) maxValue;
+                textCurrentCostMin.setText(Helper.intToPriceString(min));
+                textCurrentCostMax.setText(Helper.intToPriceString(max));
+                if (currentMaxPrice != max || currentMinPrice != min) {
+                    currentMaxPrice = max;
+                    currentMinPrice = min;
                     listBouquetsGetResponse(true);
                 }
             }
@@ -331,7 +333,7 @@ public class BucketsActivity extends BaseActivity {
     private void getDictionary(final String dictionaryType,
                                final ListDictionaryItem list,
                                final ArrayAdapter<String> adapter) {
-        startLoading(false);
+        startLoading();
         WebMethods.getInstance().getDictionary(dictionaryType, new RequestListener<DictionaryResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -350,11 +352,13 @@ public class BucketsActivity extends BaseActivity {
                 } else {
                     throw new AppException("Unknown dictionary received: " + dictionaryType);
                 }
-                list.clear();
-                list.addAll(loadedItems);
-                adapter.clear();
-                String[] itemsForAdapter = loadedItems.getValuesArray();
-                adapter.addAll(itemsForAdapter);
+                if(!loadedItems.isEmpty()) {
+                    list.clear();
+                    list.addAll(loadedItems);
+                    adapter.clear();
+                    String[] itemsForAdapter = loadedItems.getValuesArray();
+                    adapter.addAll(itemsForAdapter);
+                }
                 stopLoading();
             }
         });
@@ -381,7 +385,7 @@ public class BucketsActivity extends BaseActivity {
 
     private void updateListBouquet(int page) {
         if (!swipeRefreshLayout.isRefreshing()) {
-            startLoading(false);
+            startLoading();
         }
         WebMethods.getInstance().loadBouquets(
                 currentFlowerTypeId == -1 ? currentFlowerTypeId : dictionaryFlowerTypes.getItemId(currentFlowerTypeId),
@@ -404,11 +408,8 @@ public class BucketsActivity extends BaseActivity {
                         pagination = bouquetsResponse.getMeta().getPagination();
                         listBouquet.addAll(bouquetsResponse.getListBouquet());
 
-                        if (listBouquet.isEmpty()) {
-                            textNotFindBouquets.setVisibility(View.VISIBLE);
-                        } else {
-                            textNotFindBouquets.setVisibility(View.GONE);
-                        }
+                        textNotFindBouquets.setVisibility(listBouquet.isEmpty()?
+                                View.VISIBLE: View.GONE);
 
                         gridAdapterBouquet.notifyDataSetChanged();
 
@@ -427,7 +428,7 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void getOrders() {
-        startLoading(false);
+        startLoading();
         WebMethods.getInstance().getOrders(1, 100,
                 new RequestListener<OrdersResponse>() {
                     @Override
@@ -471,7 +472,7 @@ public class BucketsActivity extends BaseActivity {
     private void loadPriceRange() {
         PriceRange range = DataController.getInstance().getPriceRange();
         if(range == null) {
-            startLoading(false);
+            startLoading();
             WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
                 @Override
                 public void onRequestFailure(SpiceException spiceException) {

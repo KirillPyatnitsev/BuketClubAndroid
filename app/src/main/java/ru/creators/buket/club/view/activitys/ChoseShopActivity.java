@@ -519,24 +519,27 @@ public class ChoseShopActivity extends BaseActivity implements
     }
 
     private void updateArtistsList() {
-        if (!swipeRefreshLayout.isRefreshing())
-            startLoading(false);
+        if (!swipeRefreshLayout.isRefreshing()) {
+            startLoading();
+        }
         WebMethods.getInstance().getFlexAnswers(order.getId(),
                 new RequestListener<ListAnswerFlexResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
 
                     @Override
                     public void onRequestSuccess(ListAnswerFlexResponse listAnswerFlexResponse) {
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                         listAnswerFlex.clear();
                         listAnswerFlex.addAll(listAnswerFlexResponse.getListAnswerFlex());
                         Collections.sort(listAnswerFlex, selectedAnswersComporator);

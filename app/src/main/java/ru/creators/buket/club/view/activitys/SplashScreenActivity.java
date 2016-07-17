@@ -140,7 +140,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void createSession() {
-        startLoading(false);
+        startLoading();
         PreferenceCache.removeKey(this, PreferenceCache.KEY_SESSION);
         WebMethods.getInstance().createSession(getUniqueDeviceId(),
                 PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN),
@@ -231,7 +231,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void getProfile() {
-        startLoading(false);
+        startLoading();
         WebMethods.getInstance().getProfile(new RequestListener<ProfileResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {
@@ -256,7 +256,7 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void generateTypePrice() {
-        startLoading(false);
+        startLoading();
         WebMethods.getInstance().generateTypePrice(new RequestListener<DefaultResponse>() {
             @Override
             public void onRequestFailure(SpiceException spiceException) {

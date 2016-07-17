@@ -463,7 +463,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     private void sendOrder(final String phone, final String code, final AlertDialog alertDialog, final EditText input) {
-        startLoading(false);
+        startLoading();
 
         DataController.getInstance().getOrder().setCode(code);
 
@@ -493,7 +493,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     private void sendOrder() {
-        startLoading(false);
+        startLoading();
 
         WebMethods.getInstance().sendOrder(DataController.getInstance().getOrder().getOrderForServer(),
                 new RequestListener<OrderResponse>() {

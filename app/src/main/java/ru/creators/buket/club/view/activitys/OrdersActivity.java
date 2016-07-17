@@ -130,24 +130,27 @@ public class OrdersActivity extends BaseActivity {
     }
 
     private void getOrders(int page) {
-        if (!swipeRefreshLayout.isRefreshing())
-            startLoading(false);
+        if (!swipeRefreshLayout.isRefreshing()) {
+            startLoading();
+        }
         WebMethods.getInstance().getOrders(page, Pagination.PER_PAGE,
                 new RequestListener<OrdersResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                     }
 
                     @Override
                     public void onRequestSuccess(OrdersResponse ordersResponse) {
-                        if (!swipeRefreshLayout.isRefreshing())
+                        if (!swipeRefreshLayout.isRefreshing()) {
                             stopLoading();
-                        else
+                        } else {
                             swipeRefreshLayout.setRefreshing(false);
+                        }
                         listOrder.addAll(ordersResponse.getListOrder());
                         listOrderAdapter.notifyDataSetChanged();
 

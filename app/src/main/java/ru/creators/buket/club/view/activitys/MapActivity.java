@@ -27,8 +27,10 @@ import com.transitionseverywhere.TransitionManager;
 import java.io.IOException;
 import java.util.List;
 
+import ru.creators.buket.club.AppException;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.model.Order;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
@@ -48,7 +50,6 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     private Button buttonNext;
 
     private TextView textActionBar;
-
 
     private LatLng currentLatLng = null;
     private GeocoderTask geocoderTask = new GeocoderTask();
@@ -77,11 +78,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
         imageActionBarBackground = getViewById(R.id.a_m_image_action_bar_background);
         viewActonBarFilter = getViewById(R.id.a_m_view_filter);
-
         textActionBar = getViewById(R.id.a_m_text_action_bar_title);
-
         buttonNext = getViewById(R.id.a_m_button_next);
-
         editAddress = getViewById(R.id.i_mf_edit_address);
     }
 
@@ -134,15 +132,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     @Override
     public void onMapClick(LatLng latLng) {
         mMap.clear();
-
-        MarkerOptions options = new MarkerOptions().position(latLng);
-
         address = getAddressFromLatLng(latLng);
-
         textActionBar.setText(address);
-
         currentLatLng = latLng;
 
+        MarkerOptions options = new MarkerOptions().position(latLng);
         options.title(address);
         options.icon(BitmapDescriptorFactory.defaultMarker());
         mMap.addMarker(options);
@@ -164,35 +158,30 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         try {
             List<Address> addresses = geocoder
                     .getFromLocation(latLng.latitude, latLng.longitude, 1);
-            if (addresses.get(0).getAddressLine(0) != null) {
-                address = addresses.get(0).getAddressLine(0);
-            } else if (addresses.get(0).getThoroughfare() != null) {
-                address = addresses.get(0).getThoroughfare();
+            Address addr = addresses.get(0);
+            if (addr.getAddressLine(0) != null) {
+                address = addr.getAddressLine(0);
+            } else if (addr.getThoroughfare() != null) {
+                address = addr.getThoroughfare();
             } else {
-                address = addresses.get(0).getAdminArea();
+                address = addr.getAdminArea();
             }
         } catch (IOException e) {
         }
-
         return address;
     }
 
+    // TODO: Combine openFilter/closeFilter into single method toggleFilter(on/off)
     private void openFilter() {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
         showBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open),
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 
         viewActonBarFilter.setVisibility(View.VISIBLE);
-
         imageOpenFilter.setVisibility(View.GONE);
         imageCloseFilter.setVisibility(View.VISIBLE);
     }
@@ -202,28 +191,22 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         hideBlur();
         RelativeLayout.LayoutParams backgroundImageLayoutParams =
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_m_close),
-                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
-                0
-        );
+        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_m_close), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
         imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
 
         viewActonBarFilter.setVisibility(View.GONE);
-
         imageOpenFilter.setVisibility(View.VISIBLE);
         imageCloseFilter.setVisibility(View.GONE);
     }
 
     @Override
-    protected int getContentContainerId() {
+    protected final int getContentContainerId() {
         return R.id.a_m_relative_content_container;
     }
 
     @Override
-    protected int getImageBlurId() {
+    protected final int getImageBlurId() {
         return R.id.a_m_blur_image;
     }
 
@@ -249,9 +232,14 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     }
 
     private void appendOrderInfo() {
-        DataController.getInstance().getOrder().setAddress(address);
-        DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
-        DataController.getInstance().getOrder().setAddressLat(currentLatLng.latitude);
+        Order order = DataController.getInstance().getOrder();
+        if(order == null) {
+            throw new AppException("Order does not exist");
+        } else {
+            order.setAddress(address);
+            order.setAddressLat(currentLatLng.latitude);
+            order.setAddressLat(currentLatLng.latitude);
+        }
     }
 
     private void goToDeliveryInfoFillingAct() {
@@ -260,78 +248,44 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
 
     private class GeocoderTask extends AsyncTask<String, Void, List> {
 
-        protected List addresses;
-
         @Override
         protected List doInBackground(String... locationName) {
-// Creating an instance of Geocoder class
-
+            // Creating an instance of Geocoder class
             Geocoder geocoder = new Geocoder(getBaseContext());
-
-            List
-
-                    addresses = null;
+            List addresses = null;
             try {
-
-// Getting a maximum of 3 Address that matches the input text
-
+                // Getting a maximum of 3 Address that matches the input text
                 addresses = geocoder.getFromLocationName(locationName[0], 3);
-
             } catch (IOException e) {
-
                 e.printStackTrace();
-
             }
-
             return addresses;
-
         }
 
         @Override
-
         protected void onPostExecute(List addresses) {
             if (addresses == null || addresses.size() == 0) {
-
                 Toast.makeText(getBaseContext(), "No Location found", Toast.LENGTH_SHORT).show();
-
             }
-
-// Clears all the existing markers on the map
-
-//            mMap.clear();
-
-// Adding Markers on Google Map for each matching address
-
+            // Clears all the existing markers on the map
+            //mMap.clear();
+            // Adding Markers on Google Map for each matching address
             for (int i = 0; i < addresses.size(); i++) {
-
                 Address address = (Address) addresses.get(i);
-
-// Creating an instance of GeoPoint, to display in Google Map
-
+                // Creating an instance of GeoPoint, to display in Google Map
                 latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
                 String addressText = String.format("%s, %s",
-
-                        address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
-
-                        address.getCountryName());
-
+                address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : "",
+                address.getCountryName());
                 Log.d("logging", "address:" + addressText);
-
                 markerOptions = new MarkerOptions();
-
                 markerOptions.position(latLng);
-
                 markerOptions.title(addressText);
-
                 mMap.addMarker(markerOptions);
-
-// Locate the first location
-
-                if (i == 0)
-
+                // Locate the first location
+                if (i == 0) {
                     mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-
+                }
             }
 
         }
