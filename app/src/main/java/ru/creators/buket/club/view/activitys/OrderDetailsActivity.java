@@ -127,7 +127,8 @@ public class OrderDetailsActivity extends BaseActivity {
 
         if (order.getBouquetItem() != null) {
             int size = this.getWindowWidth();
-            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, 0)
+            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, (int) (size * 1.2))
+                    .centerCrop()
                     .into(imageBouquet);
         }
 
@@ -143,8 +144,16 @@ public class OrderDetailsActivity extends BaseActivity {
         Shop shop = order.getShop();
         forViews(linearOnMap, textAddress, textPhone)
                 .setVisibility(shop == null ? View.INVISIBLE : View.VISIBLE);
-        textAddress.setText(shop == null ? "--" : shop.getName());
-        textPhone.setText(shop == null ? "--" : shop.getPhone());
+
+        String nameAndAddress = "";
+        if(shop != null) {
+            nameAndAddress = shop.getName();
+            if (shop.getAddressText() != null) {
+                nameAndAddress += " " + shop.getAddressText();
+            }
+        }
+        textAddress.setText(nameAndAddress);
+        textPhone.setText(shop == null ? "" : shop.getPhone());
         //WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
 
         String deliveryTime = order.getTimeDelivery();
