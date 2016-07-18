@@ -9,6 +9,7 @@ import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpStatusCodes;
 import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpiceRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -47,8 +48,8 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
     public BaseRequest(Class<T> clazz) {
         super(clazz);
         DataController instance = DataController.getInstance();
-        Session session = instance == null? null: instance.getSession();
-        this.accessToken = session == null? null: session.getAccessToken();
+        Session session = instance == null ? null : instance.getSession();
+        this.accessToken = session == null ? null : session.getAccessToken();
     }
 
     protected final Uri.Builder buildUri() {
@@ -107,7 +108,7 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
 
         int requestId = nextRequestIndex.getAndIncrement();
         Log.d(TAG, "REQUEST " + requestId + ": " + request.getRequestMethod() + " " + request.getUrl()
-                + (content == null? "":  " " + contentToString(content)));
+                + (content == null ? "" : " " + contentToString(content)));
 
         T z = null;
         Stopwatch stopwatch = new Stopwatch();
@@ -117,14 +118,20 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
             Error status = new Error();
             status.setCode(httpResponse.getStatusCode());
 
-            String str = httpResponse.parseAsString();
+            String str;
+            if (httpResponse.getStatusCode() == HttpStatusCodes.STATUS_CODE_NO_CONTENT) {
+                str = "{}";
+            } else {
+                str = httpResponse.parseAsString();
+            }
+
             z = toObject(str, clazz);
             z.setStatus(status);
 
             Log.d(TAG, "RESPONSE " + requestId + ": " + duration + " " + str);
-        } catch(Exception e) {
+        } catch (Exception e) {
             String msg = e.toString();
-            if(msg.length() > 1000) {
+            if (msg.length() > 1000) {
                 msg = msg.substring(0, 1000);
             }
             msg = msg.replace('\n', ' ');
