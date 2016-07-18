@@ -16,18 +16,15 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ru.creators.buket.club.AppException;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.consts.Rest;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Error;
 import ru.creators.buket.club.model.Session;
 import ru.creators.buket.club.tools.Stopwatch;
-import ru.creators.buket.club.web.response.BouquetsResponse;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
 
@@ -59,7 +56,7 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
     }
 
     private final Uri.Builder getUriWithServerAddress() {
-        return Uri.parse(ServerConfig.SERVER_ADRESS).buildUpon();
+        return Uri.parse(ServerConfig.SERVER_ADDRESS).buildUpon();
     }
 
     private final Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder) {

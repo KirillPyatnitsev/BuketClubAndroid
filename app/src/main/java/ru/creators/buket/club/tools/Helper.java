@@ -302,7 +302,7 @@ public class Helper {
     }
 
     public static String addServerPrefix(String url) {
-        return ServerConfig.SERVER_ADRESS + url;
+        return ServerConfig.SERVER_ADDRESS + url;
     }
 
     public static float distFrom(float lat1, float lng1, float lat2, float lng2) {
