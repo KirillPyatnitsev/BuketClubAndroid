@@ -9,6 +9,7 @@ import com.google.api.client.http.HttpContent;
 import com.google.api.client.http.HttpMethods;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpStatusCodes;
 import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpiceRequest;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -115,9 +116,15 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
             HttpResponse httpResponse = request.execute();
             String duration = stopwatch.getMillisString();
             Error status = new Error();
-            status.setCode(httpResponse.getStatusCode());
+            int code = httpResponse.getStatusCode();
+            status.setCode(code);
 
-            String str = httpResponse.parseAsString();
+            String str;
+            if(code == HttpStatusCodes.STATUS_CODE_NO_CONTENT) {
+                str = "{}";
+            } else {
+                str = httpResponse.parseAsString();
+            }
             z = toObject(str, clazz);
             z.setStatus(status);
 
