@@ -150,7 +150,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void initView() {
         int size = this.getWindowWidth();
-        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, 0)
+        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, (int)(size * 1.2))
                 .centerCrop().into(imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice(), this));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
