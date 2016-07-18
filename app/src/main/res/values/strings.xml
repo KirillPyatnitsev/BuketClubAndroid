@@ -84,7 +84,7 @@
     <string name="text_rate_bouquet_exp">Оцените букет!</string>
     <string name="text_leave_a_comment">Оставьте комментарий</string>
 
-    <string name="text_prefix_ruble"> руб.</string>
+    <string name="text_prefix_ruble">" руб."</string>
 
     <string name="text_time_soon">Ближайшее</string>
     <string name="text_time_soon_standalone">Ближайшее время</string>
