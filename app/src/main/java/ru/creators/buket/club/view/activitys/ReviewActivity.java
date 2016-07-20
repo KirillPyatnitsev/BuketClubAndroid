@@ -26,7 +26,7 @@ public class ReviewActivity extends BaseActivity {
     private EditText editComment;
     private Button buttonSendReview;
     private ImageView imageBack;
-    private RelativeLayout commentContainer;
+    private View commentContainer;
 
     private Order order;
 
