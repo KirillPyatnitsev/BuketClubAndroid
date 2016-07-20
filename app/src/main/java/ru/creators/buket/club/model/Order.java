@@ -429,4 +429,7 @@ public class Order {
                 '}';
     }
 
+    public final boolean isDelivered() {
+        return getStatusIndex() == Order.STATUS_DELIVERED_INDEX;
+    }
 }

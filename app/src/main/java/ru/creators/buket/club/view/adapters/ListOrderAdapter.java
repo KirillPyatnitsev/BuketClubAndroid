@@ -8,6 +8,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Shop;
@@ -19,72 +24,101 @@ import ru.creators.buket.club.tools.Helper;
  */
 public class ListOrderAdapter extends BaseAdapter {
 
-    private Context context;
-    private ListOrder listOrder;
-    private LayoutInflater layoutInflater;
+    private final Context context;
+    private final List<Order> orders = new ArrayList<>();
+    private final LayoutInflater layoutInflater;
 
-    public ListOrderAdapter(Context context, ListOrder listOrder) {
+    public ListOrderAdapter(Context context) {
         this.context = context;
-        this.listOrder = listOrder;
         this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
-    public int getCount() {
-        return listOrder.size();
+    public final int getCount() {
+        return orders.size();
     }
 
     @Override
-    public Order getItem(int position) {
-        return listOrder.get(position);
+    public final Order getItem(int position) {
+        return orders.get(position);
     }
 
     @Override
-    public long getItemId(int position) {
+    public final long getItemId(int position) {
         return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-
+        View itemView;
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.inflate_order_item, parent, false);
+            itemView = layoutInflater.inflate(R.layout.inflate_order_item, parent, false);
 
             holder = new ViewHolder();
-
-            holder.textBouquetName = getViewById(R.id.i_oi_text_bouquet_name, convertView);
-            holder.textBouquetCost = getViewById(R.id.i_oi_text_bouquet_cost, convertView);
-            holder.textOrderStatus = getViewById(R.id.i_oi_text_order_status, convertView);
-            holder.imageArtistLogo = getViewById(R.id.i_oi_image_artist, convertView);
-
+            itemView.setTag(holder);
+            holder.textBouquetName = getViewById(R.id.i_oi_text_bouquet_name, itemView);
+            holder.textBouquetCost = getViewById(R.id.i_oi_text_bouquet_cost, itemView);
+            holder.textOrderStatus = getViewById(R.id.i_oi_text_order_status, itemView);
+            holder.imageArtistLogo = getViewById(R.id.i_oi_image_artist, itemView);
         } else {
+            itemView = convertView;
             holder = (ViewHolder) convertView.getTag();
-        }
-
-
-        Order order = getItem(position);
-
-        if (order != null && holder != null) {
-            holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
-            holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice(), context));
-            holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
-            Shop shop = order.getShop();
-            if (shop != null && shop.getImageUrl() != null) {
-                int size = parent.getWidth() / 3;
-                Helper.loadImage(context, shop.getImageUrl()).resize(size, size).centerCrop()
-                        .into(holder.imageArtistLogo);
+            if(holder == null) {
+                Crashlytics.log("ViewHolder is null in reused view! " + convertView);
             }
         }
 
-        return convertView;
+        Order order = getItem(position);
+        holder.textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
+        holder.textBouquetCost.setText(Helper.intToPriceString(order.getPrice(), context));
+        holder.textOrderStatus.setText(context.getString(order.getStatusDescRes()));
+        Shop shop = order.getShop();
+        if (shop != null && shop.getImageUrl() != null) {
+            int size = parent.getWidth() / 3;
+            holder.imageArtistLogo.setVisibility(View.VISIBLE);
+            Helper.loadImage(context, shop.getImageUrl()).resize(size, size).centerCrop()
+                    .into(holder.imageArtistLogo);
+        } else {
+            holder.imageArtistLogo.setVisibility(View.GONE);
+        }
+
+        return itemView;
     }
 
     private <T extends View> T getViewById(int id, View root) {
         return (T) root.findViewById(id);
     }
 
-    private class ViewHolder {
+    public final Order get(int position) {
+        Order order = this.orders.get(position);
+        return order;
+    }
+
+    public void clear() {
+        this.orders.clear();
+        this.notifyDataSetChanged();
+    }
+
+    public void addAll(ListOrder listOrder) {
+        for(Order order: listOrder) {
+            boolean valid = isValid(order);
+            if(valid) {
+                this.orders.add(order);
+            }
+        }
+        this.notifyDataSetChanged();
+    }
+
+    private static boolean isValid(Order order) {
+        if(order == null) {
+            return false;
+        }
+        // ...
+        return true;
+    }
+
+    private static class ViewHolder {
         TextView textBouquetName;
         TextView textBouquetCost;
         TextView textOrderStatus;
