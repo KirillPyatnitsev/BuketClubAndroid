@@ -20,12 +20,12 @@
             <ImageView
                 android:id="@+id/a_bdsd_image_bouquet"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="460dp"
                 android:layout_marginTop="-150dp"
                 android:layout_marginBottom="-60dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                />
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/a_bdsd_image_action_bar_background"
@@ -171,9 +171,8 @@
                 <LinearLayout
                     android:id="@+id/a_bd_linear_map"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:visibility="visible">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
 
                     <TextView

@@ -98,22 +98,25 @@
                 <EditText
                     android:id="@+id/a_r_edit_comment"
                     style="@style/text_view_normal"
-                    android:maxLines="3"
-                    android:enabled="false"
-                    android:inputType="textCapSentences"
+                    android:inputType="text|textMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
                     android:hint="@string/comment_hint"
-                    android:layout_width="match_parent" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="7" />
 
             </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_larger"
 
-                android:text="@string/text_thank_exc"/>
+                android:text="@string/text_thank_exc"
+                android:id="@+id/textView2"
+                android:layout_centerHorizontal="true"
+                android:layout_above="@+id/a_r_button_send_review"
+                android:layout_marginBottom="30dp" />
 
             <Button
                 android:id="@+id/a_r_button_send_review"
