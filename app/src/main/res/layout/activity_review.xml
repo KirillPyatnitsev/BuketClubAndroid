@@ -69,7 +69,8 @@
                     android:layout_height="@dimen/image_artist_icon_height"
                     android:src="@drawable/logo_splash"
                     android:layout_centerHorizontal="true"
-                    android:layout_below="@id/a_r_rating_bar"/>
+                    android:layout_below="@id/a_r_rating_bar"
+                    android:visibility="gone" />
 
             </RelativeLayout>
 
@@ -86,7 +87,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/margin_normal">
+                android:layout_margin="@dimen/margin_normal"
+                android:id="@+id/a_r_comment_container">
 
                 <TextView
                     style="@style/small_text.text_black"
@@ -96,8 +98,11 @@
                 <EditText
                     android:id="@+id/a_r_edit_comment"
                     style="@style/text_view_normal"
-                    android:maxLines="2"
-                    android:enabled="false"/>
+                    android:maxLines="3"
+                    android:enabled="false"
+                    android:inputType="textCapSentences"
+                    android:hint="@string/comment_hint"
+                    android:layout_width="match_parent" />
 
             </LinearLayout>
 

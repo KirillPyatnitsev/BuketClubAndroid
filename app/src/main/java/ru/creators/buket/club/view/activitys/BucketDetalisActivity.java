@@ -143,6 +143,7 @@ public class BucketDetalisActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                Helper.adjustTransition(BucketDetalisActivity.this);
             }
         });
 
@@ -298,7 +299,7 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void goToMapActivity() {
-        startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
+        Helper.gotoActivity(this, DeliveryInfoFillingActivity.class);
     }
 
 }

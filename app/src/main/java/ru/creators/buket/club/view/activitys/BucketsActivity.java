@@ -268,7 +268,7 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void goToBouquetDetailsActivity() {
-        startActivity(new Intent(this, BucketDetalisActivity.class));
+        Helper.gotoActivity(this, BucketDetalisActivity.class);
     }
 
     // TODO: Combine openFilter/closeFilter into single method toggleFilter(on/off)

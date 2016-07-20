@@ -1,6 +1,8 @@
 package ru.creators.buket.club.tools;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,6 +20,8 @@ import ru.creators.buket.club.BuildConfig;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Bouquet;
+import ru.creators.buket.club.view.activitys.BucketDetalisActivity;
+import ru.creators.buket.club.view.activitys.BucketsActivity;
 
 /**
  * Created by mifkamaz on 07/12/15.
@@ -51,6 +55,10 @@ public class Helper {
 
         final String result = reversed.toString();
         return result;
+    }
+
+    public static boolean isEmpty(Object obj) {
+        return obj == null || String.valueOf(obj).isEmpty();
     }
 
     public static Bitmap getBitmapFromView(View view) {
@@ -401,4 +409,18 @@ public class Helper {
 
     }
 
+    /**
+     * Helper method to properly transfer to the specified activity.
+     * @param act current activity
+     * @param activityClass target activity
+     */
+    public static void gotoActivity(Activity act, Class<? extends Activity> activityClass) {
+        act.startActivity(new Intent(act, activityClass));
+        adjustTransition(act);
+    }
+
+    public static void adjustTransition(Activity act) {
+        act.overridePendingTransition(
+                R.anim.com_mixpanel_android_fade_in, R.anim.com_mixpanel_android_fade_out);
+    }
 }
