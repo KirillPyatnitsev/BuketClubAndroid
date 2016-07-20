@@ -14,7 +14,7 @@ import ru.creators.buket.club.web.response.OrderResponse;
  */
 public class OrderCreateRequest extends BaseRequest<OrderResponse> {
 
-    private Order order;
+    private final Order order;
 
     public OrderCreateRequest(Order order) {
         super(OrderResponse.class);

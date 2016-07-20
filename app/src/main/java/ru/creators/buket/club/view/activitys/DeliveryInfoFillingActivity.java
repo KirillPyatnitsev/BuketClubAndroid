@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,6 +48,7 @@ import java.util.Date;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Profile;
 import ru.creators.buket.club.model.lists.ListString;
@@ -58,6 +60,8 @@ import ru.creators.buket.club.web.response.PhoneCodeResponse;
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         GoogleApiClient.ConnectionCallbacks {
+
+    private static final String TAG = ServerConfig.TAG_PREFIX + "DlvInfoFillAct";
 
     private ImageView imageBack;
     private ImageView imageLogo;
@@ -110,12 +114,11 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         initView();
         assignListener();
 
-        if (DataController.getInstance().getProfile() != null && DataController.getInstance().getProfile().getPhone() != null
-                && !DataController.getInstance().getProfile().getPhone().isEmpty()) {
-            String phone = DataController.getInstance().getProfile().getPhone().replaceAll("[^\\d.]", "");
-
+        final Profile profile = DataController.getInstance().getProfile();
+        if (profile != null && profile.getPhone() != null
+                && !profile.getPhone().isEmpty()) {
+            String phone = profile.getPhone().replaceAll("[^\\d.]", "");
             phone = phone.substring(1);
-
             editPhoneNumber.setText(phone);
         }
 
@@ -465,9 +468,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private void sendOrder(final String phone, final String code, final AlertDialog alertDialog, final EditText input) {
         startLoading();
 
-        DataController.getInstance().getOrder().setCode(code);
+        final Order order = DataController.getInstance().getOrder();
+        order.setCode(code);
+        final Order serverOrder = order.getOrderForServer();
+        Log.d(TAG, "Sending new order: " + serverOrder);
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getOrder().getOrderForServer(),
+        WebMethods.getInstance().sendOrder(serverOrder,
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -495,7 +501,11 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private void sendOrder() {
         startLoading();
 
-        WebMethods.getInstance().sendOrder(DataController.getInstance().getOrder().getOrderForServer(),
+        final Order order = DataController.getInstance().getOrder();
+        final Order serverOrder = order.getOrderForServer();
+        Log.d(TAG, "Sending new order2: " + serverOrder);
+
+        WebMethods.getInstance().sendOrder(serverOrder,
                 new RequestListener<OrderResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {

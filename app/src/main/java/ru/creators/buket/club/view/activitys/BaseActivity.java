@@ -32,7 +32,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: " + this.getClass().getName());
+        Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
         super.onCreate(savedInstanceState);
 
         DataController.getInstance().setBaseActivity(this);

@@ -58,11 +58,16 @@ public class OrderDetailsActivity extends BaseActivity {
         setContentView(R.layout.activity_bouquet_delivery_status_detalis);
         assignView();
         assignListener();
+        showOrder();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        showOrder();
+    }
+
+    private void showOrder() {
         Order order = DataController.getInstance().getOrder();
         if (order == null) {
             Log.e(TAG, "Intent called, but order is null!");
