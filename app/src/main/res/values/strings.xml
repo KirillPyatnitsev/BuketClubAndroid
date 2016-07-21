@@ -6,7 +6,7 @@
     <string name="app_name">Buket.Club</string>
 
     <string name="text_chose_bouquet">Выберите букет</string>
-    <string name="text_chose_address_delivery">Выберите адресс доставки</string>
+    <string name="text_chose_address_delivery">Выберите адрес доставки</string>
 
     <string name="text_flowers_type">Тип цветов</string>
     <string name="text_overall_tone_bouquet">Общий тон букета</string>
@@ -84,28 +84,28 @@
     <string name="text_rate_bouquet_exp">Оцените букет!</string>
     <string name="text_leave_a_comment">Оставьте комментарий</string>
 
-    <string name="text_prefix_ruble"> руб.</string>
+    <string name="text_prefix_ruble">" руб."</string>
 
     <string name="text_time_soon">Ближайшее</string>
-    <string name="text_time_soon_standalone">Ближайшее время</string>
+    <string name="text_time_soon_standalone">в ближайшее время</string>
     <string name="title_activity_payment_type">PaymentTypeActivity</string>
 
     <string name="text_finding_shop">Поиск магазина</string>
     <string name="text_in_process">Осуществляется доставка</string>
-    <string name="text_in_process_pickup">Ваш букет ждет</string>
-    <string name="text_delivered">Букет получен.\nПожалуйста, оставьте отзыв</string>
-    <string name="text_order_done">Заказ выполенен</string>
+    <string name="text_in_process_pickup">Ваш букет ждет!</string>
+    <string name="text_delivered">Букет получен.\nПожалуйста, оставьте отзыв!</string>
+    <string name="text_order_done">Заказ выполнен</string>
     <string name="phone_mask">+7 (###) ###-##-##</string>
     <string name="telephone">Телефон</string>
 
-    <string name="marker_bid_price">Предложенная цена: </string>
-    <string name="marker_store">Магазин: </string>
-    <string name="delivery_info_error">Пожалуйста, заполните данные о заказе. </string>
+    <string name="marker_bid_price">Предложенная цена:</string>
+    <string name="marker_store">Магазин:</string>
+    <string name="delivery_info_error">Пожалуйста, заполните данные о заказе.</string>
     <string name="delivery_info_address_error">При заполнении выберите адрес из числа подсказок.</string>
-    <string name="chose_shop_not_shop">Идёт поиск исполнителей</string>
+    <string name="chose_shop_not_shop">Идёт поиск исполнителей…</string>
     <string name="not_find_bouquets">Ничего не найдено</string>
 
-    <string name="remove_order_dialog_text">Отмена заказа. Если Вы перейдете назад, то Ваш заказ будет отменен.\nПерейти?</string>
+    <string name="remove_order_dialog_text">Отмена заказа. Если Вы перейдете назад, то Ваш заказ будет отменен.\nОтменить заказ?</string>
     <string name="yes">Да</string>
     <string name="no">Нет</string>
     <string name="cancel">Отмена</string>
@@ -149,8 +149,8 @@
     <string name="name_not_entered">Имя не введено</string>
 
     <!-- Default caption TextView, Buttons, etc -->
-    <string name="default_buket_name">Букетик тюльпанов</string>
-    <string name="default_buket_price">1990</string>
+    <string name="default_buket_name">Состав: Розы (5), герберы (3), тюльпаны (5)</string>
+    <string name="default_buket_price">1 990 руб.</string>
     <string name="default_buket_payment_type">Оплата при получении</string>
     <string name="default_buket_delivery_type">Самовывоз</string>
     <string name="default_buket_address">г.Москва, ул. Новый Арбат, дом 5 стр 1</string>
@@ -179,5 +179,6 @@
     <string name="failed_payment">Платеж не удался</string>
     <string name="confirm_payment_hint">Попробуйте повторить платеж. При наличии технической проблемы, пожалуйста, свяжитесь по телефону: +7 (495) 640-89-42</string>
     <string name="try_pay_again">Попробовать снова</string>
+    <string name="comment_hint">Ваш комментарий к заказу…</string>
 
 </resources>

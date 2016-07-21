@@ -429,4 +429,8 @@ public class Order {
                 '}';
     }
 
+    @JsonIgnore
+    public final boolean isDelivered() {
+        return getStatusIndex() == Order.STATUS_DELIVERED_INDEX;
+    }
 }

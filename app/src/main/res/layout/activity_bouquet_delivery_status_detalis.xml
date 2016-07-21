@@ -20,12 +20,12 @@
             <ImageView
                 android:id="@+id/a_bdsd_image_bouquet"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="460dp"
                 android:layout_marginTop="-150dp"
                 android:layout_marginBottom="-60dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                />
+                android:scaleType="centerCrop" />
 
             <ImageView
                 android:id="@+id/a_bdsd_image_action_bar_background"
@@ -61,27 +61,29 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+            android:layout_marginBottom="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:weightSum="5">
 
 
                     <TextView
                         android:id="@+id/a_bdsd_text_bouquet_name"
                         style="@style/text_view_in_linear"
-                        android:layout_marginLeft="7dp"
                         android:gravity="left|center_vertical"
                         android:textSize="@dimen/text_size_large"
                         android:textColor="@color/black"
                         android:textStyle="bold"
                         android:text="@string/default_buket_name"
-                        android:maxLength="30"
                         android:ellipsize="end"
-                        android:lines="2"
-                        />
+                        android:layout_width="wrap_content"
+                        android:autoText="false"
+                        android:maxLines="2"
+                        android:layout_weight="5" />
 
                     <TextView
                         android:id="@+id/a_bdsd_text_bouquet_cost"
@@ -90,7 +92,12 @@
                         android:text="@string/default_buket_price"
                         android:textColor="@color/black_light"
                         android:textSize="20sp"
-                        />
+                        android:layout_width="wrap_content"
+                        android:singleLine="true"
+                        android:ellipsize="none"
+                        android:layout_marginLeft="5sp"
+                        android:lines="1"
+                        android:maxLines="1" />
 
                 </LinearLayout>
 
@@ -108,9 +115,13 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/a_bdsd_text_details"
+                        style="@style/text_view_normal"
+                        android:layout_width="match_parent" />
+                    <!--
+                    <TextView
                         android:id="@+id/a_bdsd_text_pay_type"
                         style="@style/text_view_normal"
-                        android:layout_marginLeft="7dp"
                         android:text="@string/default_buket_payment_type"/>
 
                     <LinearLayout
@@ -121,18 +132,14 @@
                         <TextView
                             android:id="@+id/a_bdsd_text_delivery_type"
                             style="@style/text_view_normal"
-                            android:layout_marginLeft="7dp"
-                            />
+                            android:text="Доставка" />
 
-                        <TextView
-                            android:id="@+id/a_bdsd_text_delivery_time_prefix"
-                            style="@style/text_view_normal"
-                            android:text=" в "/>
                         <TextView
                             android:id="@+id/a_bdsd_text_delivery_time"
                             style="@style/text_view_normal"
-                            android:textStyle="bold"
-                            android:text="hh:mm"/>
+                            android:text="@string/text_time_soon_standalone"
+                            android:singleLine="false"
+                            android:layout_marginLeft="5sp" />
 
                     </LinearLayout>
 
@@ -140,7 +147,6 @@
                     <TextView
                         android:id="@+id/a_bdsd_text_address"
                         style="@style/text_view_normal"
-                        android:layout_marginLeft="7dp"
                         android:text="@string/default_buket_address"
                         />
 
@@ -148,19 +154,25 @@
                     <TextView
                         android:id="@+id/a_bdsd_text_phone"
                         style="@style/text_view_normal"
-                        android:layout_marginLeft="7dp"
+                        android:text="+7 123456789" />
+                    -->
 
-                        />
+                    <TextView
+                        android:id="@+id/a_bdsd_text_order_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Состояние заказа"
+                        style="@style/text_view_normal"
+                        android:textStyle="bold"
+                        android:layout_marginTop="5sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/a_bd_linear_map"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:visibility="visible">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
 
                     <TextView
@@ -170,7 +182,6 @@
                         android:gravity="left"
                         android:layout_gravity="left|center_vertical"
                         style="@style/text_view_normal"
-                        android:layout_marginLeft="7dp"
                         android:text="@string/default_buket_address_shop"
                         />
 

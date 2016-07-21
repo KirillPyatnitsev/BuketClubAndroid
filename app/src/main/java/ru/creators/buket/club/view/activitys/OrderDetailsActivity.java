@@ -2,6 +2,7 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,14 +35,14 @@ public class OrderDetailsActivity extends BaseActivity {
 
     private TextView textBouquetName;
     private TextView textBouquetCost;
-    private TextView textAddress;
-    private TextView textPhone;
-    private TextView textDeliveryTime;
-    private TextView textDeliveryTimePrefix;
-    private TextView textPayType;
-    private TextView textDeliveryType;
-//    private TextView textShopPhone;
-//    private TextView textOrderStatus;
+    private TextView textDetails;
+    //private TextView textAddress;
+    //private TextView textPhone;
+    //private TextView textDeliveryTime;
+    //private TextView textPayType;
+    //private TextView textDeliveryType;
+    //private TextView textShopPhone;
+    private TextView textOrderStatus;
 
     private ImageView imageBouquet;
     private ImageView imageMap;
@@ -55,19 +56,26 @@ public class OrderDetailsActivity extends BaseActivity {
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_bouquet_delivery_status_detalis);
+        assignView();
+        assignListener();
+        showOrder();
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        showOrder();
+    }
+
+    private void showOrder() {
         Order order = DataController.getInstance().getOrder();
-
-        if (order != null) {
+        if (order == null) {
+            Log.e(TAG, "Intent called, but order is null!");
+            this.finish();
+        } else {
             Log.d(TAG, "Order: " + order.toString());
-            Log.d(TAG, "access_token: " + DataController.getInstance().getSession().getAccessToken());
-            assignView();
-            assignListener();
             fillView(order);
             updateOrder();
-        } else {
-            showSnackBar(R.string.oops_error);
-            startActivity(new Intent(this, OrdersActivity.class));
         }
     }
 
@@ -85,14 +93,14 @@ public class OrderDetailsActivity extends BaseActivity {
     private void assignView() {
         textBouquetName = getViewById(R.id.a_bdsd_text_bouquet_name);
         textBouquetCost = getViewById(R.id.a_bdsd_text_bouquet_cost);
-        textAddress = getViewById(R.id.a_bdsd_text_address);
-        textPhone = getViewById(R.id.a_bdsd_text_phone);
-        textDeliveryTime = getViewById(R.id.a_bdsd_text_delivery_time);
-        textDeliveryTimePrefix = getViewById(R.id.a_bdsd_text_delivery_time_prefix);
-        textPayType = getViewById(R.id.a_bdsd_text_pay_type);
-        textDeliveryType = getViewById(R.id.a_bdsd_text_delivery_type);
-//        textShopPhone = getViewById(R.id.a_bdsd_text_shop_telephone);
-//        textOrderStatus = getViewById(R.id.a_bdsd_text_order_status);
+        textDetails = getViewById(R.id.a_bdsd_text_details);
+        //textAddress = getViewById(R.id.a_bdsd_text_address);
+        //textPhone = getViewById(R.id.a_bdsd_text_phone);
+        //textDeliveryTime = getViewById(R.id.a_bdsd_text_delivery_time);
+        //textPayType = getViewById(R.id.a_bdsd_text_pay_type);
+        //textDeliveryType = getViewById(R.id.a_bdsd_text_delivery_type);
+        //textShopPhone = getViewById(R.id.a_bdsd_text_shop_telephone);
+        textOrderStatus = getViewById(R.id.a_bdsd_text_order_status);
 
         imageBack = getViewById(R.id.i_ab_image_back);
         imageBack.setVisibility(View.VISIBLE);
@@ -113,13 +121,15 @@ public class OrderDetailsActivity extends BaseActivity {
             }
         });
 
-        imageMap.setOnClickListener(new View.OnClickListener() {
+        final View.OnClickListener gotoMap = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Toast.makeText(v.getContext(), "Go to the Map", Toast.LENGTH_LONG).show();
                 mapIntent(order.getShop().getAddressLat(), order.getShop().getAddressLng());
             }
-        });
+        };
+        imageMap.setOnClickListener(gotoMap);
+        linearOnMap.setOnClickListener(gotoMap);
     }
 
     private void fillView(Order order) {
@@ -127,28 +137,23 @@ public class OrderDetailsActivity extends BaseActivity {
 
         if (order.getBouquetItem() != null) {
             int size = this.getWindowWidth();
-            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, 0)
+            Helper.loadImage(this, order.getBouquetItem().getImageUrl()).resize(size, (int) (size * 1.25))
+                    .centerCrop()
                     .into(imageBouquet);
         }
 
-        String strPrice = Helper.intToPriceString(order.getPrice(), "");
-        String format = getString(R.string.default_buket_rub);
+        final String strPrice = Helper.intToPriceString(order.getPrice(), "");
+        final String format = getString(R.string.default_buket_rub);
         textBouquetCost.setText(String.format(format, strPrice));
         textBouquetName.setText(order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()));
 
-        int deliveryResId = order.getDeliveryTypeResId();
-        textDeliveryType.setText(deliveryResId);
-        //linearPickup.setVisibility(View.VISIBLE);
+        final StringBuilder details = new StringBuilder();
 
-        Shop shop = order.getShop();
-        forViews(linearOnMap, textAddress, textPhone)
-                .setVisibility(shop == null ? View.INVISIBLE : View.VISIBLE);
-        textAddress.setText(shop == null ? "--" : shop.getName());
-        textPhone.setText(shop == null ? "--" : shop.getPhone());
-        //WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
+        final String payType = getString(order.getPaymentTypeDesk());
+        details.append(Html.escapeHtml(payType));
 
-        String deliveryTime = order.getTimeDelivery();
-        textDeliveryTimePrefix.setVisibility(deliveryTime == null ? View.INVISIBLE : View.VISIBLE);
+        final int deliveryResId = order.getDeliveryTypeResId();
+        final String deliveryTime = order.getTimeDelivery();
         String strTime;
         if (deliveryTime == null) {
             strTime = getString(R.string.text_time_soon_standalone);
@@ -156,24 +161,41 @@ public class OrderDetailsActivity extends BaseActivity {
             Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             strTime = formatter.format(ISO8601Utils.parse(deliveryTime));
         }
-        textDeliveryTime.setText(strTime);
 
-        textPayType.setText(getString(order.getPaymentTypeDesk()));
+        final String deliveryType = getString(deliveryResId);
+        String deliveryHtml = Html.escapeHtml(deliveryType + " " + strTime);
+        final Shop shop = order.getShop();
+        if(deliveryResId == Order.DELIVERY_TYPE_ADDRESS_DESK_RES_ID) {
+            final String address = "" + order.getAddress();
+            deliveryHtml += "<br>по адресу: <b>" + Html.escapeHtml(address) + "</b>";
+        }
+        details.append("<br>" + deliveryHtml);
 
-//        if (order.getShop()!= null && order.getShop().getPhone() != null) {
-//            textShopPhone.setText(order.getShop().getPhone());
-//        }else{
-//            textShopPhone.setText("Неизвестно");
-//        }
-//
-//        textOrderStatus.setText(getString(order.getStatusDescRes()));
+        if(shop != null) {
+            String nameAndAddress = shop.getName();
+            if (shop.getAddressText() != null) {
+                nameAndAddress += ", " + shop.getAddressText();
+            }
+            if(!Helper.isEmpty(shop.getPhone())) {
+                nameAndAddress += ", " + shop.getPhone();
+            }
+            details.append("<br>" + Html.escapeHtml(nameAndAddress));
+        }
+
+        final String detailsHtml = details.toString();
+        textDetails.setText(Html.fromHtml(detailsHtml));
+
+        forViews(linearOnMap)
+                .setVisibility(shop == null ? View.GONE : View.VISIBLE);
+
+        //WebMethods.getInstance().loadImage(this, Helper.addServerPrefix(order.getShop().getImageUrl()), imageArtistIcon);
+        textOrderStatus.setText(getString(order.getStatusDescRes()));
     }
 
     private void updateOrder() {
         if (!(ServerConfig.USE_FAKE_DEBUG_DATA && BuildConfig.DEBUG)) {
             loadOrder(order.getId());
         }
-
     }
 
     private void loadOrder(int orderId) {

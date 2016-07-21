@@ -10,11 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.flurry.android.FlurryAgent;
-import com.transitionseverywhere.TransitionManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,20 +21,18 @@ import java.util.List;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.consts.ServerConfig;
-import ru.creators.buket.club.tools.Helper;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String TAG = ServerConfig.TAG_PREFIX + "BaseActivity";
-    protected CoordinatorLayout coordinatorLayout;
+    private CoordinatorLayout coordinatorLayout;
 
     private RelativeLayout relativeLoading;
-    //private ImageView imageLoadingBlur;
     private int runningProcessCount = 0;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: " + this.getClass().getName());
+        Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
         super.onCreate(savedInstanceState);
 
         DataController.getInstance().setBaseActivity(this);
@@ -90,27 +86,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected final void showBlur() {
-//        if (getImageBlurId()!=0 && getContentContainerId()!=0){
-//            Bitmap blur = Helper.fastBlur(Helper.getBitmapFromView(coordinatorLayout), 20);
-//            ImageView imageViewBlur = getViewById(getImageBlurId());
-//            View viewForHide = getViewById(getContentContainerId());
-//
-//            TransitionManager.beginDelayedTransition(coordinatorLayout);
-//            viewForHide.setVisibility(View.GONE);
-//            imageViewBlur.setImageBitmap(blur);
-//            imageViewBlur.setVisibility(View.VISIBLE);
-//        }
     }
 
     protected final void hideBlur() {
-//        if (getImageBlurId() != 0 && getContentContainerId() != 0) {
-//            ImageView imageViewBlur = getViewById(getImageBlurId());
-//            View viewForHide = getViewById(getContentContainerId());
-//
-//            TransitionManager.beginDelayedTransition(coordinatorLayout);
-//            viewForHide.setVisibility(View.VISIBLE);
-//            imageViewBlur.setVisibility(View.GONE);
-//        }
     }
 
     private RelativeLayout getRelativeLoading() {
@@ -141,19 +119,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         // Override to perform actions when all requests are done
     }
 
-    protected final ViewComposite forViews(View... views) {
-        return new ViewComposite(views);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
         DataController.getInstance().setAppIsFolded(false);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
     }
 
     @Override
@@ -178,6 +147,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
         return width;
+    }
+
+    protected final ViewComposite forViews(View... views) {
+        return new ViewComposite(views);
     }
 
     /**

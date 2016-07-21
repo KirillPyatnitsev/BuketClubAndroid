@@ -39,6 +39,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activitys.BucketDetalisActivity"
+            android:launchMode = "singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activitys.MapActivity"

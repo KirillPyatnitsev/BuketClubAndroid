@@ -2,6 +2,7 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -13,6 +14,7 @@ import com.octo.android.robospice.request.listener.RequestListener;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
 import ru.creators.buket.club.model.Pagination;
 import ru.creators.buket.club.model.lists.ListOrder;
@@ -22,20 +24,17 @@ import ru.creators.buket.club.web.response.OrdersResponse;
 
 public class OrdersActivity extends BaseActivity {
 
-    private ListOrder listOrder = new ListOrder();
+    private static final String TAG = ServerConfig.TAG_PREFIX + "OrdersActivity";
+
     private ListOrderAdapter listOrderAdapter;
-
     private ListView listView;
-
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private ImageView imageBack;
-
     private Pagination pagination;
     private int lastLoadedPage;
 
     @Override
-    protected void onCreateInternal() {
+    protected final void onCreateInternal() {
         setContentView(R.layout.activity_orders);
         assignView();
         assignListener();
@@ -43,7 +42,7 @@ public class OrdersActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
+    protected final void onResume() {
         super.onResume();
         listOrdersGetRequest(true);
     }
@@ -58,12 +57,14 @@ public class OrdersActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DataController.getInstance().setOrder(listOrder.get(position));
+                final Order order = listOrderAdapter.get(position);
+                DataController.getInstance().setOrder(order);
 
-                if (listOrder.get(position).getStatusIndex() == Order.STATUS_DELIVERED_INDEX)
+                if (order.isDelivered()) {
                     goToReviewActivity();
-                else
-                    goToOrderDetalisActivity();
+                } else {
+                    goToOrderDetailsActivity();
+                }
 
             }
         });
@@ -90,14 +91,15 @@ public class OrdersActivity extends BaseActivity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                if (!listOrder.isEmpty() && firstVisibleItem + visibleItemCount == listOrder.size())
+                if (totalItemCount > 0 && firstVisibleItem + visibleItemCount >= totalItemCount) {
                     listOrdersGetRequest(false);
+                }
             }
         });
     }
 
     @Override
-    public void onBackPressed() {
+    public final void onBackPressed() {
         goToBouquetsActivity();
     }
 
@@ -107,12 +109,12 @@ public class OrdersActivity extends BaseActivity {
 
     private void initView() {
         imageBack.setVisibility(View.VISIBLE);
-        listOrderAdapter = new ListOrderAdapter(this, listOrder);
+        listOrderAdapter = new ListOrderAdapter(this);
         listView.setAdapter(listOrderAdapter);
     }
 
     @Override
-    protected int getCoordinatorViewId() {
+    protected final int getCoordinatorViewId() {
         return R.id.a_o_coordinator_root;
     }
 
@@ -120,7 +122,7 @@ public class OrdersActivity extends BaseActivity {
         if (reload) {
             lastLoadedPage = 0;
             pagination = null;
-            listOrder.clear();
+            listOrderAdapter.clear();
         }
 
         if (pagination == null || lastLoadedPage < pagination.getNextPage()) {
@@ -130,6 +132,7 @@ public class OrdersActivity extends BaseActivity {
     }
 
     private void getOrders(int page) {
+        Log.d(TAG, "Requesting orders page " + page);
         if (!swipeRefreshLayout.isRefreshing()) {
             startLoading();
         }
@@ -151,15 +154,20 @@ public class OrdersActivity extends BaseActivity {
                         } else {
                             swipeRefreshLayout.setRefreshing(false);
                         }
-                        listOrder.addAll(ordersResponse.getListOrder());
-                        listOrderAdapter.notifyDataSetChanged();
+                        ListOrder orders = ordersResponse.getListOrder();
+                        if(orders == null) {
+                            Log.e(TAG, "In ordersResponse got orders = null!");
+                        } else {
+                            Log.d(TAG, "Orders loaded: " + orders.size());
+                            listOrderAdapter.addAll(orders);
+                        }
 
                         pagination = ordersResponse.getMeta().getPagination();
                     }
                 });
     }
 
-    private void goToOrderDetalisActivity() {
+    private void goToOrderDetailsActivity() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 

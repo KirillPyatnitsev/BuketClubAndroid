@@ -49,14 +49,15 @@ public class BucketDetalisActivity extends BaseActivity {
     private TextView textPrice;
     private TextView textBouquetName;
 
-    private Bouquet bouquet = DataController.getInstance().getBouquet();
+    private Bouquet bouquet;
 
-    private Button buttonBay;
+    private Button buttonBuy;
 
 
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_bucket_detalis);
+        bouquet = DataController.getInstance().getBouquet();
         if (bouquet != null) {
             assignView();
             assignListener();
@@ -75,7 +76,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void assignView() {
 
-        buttonBay = getViewById(R.id.a_bd_button_bay);
+        buttonBuy = getViewById(R.id.a_bd_button_bay);
 
         textBouquetSizeLittle = getViewById(R.id.a_bd_text_bouquet_size_little);
         imageBouquetSizeLittleBig = getViewById(R.id.a_bd_image_big_bouquet_size_little);
@@ -110,7 +111,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void assignListener() {
 
-        buttonBay.setOnClickListener(new View.OnClickListener() {
+        buttonBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buildOrder();
@@ -143,6 +144,7 @@ public class BucketDetalisActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                Helper.adjustTransition(BucketDetalisActivity.this);
             }
         });
 
@@ -150,7 +152,7 @@ public class BucketDetalisActivity extends BaseActivity {
 
     private void initView() {
         int size = this.getWindowWidth();
-        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, 0)
+        Helper.loadImage(this, bouquet.getImageUrl()).resize(size, (int)(size * 1.2))
                 .centerCrop().into(imageBouquet);
         textPrice.setText(Helper.intToPriceString(bouquet.getMiddleSizePrice(), this));
         textBouquetName.setText(bouquet.getBouquetNameBySize(currentSize));
@@ -298,7 +300,7 @@ public class BucketDetalisActivity extends BaseActivity {
     }
 
     private void goToMapActivity() {
-        startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
+        Helper.gotoActivity(this, DeliveryInfoFillingActivity.class);
     }
 
 }

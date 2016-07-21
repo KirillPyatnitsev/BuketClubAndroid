@@ -268,44 +268,40 @@ public class BucketsActivity extends BaseActivity {
     }
 
     private void goToBouquetDetailsActivity() {
-        startActivity(new Intent(this, BucketDetalisActivity.class));
+        Helper.gotoActivity(this, BucketDetalisActivity.class);
     }
 
-    // TODO: Combine openFilter/closeFilter into single method toggleFilter(on/off)
     private void openFilter() {
-        TransitionManager.beginDelayedTransition(getCoordinatorLayout());
-        showBlur();
-        RelativeLayout.LayoutParams backgroundImageLayoutParams =
-                new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
-
-        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
-
-        textActionBarTitle.setVisibility(View.GONE);
-        viewActonBarFilter.setVisibility(View.VISIBLE);
-
-        imageOpenFilter.setVisibility(View.GONE);
-        imageCloseFilter.setVisibility(View.VISIBLE);
+        toggleFilter(true);
     }
 
     private void closeFilter() {
+        toggleFilter(false);
+        listBouquetsGetResponse(true);
+    }
+
+    private void toggleFilter(boolean show) {
         TransitionManager.beginDelayedTransition(getCoordinatorLayout());
-        hideBlur();
-        RelativeLayout.LayoutParams backgroundImageLayoutParams =
+        if (show) {
+            showBlur();
+        } else {
+            hideBlur();
+        }
+        final RelativeLayout.LayoutParams layout =
                 new RelativeLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
-        backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_close), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
+        final int margin = show? R.dimen.margin_top_action_bar_a_b_open
+                : R.dimen.margin_top_action_bar_a_b_close;
+        layout.setMargins(
+                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
+                getResources().getDimensionPixelOffset(margin),
+                getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar),
+                0);
 
-        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
-
-        textActionBarTitle.setVisibility(View.VISIBLE);
-        viewActonBarFilter.setVisibility(View.GONE);
-
-        imageOpenFilter.setVisibility(View.VISIBLE);
-        imageCloseFilter.setVisibility(View.GONE);
-
-        listBouquetsGetResponse(true);
+        imageActionBarBackground.setLayoutParams(layout);
+        forViews(textActionBarTitle, imageOpenFilter).setVisibility(show ? View.GONE : View.VISIBLE);
+        forViews(viewActonBarFilter, imageCloseFilter).setVisibility(show ? View.VISIBLE: View.GONE);
     }
 
     private void setSpinnerData(int min, int max) {
@@ -352,7 +348,7 @@ public class BucketsActivity extends BaseActivity {
                 } else {
                     throw new AppException("Unknown dictionary received: " + dictionaryType);
                 }
-                if(!loadedItems.isEmpty()) {
+                if (!loadedItems.isEmpty()) {
                     list.clear();
                     list.addAll(loadedItems);
                     adapter.clear();
@@ -408,8 +404,8 @@ public class BucketsActivity extends BaseActivity {
                         pagination = bouquetsResponse.getMeta().getPagination();
                         listBouquet.addAll(bouquetsResponse.getListBouquet());
 
-                        textNotFindBouquets.setVisibility(listBouquet.isEmpty()?
-                                View.VISIBLE: View.GONE);
+                        textNotFindBouquets.setVisibility(listBouquet.isEmpty() ?
+                                View.VISIBLE : View.GONE);
 
                         gridAdapterBouquet.notifyDataSetChanged();
 
@@ -471,7 +467,7 @@ public class BucketsActivity extends BaseActivity {
 
     private void loadPriceRange() {
         PriceRange range = DataController.getInstance().getPriceRange();
-        if(range == null) {
+        if (range == null) {
             startLoading();
             WebMethods.getInstance().loadPriceRange(new RequestListener<PriceRangeResponse>() {
                 @Override
@@ -482,7 +478,7 @@ public class BucketsActivity extends BaseActivity {
                 @Override
                 public void onRequestSuccess(PriceRangeResponse priceRangeResponse) {
                     PriceRange loadedRange = priceRangeResponse.getPriceRange();
-                    if(loadedRange == null) {
+                    if (loadedRange == null) {
                         Log.e(TAG, "Failed to load price range");
                     } else {
                         showPriceRange(loadedRange);

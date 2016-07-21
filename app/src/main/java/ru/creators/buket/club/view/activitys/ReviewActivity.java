@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -13,22 +14,28 @@ import com.octo.android.robospice.request.listener.RequestListener;
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
 import ru.creators.buket.club.model.Order;
+import ru.creators.buket.club.model.Review;
+import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
 public class ReviewActivity extends BaseActivity {
 
-    RatingBar ratingBar;
-    ImageView imageArtistIcon;
-    EditText editComment;
-    Button buttonSendReview;
-    ImageView imageBack;
+    private RatingBar ratingBar;
+    //private ImageView imageArtistIcon;
+    private EditText editComment;
+    private Button buttonSendReview;
+    private ImageView imageBack;
+    private View commentContainer;
 
-    Order order = DataController.getInstance().getOrder();
+    private Order order;
 
     @Override
     protected void onCreateInternal() {
         setContentView(R.layout.activity_review);
+
+        order = DataController.getInstance().getOrder();
+
         assignView();
         assignListener();
     }
@@ -40,8 +47,9 @@ public class ReviewActivity extends BaseActivity {
 
     private void assignView() {
         ratingBar = getViewById(R.id.a_r_rating_bar);
-        imageArtistIcon = getViewById(R.id.a_r_image_artist_icon);
+        //imageArtistIcon = getViewById(R.id.a_r_image_artist_icon);
         editComment = getViewById(R.id.a_r_edit_comment);
+        commentContainer = getViewById(R.id.a_r_comment_container);
         buttonSendReview = getViewById(R.id.a_r_button_send_review);
         imageBack = getViewById(R.id.i_ab_image_back);
         imageBack.setVisibility(View.VISIBLE);
@@ -51,12 +59,10 @@ public class ReviewActivity extends BaseActivity {
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                if (rating < 4) {
-                    editComment.setEnabled(true);
-                } else {
-                    editComment.setEnabled(false);
-                    editComment.setText("");
-                }
+                boolean wantComment = rating < 4;
+                editComment.setEnabled(wantComment);
+                commentContainer.setVisibility(wantComment? View.VISIBLE: View.GONE);
+
             }
         });
         buttonSendReview.setOnClickListener(new View.OnClickListener() {
@@ -86,18 +92,18 @@ public class ReviewActivity extends BaseActivity {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
                         stopLoading();
-                        goToOrderDetalis();
+                        goToOrderDetails();
                     }
 
                     @Override
                     public void onRequestSuccess(DefaultResponse defaultResponse) {
                         stopLoading();
-                        goToOrderDetalis();
+                        goToOrderDetails();
                     }
                 });
     }
 
-    private void goToOrderDetalis() {
+    private void goToOrderDetails() {
         startActivity(new Intent(this, OrderDetailsActivity.class));
     }
 }

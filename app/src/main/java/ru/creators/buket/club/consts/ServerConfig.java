@@ -9,10 +9,7 @@ public class ServerConfig {
     public static final String TAG_PREFIX = "buket_";
 
     public static final String SERVER_HOST = "buket.club";
-    public static final String SERVER_ADRESS = "http://" + SERVER_HOST;
-    //public static final String SERVER_ADRESS = "http://bouquet.vexadev.com";
-    //public static final String SERVER_ADRESS = "http://176.112.199.34";
-    //public static final String SERVER_ADRESS_TEST = "https://6112df6.ngrok.com";
+    public static final String SERVER_ADDRESS = "http://" + SERVER_HOST;
     public static final String SERVER_API_PREFIX = "api";
     public static final String SERVER_API_VERSION = "client";
     public static final String SERVER_API_VERSION_V1 = "v1";
