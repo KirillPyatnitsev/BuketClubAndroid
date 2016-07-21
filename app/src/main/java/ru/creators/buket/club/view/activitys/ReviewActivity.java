@@ -90,6 +90,7 @@ public class ReviewActivity extends BaseActivity {
 
     private void sendReview(String comment, int rating) {
         startLoading();
+        final Order orderToSend = this.order;
         WebMethods.getInstance().sendReviewRequest(order.getId(), comment, rating,
                 new RequestListener<DefaultResponse>() {
                     @Override
@@ -101,6 +102,9 @@ public class ReviewActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(DefaultResponse defaultResponse) {
                         stopLoading();
+                        // Update order to reflect changes in Details view.
+                        orderToSend.setStatusIndex(Order.STATUS_DONE_INDEX);
+                        DataController.getInstance().setOrder(orderToSend);
                         goToOrderDetails();
                     }
                 });
