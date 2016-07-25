@@ -2,24 +2,25 @@ package ru.creators.buket.club.view.activitys;
 
 import android.content.Intent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import ru.creators.buket.club.DataController;
 import ru.creators.buket.club.R;
+import ru.creators.buket.club.consts.ServerConfig;
 import ru.creators.buket.club.model.Order;
-import ru.creators.buket.club.model.Review;
-import ru.creators.buket.club.tools.Helper;
 import ru.creators.buket.club.web.WebMethods;
 import ru.creators.buket.club.web.response.DefaultResponse;
 
 public class ReviewActivity extends BaseActivity {
+
+    private static final String TAG = ServerConfig.TAG_PREFIX + "ReviewActivity";
 
     private RatingBar ratingBar;
     //private ImageView imageArtistIcon;
@@ -53,6 +54,8 @@ public class ReviewActivity extends BaseActivity {
         buttonSendReview = getViewById(R.id.a_r_button_send_review);
         imageBack = getViewById(R.id.i_ab_image_back);
         imageBack.setVisibility(View.VISIBLE);
+
+        editComment.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     private void assignListener() {
@@ -61,7 +64,7 @@ public class ReviewActivity extends BaseActivity {
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 boolean wantComment = rating < 4;
                 editComment.setEnabled(wantComment);
-                commentContainer.setVisibility(wantComment? View.VISIBLE: View.GONE);
+                commentContainer.setVisibility(wantComment ? View.VISIBLE : View.GONE);
 
             }
         });
@@ -87,6 +90,7 @@ public class ReviewActivity extends BaseActivity {
 
     private void sendReview(String comment, int rating) {
         startLoading();
+        final Order orderToSend = this.order;
         WebMethods.getInstance().sendReviewRequest(order.getId(), comment, rating,
                 new RequestListener<DefaultResponse>() {
                     @Override
@@ -98,6 +102,9 @@ public class ReviewActivity extends BaseActivity {
                     @Override
                     public void onRequestSuccess(DefaultResponse defaultResponse) {
                         stopLoading();
+                        // Update order to reflect changes in Details view.
+                        orderToSend.setStatusIndex(Order.STATUS_DONE_INDEX);
+                        DataController.getInstance().setOrder(orderToSend);
                         goToOrderDetails();
                     }
                 });

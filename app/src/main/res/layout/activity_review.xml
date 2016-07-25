@@ -98,11 +98,12 @@
                 <EditText
                     android:id="@+id/a_r_edit_comment"
                     style="@style/text_view_normal"
-                    android:inputType="text|textMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
+                    android:inputType="textImeMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
                     android:hint="@string/comment_hint"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="7" />
+                    android:maxLines="7"
+                    android:singleLine="false" />
 
             </LinearLayout>
 
