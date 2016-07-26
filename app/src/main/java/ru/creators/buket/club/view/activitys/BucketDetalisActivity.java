@@ -103,8 +103,8 @@ public class BucketDetalisActivity extends BaseActivity {
         great = new SizeViewHolder(textBouquetSizeGreat, imageBouquetSizeGreatBig, imageBouquetSizeGreatMin, relativeBouquetSizeGreat);
 
         little.setSelection(SizeViewHolder.UNSELECTED);
-        little.setSelection(SizeViewHolder.SELECTED);
-        little.setSelection(SizeViewHolder.UNSELECTED);
+        medium.setSelection(SizeViewHolder.SELECTED);
+        great.setSelection(SizeViewHolder.UNSELECTED);
 
         imageBack = getViewById(R.id.i_ab_image_back);
     }
@@ -175,6 +175,7 @@ public class BucketDetalisActivity extends BaseActivity {
                     textPrice.setText(Helper.intToPriceString(bouquet.getLargeSizePrice(), this));
                     break;
             }
+
         }
     }
 
