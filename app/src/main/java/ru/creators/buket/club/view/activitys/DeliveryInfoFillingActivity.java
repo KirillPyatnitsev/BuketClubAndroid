@@ -12,7 +12,9 @@ import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -59,7 +61,7 @@ import ru.creators.buket.club.web.response.PhoneCodeResponse;
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
-        GoogleApiClient.ConnectionCallbacks {
+        GoogleApiClient.ConnectionCallbacks, TextView.OnEditorActionListener {
 
     private static final String TAG = ServerConfig.TAG_PREFIX + "DlvInfoFillAct";
 
@@ -297,6 +299,21 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 DataController.getInstance().getOrder().setAddressLng(lastLocation.getLongitude());
             }
         });
+
+        editComment.setOnEditorActionListener(this);
+        editComment.setImeActionLabel("Ok", EditorInfo.IME_ACTION_DONE);
+
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        boolean handled = false;
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+            // обрабатываем нажатие кнопки
+
+            return handled;
+        }
+        return handled;
     }
 
     private SlideDateTimeListener slideDateTimeListener = new SlideDateTimeListener() {
