@@ -52,7 +52,7 @@
                         android:singleLine="true"
                         android:layout_marginBottom="@dimen/margin_small"/>
 
-                    <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                    <com.opendev.buket.client.view.custom.maskededittext.MaskedEditText
                         android:id="@+id/a_ss_edit_phone"
                         style="@style/text_view_normal"
                         android:layout_width="match_parent"

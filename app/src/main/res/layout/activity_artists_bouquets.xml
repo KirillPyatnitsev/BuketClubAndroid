@@ -5,7 +5,7 @@
     android:id="@+id/a_ab_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.ArtistsBouquetsActivity">
+    tools:context="com.opendev.buket.client.view.activitys.ArtistsBouquetsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

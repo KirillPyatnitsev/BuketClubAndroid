@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="ru.creators.buket.club">
+    package="com.opendev.buket.client">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <permission android:name="ru.creators.buket.club.admin.permission.C2D_MESSAGE"
+    <permission android:name="com.opendev.buket.client.admin.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="ru.creators.buket.club.admin.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.opendev.buket.client.admin.permission.C2D_MESSAGE" />
     <!--
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -89,7 +89,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="ru.creators.buket.club" />
+                <category android:name="com.opendev.buket.client" />
             </intent-filter>
         </receiver>
         <!-- [END gcm_receiver] -->

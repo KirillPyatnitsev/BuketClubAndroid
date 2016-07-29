@@ -4,7 +4,7 @@
     android:id="@+id/a_m_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.MapActivity">
+    tools:context="com.opendev.buket.client.view.activitys.MapActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

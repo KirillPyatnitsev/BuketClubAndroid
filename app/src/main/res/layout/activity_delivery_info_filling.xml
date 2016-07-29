@@ -6,7 +6,7 @@
     android:id="@+id/a_dif_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.DeliveryInfoFillingActivity">
+    tools:context="com.opendev.buket.client.view.activitys.DeliveryInfoFillingActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
                         android:layout_marginTop="@dimen/margin_small"
                         android:text="@string/text_contact_telephone_of_recipient" />
 
-                    <ru.creators.buket.club.view.custom.maskededittext.MaskedEditText
+                    <com.opendev.buket.client.view.custom.maskededittext.MaskedEditText
                         android:id="@+id/a_dif_edit_phone"
                         style="@style/text_view_normal"
                         android:inputType="number"

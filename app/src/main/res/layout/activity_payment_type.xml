@@ -5,7 +5,7 @@
     android:id="@+id/a_pt_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.creators.buket.club.view.activitys.BucketsActivity">
+    tools:context="com.opendev.buket.client.view.activitys.BucketsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
