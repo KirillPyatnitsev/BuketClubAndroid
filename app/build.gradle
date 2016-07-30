@@ -78,7 +78,7 @@ android {
 
             applicationVariants.all { variant ->
                 variant.outputs.each { output ->
-                    project.ext { appName = 'buket' }
+                    project.ext { appName = 'buket-client' }
                     def newName = output.outputFile.name
                     newName = newName.replace("app-", "$project.ext.appName-") //"MyAppName" -> I set my app variables in the root project
 
