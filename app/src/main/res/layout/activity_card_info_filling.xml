@@ -6,7 +6,7 @@
     android:id="@+id/a_cif_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.opendev.buket.client.view.activitys.BucketsActivity">
+    tools:context="com.opendev.buket.club.view.activity.BucketsActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                     android:layout_marginTop="@dimen/margin_small"
                     android:text="@string/telephone"/>
 
-                <com.opendev.buket.client.view.custom.maskededittext.MaskedEditText
+                <com.opendev.buket.club.view.custom.maskededittext.MaskedEditText
                     android:id="@+id/a_cif_edit_phone"
                     style="@style/text_view_normal"
                     custom_edit:mask="@string/phone_mask"

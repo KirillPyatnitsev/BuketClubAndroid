@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "915505288420",
+    "project_id": "buketfinder-client"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:915505288420:android:eac98524fa1a3c78",
+        "android_client_info": {
+          "package_name": "com.opendev.buket.club"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1kd6bMFWKkAtuf_3B6ycACB9HDkxceqw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

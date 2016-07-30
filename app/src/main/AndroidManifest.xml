@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.opendev.buket.client">
+    package="com.opendev.buket.club">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <permission android:name="com.opendev.buket.client.admin.permission.C2D_MESSAGE"
+    <permission android:name="com.opendev.buket.club.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.opendev.buket.client.admin.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.opendev.buket.club.permission.C2D_MESSAGE" />
     <!--
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -30,56 +30,50 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.activitys.SplashScreenActivity"
+            android:name=".view.activity.SplashScreenActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".view.activitys.BucketsActivity"
+            android:name=".view.activity.BucketsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.BucketDetalisActivity"
+            android:name=".view.activity.BucketDetalisActivity"
             android:launchMode = "singleInstance"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.MapActivity"
+            android:name=".view.activity.MapActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.ArtistsBouquetsActivity"
+            android:name=".view.activity.ArtistsBouquetsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.DeliveryInfoFillingActivity"
+            android:name=".view.activity.DeliveryInfoFillingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.PaymentTypeActivity"
+            android:name=".view.activity.PaymentTypeActivity"
             android:label="@string/title_activity_payment_type"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".view.activitys.CardInfoFillingActivity"
+            android:name=".view.activity.CardInfoFillingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.PayDoneActivity"
+            android:name=".view.activity.PayDoneActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.OrderDetailsActivity"
+            android:name=".view.activity.OrderDetailsActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".view.activitys.ReviewActivity"
+            android:name=".view.activity.ReviewActivity"
             android:screenOrientation="portrait" />
 
-        <service
-            android:name="com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity android:name=".view.activitys.OrdersActivity"
+        <activity android:name=".view.activity.OrdersActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.activitys.ChoseShopActivity"
+        <activity android:name=".view.activity.ChoseShopActivity"
             android:screenOrientation="portrait"/>
 
         <receiver
@@ -89,12 +83,15 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-                <category android:name="com.opendev.buket.client" />
+                <category android:name="com.opendev.buket.club" />
             </intent-filter>
         </receiver>
-        <!-- [END gcm_receiver] -->
 
-        <!-- [START gcm_listener] -->
+        <service
+            android:name="com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <service
             android:name=".gcm.MyGcmListenerService"
             android:exported="false">
@@ -102,8 +99,6 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <!-- [END gcm_listener] -->
-        <!-- [START instanceId_listener] -->
         <service
             android:name=".gcm.MyInstanceIDListenerService"
             android:exported="false">
@@ -111,7 +106,7 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-        <!-- [END instanceId_listener] -->
+
         <service
             android:name=".gcm.RegistrationIntentService"
             android:exported="false"/>
