@@ -22,7 +22,7 @@ public class ServerConfig {
     public static final String FLURRY_API_KEY = "MDW7F3F52TFGVDYG5T9S";
     public static final String MIXPANEL_API_KEY = "33820e1b43766840234930ba41432dd2";
 
-    public static final String GCM_DEFAULT_SENDER_ID = "710131429117";
+    public static final String GCM_DEFAULT_SENDER_ID = "915505288420";
 
 
 

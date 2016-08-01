@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.opendev.buket.club.tools.PreferenceCache;
 import com.transitionseverywhere.TransitionManager;
 
 import org.florescu.android.rangeseekbar.RangeSeekBar;
@@ -406,6 +408,8 @@ public class BucketsActivity extends BaseActivity {
 
                         textNotFindBouquets.setVisibility(listBouquet.isEmpty() ?
                                 View.VISIBLE : View.GONE);
+
+                        Log.d(TAG, "device_token: " + PreferenceCache.getString(getApplicationContext(), PreferenceCache.KEY_GCM_TOKEN));
 
                         gridAdapterBouquet.notifyDataSetChanged();
 

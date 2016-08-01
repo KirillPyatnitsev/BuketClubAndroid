@@ -51,7 +51,8 @@ public class MyGcmListenerService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         Log.d(TAG, "From: " + from);
-        sendNotification(data.getString("message"));
+//        sendNotification(data.getString("message"));
+        sendNotification("Статус заказа изменился! Проверьте заказ.");
     }
 
     /**
@@ -60,31 +61,31 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(final String message) {
-        BaseActivity act = DataController.getInstance().getBaseActivity();
-        if (act != null) {
-            act.pushMessageReceived(message);
-        } else {
+//        BaseActivity act = DataController.getInstance().getBaseActivity();
+//        if (act != null) {
+//            act.pushMessageReceived(message);
+//        } else {
             Intent intent = new Intent(this, OrdersActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                     PendingIntent.FLAG_ONE_SHOT);
 
             Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+            Uri soundUri=Uri.parse("android.resource://"+getPackageName()+"/raw/push_sound");
 
-            Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                     .setLargeIcon(largeIcon)
-                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setSmallIcon(R.drawable.push_icon)
                     .setContentTitle(getString(R.string.app_name))
                     .setContentText(message)
                     .setAutoCancel(false)
-                    .setSound(defaultSoundUri)
+                    .setSound(soundUri)
                     .setContentIntent(pendingIntent);
 
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-        }
+//        }
     }
 }
