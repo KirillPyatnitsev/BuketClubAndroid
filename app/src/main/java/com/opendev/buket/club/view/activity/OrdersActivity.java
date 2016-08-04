@@ -8,11 +8,9 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-
 import com.opendev.buket.club.BuildConfig;
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
@@ -37,7 +35,6 @@ public class OrdersActivity extends BaseActivity {
     private int lastLoadedPage;
 
     private ImageView imageLogo;
-    private int engineeringCount;
 
     @Override
     protected final void onCreateInternal() {
@@ -75,20 +72,15 @@ public class OrdersActivity extends BaseActivity {
             }
         });
 
-        imageLogo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (BuildConfig.DEBUG) {
-                    Log.d(TAG, String.valueOf(engineeringCount));
-                    engineeringCount++;
-                    if (engineeringCount==5) {
-                        EngineerDialogFragment engineerDialogFragment = new EngineerDialogFragment();
-                        engineerDialogFragment.show(getSupportFragmentManager(), "engineerDialogFragment");
-                    }
+        if (BuildConfig.DEBUG) {
+            imageLogo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    EngineerDialogFragment engineerDialogFragment = new EngineerDialogFragment();
+                    engineerDialogFragment.show(getSupportFragmentManager(), "engineerDialogFragment");
                 }
-            }
-        });
+            });
+        }
 
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.opendev.buket.club.consts.ServerConfig;
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PaymentParams;
 
@@ -25,13 +26,7 @@ import ru.yandex.money.android.PaymentActivity;
 
 public class PaymentTypeActivity extends BaseActivity {
 
-    private static final String CLIENT_ID = "CF81271080DB5D1AC2C1659FA16962AAD09FCEEBF3D3DF88DF32B7FD243EE77D";
-    private static final String P2P = "410013897372739";
     private static final int REQUEST_CODE_YA_MONEY = 1488;
-
-    public static final int PAY_CARD = 1;
-
-    private int currentPayType = PAY_CARD;
 
     private ImageView imageBack;
     private TextView textViewConfirmPayment;
@@ -104,13 +99,13 @@ public class PaymentTypeActivity extends BaseActivity {
             price = new BigDecimal(order.getPrice());
         }
 
-        PaymentParams cardParams = new P2pTransferParams.Builder(P2P)
+        PaymentParams cardParams = new P2pTransferParams.Builder(ServerConfig.YANDEX_KASSA_P2P)
                 .setAmount(price)
                 .setMessage("Оплата за заказ №" + order.getId() + ": " + order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()) + ". Android.")
                 .create();
         Intent intent = PaymentActivity.getBuilder(this)
                 .setPaymentParams(cardParams)
-                .setClientId(CLIENT_ID)
+                .setClientId(ServerConfig.YANDEX_KASSA_CLIENT_ID)
                 .build();
         startActivityForResult(intent, REQUEST_CODE_YA_MONEY);
     }
