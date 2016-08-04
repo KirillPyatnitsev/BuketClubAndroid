@@ -46,12 +46,12 @@ public class PaymentTypeActivity extends BaseActivity {
         assignView();
         initView();
 
-        if (BuildConfig.DEBUG) {
+//        if (BuildConfig.DEBUG) {
 //            payYandexMoney();
-            yandexPaymentOk();
-        } else {
+//            yandexPaymentOk();
+//        } else {
             payYandexMoney();
-        }
+//        }
     }
 
     @Override
@@ -97,8 +97,15 @@ public class PaymentTypeActivity extends BaseActivity {
 
     private void payYandexMoney() {
 
+        BigDecimal price;
+        if (BuildConfig.DEBUG) {
+            price = new BigDecimal(1);
+        } else {
+            price = new BigDecimal(order.getPrice());
+        }
+
         PaymentParams cardParams = new P2pTransferParams.Builder(P2P)
-                .setAmount(new BigDecimal(order.getPrice()))
+                .setAmount(price)
                 .setMessage("Оплата за заказ №" + order.getId() + ": " + order.getBouquetItem().getBouquetNameBySize(order.getSizeIndex()) + ". Android.")
                 .create();
         Intent intent = PaymentActivity.getBuilder(this)
