@@ -8,13 +8,16 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import com.opendev.buket.club.BuildConfig;
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
 import com.opendev.buket.club.consts.ServerConfig;
+import com.opendev.buket.club.engineer.EngineerDialogFragment;
 import com.opendev.buket.club.model.Order;
 import com.opendev.buket.club.model.Pagination;
 import com.opendev.buket.club.model.lists.ListOrder;
@@ -32,6 +35,9 @@ public class OrdersActivity extends BaseActivity {
     private ImageView imageBack;
     private Pagination pagination;
     private int lastLoadedPage;
+
+    private ImageView imageLogo;
+    private int engineeringCount;
 
     @Override
     protected final void onCreateInternal() {
@@ -51,6 +57,7 @@ public class OrdersActivity extends BaseActivity {
         listView = getViewById(R.id.a_o_list_view_orders);
         imageBack = getViewById(R.id.i_ab_image_back);
         swipeRefreshLayout = getViewById(R.id.a_o_swipe_refresh);
+        imageLogo = getViewById(R.id.i_ab_image_icon);
     }
 
     private void assignListener() {
@@ -65,7 +72,21 @@ public class OrdersActivity extends BaseActivity {
                 } else {
                     goToOrderDetailsActivity();
                 }
+            }
+        });
 
+        imageLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, String.valueOf(engineeringCount));
+                    engineeringCount++;
+                    if (engineeringCount==5) {
+                        EngineerDialogFragment engineerDialogFragment = new EngineerDialogFragment();
+                        engineerDialogFragment.show(getSupportFragmentManager(), "engineerDialogFragment");
+                    }
+                }
             }
         });
 

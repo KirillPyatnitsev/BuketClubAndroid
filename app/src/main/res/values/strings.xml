@@ -181,4 +181,9 @@
     <string name="try_pay_again">Попробовать снова</string>
     <string name="comment_hint">Ваш комментарий к заказу…</string>
 
+    <string name="engineer_menu">Инженерное меню</string>
+    <string name="engineer_title_token">Ваш токен:</string>
+    <string name="engineer_close">Закрыть</string>
+    <string name="engineer_push">Отправить пуш</string>
+
 </resources>
