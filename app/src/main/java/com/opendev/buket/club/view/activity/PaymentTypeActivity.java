@@ -41,12 +41,12 @@ public class PaymentTypeActivity extends BaseActivity {
         assignView();
         initView();
 
-//        if (BuildConfig.DEBUG) {
+        if (BuildConfig.DEBUG) {
 //            payYandexMoney();
-//            yandexPaymentOk();
-//        } else {
+            yandexPaymentOk();
+        } else {
             payYandexMoney();
-//        }
+        }
     }
 
     @Override

@@ -61,31 +61,31 @@ public class MyGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(final String message) {
-//        BaseActivity act = DataController.getInstance().getBaseActivity();
-//        if (act != null) {
-//            act.pushMessageReceived(message);
-//        } else {
-            Intent intent = new Intent(this, OrdersActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
-                    PendingIntent.FLAG_ONE_SHOT);
+        BaseActivity act = DataController.getInstance().getBaseActivity();
+        if (act != null) {
+            act.pushMessageReceived(message);
+        }
+        Intent intent = new Intent(this, OrdersActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-            Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-            Uri soundUri=Uri.parse("android.resource://"+getPackageName()+"/raw/push_sound");
+        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        Uri soundUri=Uri.parse("android.resource://"+getPackageName()+"/raw/push_sound");
 
-            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                    .setLargeIcon(largeIcon)
-                    .setSmallIcon(R.drawable.push_icon)
-                    .setContentTitle(getString(R.string.app_name))
-                    .setContentText(message)
-                    .setAutoCancel(false)
-                    .setSound(soundUri)
-                    .setContentIntent(pendingIntent);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setLargeIcon(largeIcon)
+                .setSmallIcon(R.drawable.push_icon)
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText(message)
+                .setAutoCancel(false)
+                .setSound(soundUri)
+                .setContentIntent(pendingIntent);
 
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-            notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-//        }
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+
     }
 }
