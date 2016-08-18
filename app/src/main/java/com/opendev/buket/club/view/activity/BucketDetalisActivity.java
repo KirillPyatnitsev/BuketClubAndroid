@@ -143,11 +143,22 @@ public class BucketDetalisActivity extends BaseActivity {
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
-                Helper.adjustTransition(BucketDetalisActivity.this);
+//                onBackPressed();
+                goToBackActivity();
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        goToBackActivity();
+    }
+
+    private void goToBackActivity() {
+        startActivity(new Intent(this, BucketsActivity.class));
+        Helper.adjustTransition(BucketDetalisActivity.this);
+        finish();
     }
 
     private void initView() {

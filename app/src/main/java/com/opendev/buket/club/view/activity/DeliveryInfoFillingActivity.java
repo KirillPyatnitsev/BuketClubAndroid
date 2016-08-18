@@ -35,6 +35,7 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.opendev.buket.club.tools.Helper;
 import com.seatgeek.placesautocomplete.OnPlaceSelectedListener;
 import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
 import com.seatgeek.placesautocomplete.model.Place;
@@ -151,6 +152,17 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        goToBackActivity();
+    }
+
+    private final void goToBackActivity() {
+        startActivity(new Intent(this, BucketDetalisActivity.class));
+        Helper.adjustTransition(DeliveryInfoFillingActivity.this);
+        finish();
+    }
+
+    @Override
     public void onConnected(Bundle bundle) {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -189,7 +201,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         imageBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed();
+                goToBackActivity();
             }
         });
 
