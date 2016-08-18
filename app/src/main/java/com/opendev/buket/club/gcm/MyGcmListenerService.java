@@ -67,7 +67,7 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         Intent intent = new Intent(this, OrdersActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
@@ -78,14 +78,14 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setSmallIcon(R.drawable.push_icon)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText(message)
-                .setAutoCancel(false)
+                .setAutoCancel(true)
                 .setSound(soundUri)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(99, notificationBuilder.build());
 
     }
 }

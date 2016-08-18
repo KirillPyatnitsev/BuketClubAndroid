@@ -22,8 +22,6 @@ public class ServerConfig {
     public static final String FLURRY_API_KEY = "MDW7F3F52TFGVDYG5T9S";
     public static final String MIXPANEL_API_KEY = "33820e1b43766840234930ba41432dd2";
 
-    public static final String GCM_DEFAULT_SENDER_ID = "915505288420";
-
     public static final String YANDEX_KASSA_CLIENT_ID = "CF81271080DB5D1AC2C1659FA16962AAD09FCEEBF3D3DF88DF32B7FD243EE77D";
     public static final String YANDEX_KASSA_P2P = "410013897372739";
 

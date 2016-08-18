@@ -58,7 +58,7 @@ public class EngineerDialogFragment extends DialogFragment {
 
         messageBuilder.restrictedPackageName(restrictedPackageName.trim());
 
-        final String apiKey = getString(R.string.sender_api_key);
+        final String apiKey = getString(R.string.google_api_key);
         final String registrationId = PreferenceCache.getString(getActivity(), PreferenceCache.KEY_GCM_TOKEN);
 
         new AsyncTask<Void, Void, String>() {

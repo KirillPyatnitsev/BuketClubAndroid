@@ -1,8 +1,5 @@
 <resources>
 
-    <string name="sender_api_key">AIzaSyD1kd6bMFWKkAtuf_3B6ycACB9HDkxceqw</string>
-    <string name="sender_id">915505288420</string>
-
     <string name="app_name">Buket.Club</string>
 
     <string name="text_chose_bouquet">Выберите букет</string>

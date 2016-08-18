@@ -1,6 +1,7 @@
 package com.opendev.buket.club.view.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -13,14 +14,13 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.flurry.android.FlurryAgent;
+import com.opendev.buket.club.DataController;
+import com.opendev.buket.club.R;
+import com.opendev.buket.club.consts.ServerConfig;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.opendev.buket.club.DataController;
-import com.opendev.buket.club.R;
-import com.opendev.buket.club.consts.ServerConfig;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
@@ -29,11 +29,20 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private RelativeLayout relativeLoading;
     private int runningProcessCount = 0;
+    private boolean isFinishWithCreateNewActivity = false;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
+
+        if (DataController.getInstance().getSession() == null) {
+            if (!this.getClass().getSimpleName().equals("SplashScreenActivity")) {
+                isFinishWithCreateNewActivity = true;
+                finish();
+                return;
+            }
+        }
 
         DataController.getInstance().setBaseActivity(this);
 
@@ -45,6 +54,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected final void onDestroy() {
+        if (isFinishWithCreateNewActivity) {
+            Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
         DataController.getInstance().removeBaseActivity(this);
         super.onDestroy();
         Log.d(TAG, "onDestroy: " + this.getClass().getName());

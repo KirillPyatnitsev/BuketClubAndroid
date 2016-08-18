@@ -29,6 +29,7 @@ import com.google.android.gms.iid.InstanceID;
 
 import java.io.IOException;
 
+import com.opendev.buket.club.R;
 import com.opendev.buket.club.consts.ServerConfig;
 import com.opendev.buket.club.tools.PreferenceCache;
 
@@ -46,26 +47,18 @@ public class RegistrationIntentService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         boolean tokenSent = false;
         try {
-            // [START register_for_gcm]
-            // Initially this call goes out to the network to retrieve the token, subsequent calls
-            // are local.
-            // [START get_token]
+
             InstanceID instanceID = InstanceID.getInstance(this);
-            String token = instanceID.getToken(ServerConfig.GCM_DEFAULT_SENDER_ID,
+            String token = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                     GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-            // [END get_token]
+
             Log.i(TAG, "GCM Registration Token: " + token);
 
             sendRegistrationToServer(token);
 
-            // Subscribe to topic channels
             subscribeTopics(token);
 
-            // You should store a boolean that indicates whether the generated token has been
-            // sent to your server. If the boolean is false, send the token to your server,
-            // otherwise your server should have already received the token.
             tokenSent = true;
-            // [END register_for_gcm]
 
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
