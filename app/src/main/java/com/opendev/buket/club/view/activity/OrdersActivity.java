@@ -1,21 +1,22 @@
 package com.opendev.buket.club.view.activity;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.opendev.buket.club.BuildConfig;
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
 import com.opendev.buket.club.consts.ServerConfig;
-import com.opendev.buket.club.engineer.EngineerDialogFragment;
 import com.opendev.buket.club.model.Order;
 import com.opendev.buket.club.model.Pagination;
 import com.opendev.buket.club.model.lists.ListOrder;
@@ -30,18 +31,20 @@ public class OrdersActivity extends BaseActivity {
     private ListOrderAdapter listOrderAdapter;
     private ListView listView;
     private SwipeRefreshLayout swipeRefreshLayout;
-    private ImageView imageBack;
+  //  private ImageView imageBack;
     private Pagination pagination;
     private int lastLoadedPage;
 
-    private ImageView imageLogo;
+   // private ImageView imageLogo;
+    private Toolbar toolbar;
+
 
     @Override
     protected final void onCreateInternal() {
         setContentView(R.layout.activity_orders);
         assignView();
-        assignListener();
         initView();
+        assignListener();
     }
 
     @Override
@@ -52,9 +55,10 @@ public class OrdersActivity extends BaseActivity {
 
     private void assignView() {
         listView = getViewById(R.id.a_o_list_view_orders);
-        imageBack = getViewById(R.id.i_ab_image_back);
+       // imageBack = getViewById(R.id.i_ab_image_back);
         swipeRefreshLayout = getViewById(R.id.a_o_swipe_refresh);
-        imageLogo = getViewById(R.id.i_ab_image_icon);
+       // imageLogo = getViewById(R.id.i_ab_image_icon);
+        toolbar = getViewById(R.id.orders_toolbar);
     }
 
     private void assignListener() {
@@ -64,30 +68,37 @@ public class OrdersActivity extends BaseActivity {
                 final Order order = listOrderAdapter.get(position);
                 DataController.getInstance().setOrder(order);
 
-                if (order.isDelivered()) {
-                    goToReviewActivity();
-                } else {
+                if (order.isDelivered() || order.isProcess() || order.isDone()) {
                     goToOrderDetailsActivity();
                 }
             }
         });
 
-        if (BuildConfig.DEBUG) {
-            imageLogo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EngineerDialogFragment engineerDialogFragment = new EngineerDialogFragment();
-                    engineerDialogFragment.show(getSupportFragmentManager(), "engineerDialogFragment");
-                }
-            });
-        }
-
-        imageBack.setOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                onBackPressed();
+            public void onClick(View view) {
+                startActivity(new Intent(OrdersActivity.this, BucketsActivity.class));
             }
         });
+
+
+
+       // if (BuildConfig.DEBUG) {
+        //    imageLogo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    EngineerDialogFragment engineerDialogFragment = new EngineerDialogFragment();
+//                    engineerDialogFragment.show(getSupportFragmentManager(), "engineerDialogFragment");
+//                }
+//            });
+//        }
+
+      //  imageBack.setOnClickListener(new View.OnClickListener() {
+      //      @Override
+        //    public void onClick(View v) {
+     //           onBackPressed();
+      ////      }
+      //  });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -113,7 +124,7 @@ public class OrdersActivity extends BaseActivity {
 
     @Override
     public final void onBackPressed() {
-        goToBouquetsActivity();
+        startActivity(new Intent(OrdersActivity.this, BucketsActivity.class));
     }
 
     private void goToBouquetsActivity() {
@@ -121,9 +132,25 @@ public class OrdersActivity extends BaseActivity {
     }
 
     private void initView() {
-        imageBack.setVisibility(View.VISIBLE);
+        //imageBack.setVisibility(View.VISIBLE);
         listOrderAdapter = new ListOrderAdapter(this);
         listView.setAdapter(listOrderAdapter);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ////getSupportActionBar().setHomeButtonEnabled(true);
+       // toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_hamburger));
+
+        setTitle("Мои заказы");
+
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.
+                getColor(this, R.color.list_bouquet_color), ContextCompat.
+                getColor(this, R.color.list_bouquet_color),ContextCompat.
+                getColor(this, R.color.list_bouquet_color));
     }
 
     @Override
@@ -186,5 +213,23 @@ public class OrdersActivity extends BaseActivity {
 
     private void goToReviewActivity() {
         startActivity(new Intent(this, ReviewActivity.class));
+
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+         /*   case R.id.action_bullets:
+                launchCustomDialog();*/
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -16,12 +17,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.github.pinball83.maskededittext.MaskedEditText;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
-import com.transitionseverywhere.TransitionManager;
-
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
 import com.opendev.buket.club.consts.ServerConfig;
@@ -29,16 +29,23 @@ import com.opendev.buket.club.gcm.QuickstartPreferences;
 import com.opendev.buket.club.gcm.RegistrationIntentService;
 import com.opendev.buket.club.model.Profile;
 import com.opendev.buket.club.model.Session;
+import com.opendev.buket.club.tools.AsyncResponse;
 import com.opendev.buket.club.tools.Helper;
 import com.opendev.buket.club.tools.PreferenceCache;
-import com.opendev.buket.club.view.custom.maskededittext.MaskedEditText;
 import com.opendev.buket.club.web.WebMethods;
 import com.opendev.buket.club.web.response.DefaultResponse;
 import com.opendev.buket.club.web.response.PhoneCodeResponse;
 import com.opendev.buket.club.web.response.ProfileResponse;
 import com.opendev.buket.club.web.response.SessionResponse;
+import com.transitionseverywhere.TransitionManager;
 
-public class SplashScreenActivity extends BaseActivity {
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class SplashScreenActivity extends BaseActivity implements AsyncResponse {
 
     private static final boolean TEST_APPLICATION_MODE = false;
 
@@ -48,8 +55,8 @@ public class SplashScreenActivity extends BaseActivity {
     private Session session;
     private Profile profile;
 
-    private Button buttonFlexible;
-    private Button buttonFix;
+    //  private Button buttonFlexible;
+    //  private Button buttonFix;
     private Button buttonNext;
     private TextView textResendCode;
 
@@ -58,6 +65,7 @@ public class SplashScreenActivity extends BaseActivity {
     private MaskedEditText editPhone;
 
     private String phone;
+    private int randomPin;
 
     @Override
     protected void onCreateInternal() {
@@ -74,19 +82,17 @@ public class SplashScreenActivity extends BaseActivity {
             startService(intent);
         }
 
+
+
         Log.d(TAG, "deviceId: " + getUniqueDeviceId());
 
         assignView();
+
         assignListener();
 
-        if (TEST_APPLICATION_MODE) {
-            buttonFix.setVisibility(View.VISIBLE);
-            buttonFlexible.setVisibility(View.VISIBLE);
-        } else {
-            if (tokenSent) {
-                startApp();
-            }
-        }
+        startApp();
+
+
 
         LocalBroadcastManager.getInstance(this).registerReceiver(gcmRegistrationDone,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
@@ -124,21 +130,22 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void assignView() {
-        buttonFix = getViewById(R.id.a_ss_button_fix);
-        buttonFlexible = getViewById(R.id.a_ss_button_flex);
+        //  buttonFix = getViewById(R.id.a_ss_button_fix);
+        // buttonFlexible = getViewById(R.id.a_ss_button_flex);
         buttonNext = getViewById(R.id.a_ss_button_enter);
         textResendCode = getViewById(R.id.a_ss_text_resend);
 
         editName = getViewById(R.id.a_ss_edit_name);
         editCode = getViewById(R.id.a_ss_edit_code);
         editPhone = getViewById(R.id.a_ss_edit_phone);
+
     }
 
     private void createSession() {
         startLoading();
         PreferenceCache.removeKey(this, PreferenceCache.KEY_SESSION);
         WebMethods.getInstance().createSession(getUniqueDeviceId(),
-                PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN),
+                PreferenceCache.getString(this, PreferenceCache.KEY_GCM_TOKEN), ServerConfig.BUKET_CLUB_PROJECT_ID,
                 new RequestListener<SessionResponse>() {
                     @Override
                     public void onRequestFailure(SpiceException spiceException) {
@@ -157,19 +164,19 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void assignListener() {
-        buttonFix.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startApp();
-            }
-        });
-
-        buttonFlexible.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startApp();
-            }
-        });
+//        buttonFix.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startApp();
+//            }
+//        });
+//
+//        buttonFlexible.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startApp();
+//            }
+//        });
 
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,12 +199,20 @@ public class SplashScreenActivity extends BaseActivity {
     private void next() {
         String name = editName.getText().toString();
         String phone = editPhone.getText().toString();
+        String phone1 = editPhone.getUnmaskedText();
+
         if (this.phone == null || !this.phone.equals(phone)) {
             if (name.isEmpty()) {
                 showSnackBar(R.string.name_not_entered);
             } else if (Helper.isPhoneNumberValid(phone)) {
                 this.phone = phone;
-                phoneVerificationStartPostRequest(phone, name);
+                //phoneVerificationStartPostRequest(phone, name);
+                randomPin = (int)(Math.random()*9000)+1000;
+                String apiKey = "54C89625-8019-06DA-52A7-CF791AFEEB5D";
+                String url = "http://sms.ru/sms/send?api_id=" + apiKey + "&to=" + phone1 + "&text=" + "Your%20code:" + randomPin;
+                GetPhoneQuery getPhoneQuery = new GetPhoneQuery();
+                getPhoneQuery.delegate = this;
+                getPhoneQuery.execute(url);
             } else {
                 showSnackBar(R.string.phone_not_entered);
             }
@@ -208,7 +223,7 @@ public class SplashScreenActivity extends BaseActivity {
             profile.setPhone(phone);
             profile.setFillName(name);
             profile.setCode(code);
-            profilePatchRequest(profile);
+           // profilePatchRequest(profile);
         }
     }
 
@@ -223,6 +238,24 @@ public class SplashScreenActivity extends BaseActivity {
 
     private void saveSession(Session session) {
         DataController.getInstance().setSession(session);
+    }
+
+
+
+    private void generateTypePrice() {
+        startLoading();
+        WebMethods.getInstance().generateTypePrice(new RequestListener<DefaultResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                stopLoading();
+            }
+
+            @Override
+            public void onRequestSuccess(DefaultResponse defaultResponse) {
+                getProfile();
+                stopLoading();
+            }
+        });
     }
 
     private void getProfile() {
@@ -250,24 +283,11 @@ public class SplashScreenActivity extends BaseActivity {
         });
     }
 
-    private void generateTypePrice() {
-        startLoading();
-        WebMethods.getInstance().generateTypePrice(new RequestListener<DefaultResponse>() {
-            @Override
-            public void onRequestFailure(SpiceException spiceException) {
-                stopLoading();
-            }
-
-            @Override
-            public void onRequestSuccess(DefaultResponse defaultResponse) {
-                getProfile();
-                stopLoading();
-            }
-        });
-    }
-
     @Override
     protected void allProcessDone() {
+        /*if (profile != null) {
+            profile.setPhone(null);////
+        }*/
         if (session != null && profile != null) {
             session.setAppMode(profile.getTypePriceIndex());
             saveSession(session);
@@ -287,12 +307,13 @@ public class SplashScreenActivity extends BaseActivity {
     }
 
     private void showRegistration() {
-        TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+
         editName.setVisibility(View.VISIBLE);
         editPhone.setVisibility(View.VISIBLE);
         buttonNext.setVisibility(View.VISIBLE);
-        buttonFix.setVisibility(View.GONE);
-        buttonFlexible.setVisibility(View.GONE);
+//        buttonFix.setVisibility(View.GONE);
+//        buttonFlexible.setVisibility(View.GONE);
+        // editPhone.getBackground().mutate().setColorFilter(getResources().getColor(R.color.gray), PorterDuff.Mode.SRC_ATOP);
     }
 
     private boolean checkPlayServices() {
@@ -328,7 +349,7 @@ public class SplashScreenActivity extends BaseActivity {
                             profile.setPhone(phone);
                             profile.setFillName(name);
                             profile.setCode(phoneCodeResponse.getPhoneVerification().getCode());
-                            profilePatchRequest(profile);
+                           // profilePatchRequest(profile);
                         } else {
                             showSnackBar(R.string.code_write_second);
                             TransitionManager.beginDelayedTransition(getCoordinatorLayout());
@@ -337,6 +358,10 @@ public class SplashScreenActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    private void phoneRequest(){
+
     }
 
     private void profilePatchRequest(Profile profile) {
@@ -349,14 +374,98 @@ public class SplashScreenActivity extends BaseActivity {
 
                     @Override
                     public void onRequestSuccess(DefaultResponse defaultResponse) {
+                        DataController.getInstance().setName(editName.getText().toString());
+                        DataController.getInstance().setPhone(editPhone.getUnmaskedText());
                         goToBuketActivity();
                     }
                 }
         );
     }
 
+    @Override
+    public void processFinish(String output) {
+        Log.d(TAG, output);
+        int code = Integer.parseInt(output.substring(0, 3));
+        if (code == 100) {
+            queueShowResend();
+            showSnackBar(R.string.code_write_second);
+            TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+            editCode.setVisibility(View.VISIBLE);
+            buttonNext.setText("ПОДТВЕРДИТЬ");
+            buttonNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String p = editCode.getText().toString();
+                    int inputCode = 0;
+                    if (!p.equals("")) {
+                        inputCode = Integer.parseInt(p);
+                    }
+                    if (inputCode == randomPin){
+                        DataController.getInstance().setName(editName.getText().toString());
+                        DataController.getInstance().setPhone(editPhone.getUnmaskedText());
+                        Profile profile = new Profile();
+                        profile.setPhone(editPhone.getUnmaskedText());
+                        profile.setFillName(editName.getText().toString());
+                        profilePatchRequest(profile);
+                        goToBuketActivity();
+                    } else {
+                        showSnackBar(R.string.code_is_wrong);
+                    }
+                }
+            });
+        } else {
+            showSnackBar(R.string.phone_verification_error);
+        }
+    }
+
+    private class GetPhoneQuery extends AsyncTask<String, Integer, String> {
+        public AsyncResponse delegate;
+
+
+
+        protected String doInBackground(String... urls) {
+
+            HttpURLConnection urlConnection = null;
+            StringBuilder sb = new StringBuilder();
+            try {
+
+                URL url = new URL(urls[0]);
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                int code = urlConnection.getResponseCode();
+
+                InputStream in = (InputStream) urlConnection.getContent();
+
+                InputStreamReader isw = new InputStreamReader(in);
+
+                int data = isw.read();
+                while (data != -1) {
+                    char current = (char) data;
+                    data = isw.read();
+                    sb.append(current);
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return sb.toString();
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        protected void onPostExecute(String result) {
+            // this is executed on the main thread after the process is over
+            // update your UI here
+            delegate.processFinish(result);
+        }
+    }
+
     private String getUniqueDeviceId() {
         String id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         return id;
     }
+
+
 }

@@ -10,9 +10,9 @@
     <color name="black_light">#333333</color>
     <color name="green">#7BCB23</color>
 
-    <color name="colorPrimary">@color/yellow</color>
-    <color name="colorPrimaryDark">@color/yellow</color>
-    <color name="colorAccent">@color/pink</color>
+    <color name="colorPrimary">@color/list_bouquet_color</color>
+    <color name="colorPrimaryDark">@color/list_bouquet_color</color>
+    <color name="colorAccent">@color/black</color>
 
     <color name="text_color_default">@color/black</color>
     <color name="text_color_grey">@color/gray</color>
@@ -40,5 +40,20 @@
     <color name="red_price">#f10130</color>
     <color name="green_border">#1cc220</color>
 
+    <color name="slider1_color">#edae5c</color>
+    <color name="slider2_color">#a2d9fd</color>
+    <color name="slider3_color">#ff77ab</color>
 
+    <color name="color_dot_inactive">#d8d8d8</color>
+    <color name="color_dot_active">#ffffff</color>
+    <color name="list_bouquet_color">#63d4ff</color>
+    <color name="list_price_color">#00bdfa</color>
+    <color name="toolbar_color">#86dafe</color>
+    <color name="btn_pressed_color">#00bdfa</color>
+    <color name="rating_text">#ffdf00</color>
+    <color name="gray_text">#444444</color>
+    <color name="light_gray_text">#aaaaaa</color>
+    <color name="success_background">#3e99d2</color>
+    <color name="order_background_gray">#efefef</color>
+    <color name="delivery_green">#00a45b</color>
 </resources>

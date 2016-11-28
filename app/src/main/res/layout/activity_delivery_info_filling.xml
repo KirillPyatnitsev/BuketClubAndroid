@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
@@ -12,98 +17,133 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:id="@+id/delivery_toolbar"
+            layout="@layout/toolbar"/>
+
         <ImageView
             android:id="@+id/a_dif_blur_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone" />
-
-        <RelativeLayout
-            android:id="@+id/a_dif_relative_action_bar_container"
+            android:visibility="visible" />
+        <ScrollView
+            android:layout_below="@id/delivery_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:id="@+id/a_dif_image_action_bar_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
-                android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_dif_close"
-                android:src="@drawable/round_action_bar" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <include
-                    android:id="@+id/a_dif_action_bar"
-                    layout="@layout/include_action_bar" />
-
-                <TextView
-                    android:id="@+id/a_dif_text_action_bar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/a_dif_action_bar"
-                    android:layout_centerHorizontal="true"
-
-                    android:text="@string/text_delivery"
-                    android:textColor="@color/text_color_default"
-                    android:textSize="@dimen/text_size_large"
-                    android:visibility="visible" />
-
-            </RelativeLayout>
-
-        </RelativeLayout>
-
+            android:layout_height="match_parent">
         <RelativeLayout
             android:id="@+id/a_dif_relative_content_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/a_dif_relative_action_bar_container"
-            android:layout_marginTop="-37dp">
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_below="@id/delivery_toolbar">
 
 
-                <LinearLayout
+
+
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_normal"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
                     <TextView
                         style="@style/small_text.text_black"
-                        android:text="@string/text_delivery_type" />
+                        android:text="@string/text_delivery_type"
+                        android:id="@+id/delivery_type_title"
+                        android:textColor="@color/gray_text"
+                        android:visibility="visible"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginTop="@dimen/margin_super_large"
+                        android:layout_marginLeft="@dimen/margin_super_large"/>
 
-                    <fr.ganfra.materialspinner.MaterialSpinner
+                    <Spinner
                         android:id="@+id/a_dif_spinner_delivery_type_place"
-                        style="@style/spinner"/>
+                        style="@style/spinner"
+                        android:visibility="visible"
+                        android:layout_below="@id/delivery_type_title"
+                        android:layout_alignLeft="@id/delivery_type_title"/>
 
                     <TextView
                         style="@style/small_text.text_black"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/text_delivery_time" />
+                        android:text="@string/text_delivery_time"
+                        android:textColor="@color/gray_text"
+                        android:visibility="visible"
+                        android:id="@+id/a_dif_spinner_delivery_type_time_text"
+                        android:layout_alignLeft="@id/a_dif_spinner_delivery_type_place"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_below="@id/a_dif_spinner_delivery_type_place"/>
 
-                    <fr.ganfra.materialspinner.MaterialSpinner
+                    <Spinner
                         android:id="@+id/a_dif_spinner_delivery_type_time"
-                        style="@style/spinner"/>
+                        style="@style/spinner"
+                        android:visibility="visible"
+                        android:layout_below="@id/a_dif_spinner_delivery_type_time_text"
+                        android:layout_alignLeft="@id/a_dif_spinner_delivery_type_place"
+                        />
 
-                    <TextView
-                        android:id="@+id/a_dif_text_delivery_address"
-                        style="@style/small_text.text_black"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/text_address_delivery_1"
-                        android:visibility="gone"/>
+
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:text="@string/name_hint"
+                            android:textColor="@color/gray_text"
+                            android:visibility="visible"
+                            android:id="@+id/delivery_name_input_title"
+                            android:layout_alignLeft="@id/a_dif_spinner_delivery_type_place"
+
+                            android:layout_marginTop="@dimen/margin_large"
+                            android:layout_below="@id/a_dif_spinner_delivery_type_time"/>
+                        <EditText
+                            android:id="@+id/delivery_name_input"
+                            style="@style/text_view_normal"
+                            android:visibility="visible"
+                            android:singleLine="true"
+                            android:hint="Введите имя..."
+                            android:layout_alignLeft="@id/delivery_name_input_title"
+                            android:layout_below="@id/delivery_name_input_title"/>
+
+
+
+
+
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:text="Контактный телефон"
+                            android:textColor="@color/gray_text"
+                            android:visibility="visible"
+                            android:id="@+id/a_dif_edit_phone_label"
+                            android:layout_below="@id/delivery_name_input"
+                            android:layout_alignLeft="@id/a_dif_spinner_delivery_type_place"
+                            android:layout_marginTop="@dimen/margin_large"/>
+                    <com.github.pinball83.maskededittext.MaskedEditText
+                        android:id="@+id/a_dif_edit_phone"
+                        android:visibility="visible"
+                        android:textColor="@color/gray_text"
+                        app:mask="7 (***) *** **-**"
+                        app:notMaskedSymbol="*"
+                        style="@style/text_view_normal"
+                        android:inputType="number"
+                        android:layout_below="@id/a_dif_edit_phone_label"
+                        android:layout_alignLeft="@id/a_dif_edit_phone_label"
+                        />
+
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/a_dif_text_delivery_address"-->
+                        <!--style="@style/small_text.text_black"-->
+                        <!--android:text="@string/text_address_delivery_1"-->
+                        <!--android:visibility="visible"/>-->
+
 
                     <RelativeLayout
                         android:id="@+id/a_dif_relative_address_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:visibility="visible"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_alignLeft="@id/a_dif_edit_phone_label"
+                        android:layout_below="@id/a_dif_edit_phone">
 
                         <ImageButton
                             android:id="@+id/a_dif_button_my_location"
@@ -115,12 +155,22 @@
                             android:layout_alignParentRight="true"
                             android:visibility="gone"/>
 
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:id="@+id/delivery_address_title"
+                            android:text="Адрес доставки"
+                            android:textColor="@color/gray_text"
+                            android:visibility="visible"/>
                         <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
                             android:id="@+id/a_dif_edit_delivery_address"
                             android:layout_width="match_parent"
+                            style="@style/text_view_normal"
+                            android:theme="@style/text_view_normal"
+                            android:hint="Выберите адрес..."
                             android:layout_height="wrap_content"
                             app:pacv_googleMapsApiKey="@string/google_maps_server_key"
-                            android:layout_toLeftOf="@id/a_dif_button_my_location"/>
+                            android:layout_toLeftOf="@id/a_dif_button_my_location"
+                            android:layout_below="@id/delivery_address_title"/>
 
                     </RelativeLayout>
 
@@ -136,48 +186,63 @@
                         <!--style="@style/text_view_normal"-->
                         <!--android:singleLine="true" />-->
 
-                    <TextView
-                        style="@style/small_text.text_black"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/text_contact_telephone_of_recipient" />
 
-                    <com.opendev.buket.club.view.custom.maskededittext.MaskedEditText
-                        android:id="@+id/a_dif_edit_phone"
-                        style="@style/text_view_normal"
-                        android:inputType="number"
-                        custom_edit:mask="@string/phone_mask" />
 
-                    <TextView
-                        style="@style/small_text.text_black"
-                        android:layout_marginTop="@dimen/margin_small"
-                        android:text="@string/text_contact_comment_to_order" />
-
+                        <TextView
+                            style="@style/small_text.text_black"
+                            android:text="@string/comment_hint"
+                            android:textColor="@color/gray_text"
+                            android:visibility="visible"
+                            android:id="@+id/delivery_comment_title"
+                            android:layout_below="@id/a_dif_relative_address_container"
+                            android:layout_alignLeft="@id/a_dif_relative_address_container"
+                            android:layout_marginTop="@dimen/margin_large"/>
                     <EditText
                         android:id="@+id/a_dif_edit_comment"
                         style="@style/text_view_normal"
+                        android:visibility="visible"
                         android:singleLine="true"
-                        android:hint="@string/comment_hint"/>
+                        android:hint="Укажите пожелания к заказу..."
+                        android:layout_below="@id/delivery_comment_title"
+                        android:layout_alignLeft="@id/delivery_comment_title"/>
 
-                     <LinearLayout
-                         android:layout_width="match_parent"
-                         android:layout_height="wrap_content">
+
+
+
+                    <!--<Spinner-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/spinner" />-->
+
+
                          <Button
                              android:id="@+id/a_dif_button_next"
-                             style="@style/button_default"
                              android:text="@string/text_pay"
+                             android:layout_width="match_parent"
+                             android:layout_height="55dp"
+                             android:background="@drawable/details_btn_selector"
+                             android:textSize="18sp"
+                             android:gravity="center"
+                             android:layout_below="@id/a_dif_edit_comment"
+                             android:layout_marginTop="@dimen/margin_small"
+                             android:textColor="@color/white"
+                             android:textAllCaps="false"
+                             android:layout_marginLeft="@dimen/margin_small"
+                             android:layout_marginRight="@dimen/margin_small"
                              android:layout_marginBottom="@dimen/margin_small"/>
-                     </LinearLayout>
 
 
-                </LinearLayout>
 
-            </ScrollView>
+                </RelativeLayout>
+
 
 
         </RelativeLayout>
-
-        <include layout="@layout/include_progress" />
+        </ScrollView>
 
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
+
+    <include layout="@layout/include_progress" />
+</RelativeLayout>

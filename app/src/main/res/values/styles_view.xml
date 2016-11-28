@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <style name="spinner">
+    <style name="spinner" parent="Widget.AppCompat.Spinner.Underlined">
 
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -11,17 +11,31 @@
         <item name="ms_enableErrorLabel">false</item>
         <item name="ms_baseColor">@color/black</item>
         <item name="ms_highlightColor">@color/black</item>
+        <item name="android:dividerHeight">1dp</item>
         <item name="ms_thickness">1dp</item>
         <item name="ms_arrowSize">16dp</item>
+        <item name="android:dropDownHeight">60dp</item>
         <item name="ms_arrowColor">@color/black</item>
+        <item name="colorControlNormal">@color/gray_text</item>
     </style>
 
     <style name="text_view_normal">
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_normal</item>
-        <item name="android:textColor">@color/black</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlActivated">@color/black</item>
+        <item name="colorControlHighlight">@color/black</item>
+        <item name="android:textColorHint">@color/gray</item>
     </style>
+
+    <style name="ThemeSpinner" parent="">
+        <!-- Color when pressed -->
+        <item name="colorAccent">#ffa000</item>
+        <!-- Default color for the dropdown arrow and line -->
+        <item name="colorControlNormal">#ffc107</item>
+    </style>
+
 
     <style name="text_view_in_linear">
         <item name="android:layout_width">0dp</item>
@@ -39,6 +53,8 @@
 
     <style name="small_text.text_black" parent="small_text">
         <item name="android:textColor">@color/text_color_default</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:color">@color/gray_text</item>
     </style>
 
     <style name="small_text.text_grey" parent="small_text">
@@ -113,5 +129,20 @@
         <item name="android:layout_marginTop">@dimen/margin_normal</item>
         <item name="android:layout_marginBottom">@dimen/margin_normal</item>
     </style>
+
+    <style name="blue_bottom_button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/gray</item>
+        <item name="android:layout_marginTop">@dimen/margin_normal</item>
+        <item name="android:layout_marginBottom">@dimen/margin_normal</item>
+    </style>
+
+
+    <style name="floatlabelededittext">
+        <item name="android:textColor">@color/gray</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 
 </resources>

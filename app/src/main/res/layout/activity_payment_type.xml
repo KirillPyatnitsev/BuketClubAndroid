@@ -11,95 +11,95 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/a_pt_blur_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/a_pt_blur_image"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="gone"/>-->
 
-        <RelativeLayout
-            android:id="@+id/a_pt_relative_action_bar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/a_pt_relative_action_bar_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <ImageView
-                android:id="@+id/a_pt_image_action_bar_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
-                android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_pt_close"
-                android:src="@drawable/round_action_bar" />
+            <!--<ImageView-->
+                <!--android:id="@+id/a_pt_image_action_bar_background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginRight="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginTop="@dimen/margin_top_action_bar_a_pt_close"-->
+                <!--android:src="@drawable/round_action_bar" />-->
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-                <include
-                    android:id="@+id/a_pt_action_bar"
-                    layout="@layout/include_action_bar" />
+                <!--<include-->
+                    <!--android:id="@+id/a_pt_action_bar"-->
+                    <!--layout="@layout/include_action_bar" />-->
 
-                <TextView
-                    android:id="@+id/a_pt_text_action_bar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/a_pt_action_bar"
-                    android:layout_centerHorizontal="true"
+                <!--<TextView-->
+                    <!--android:id="@+id/a_pt_text_action_bar_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/a_pt_action_bar"-->
+                    <!--android:layout_centerHorizontal="true"-->
 
-                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+                    <!--android:layout_marginTop="@dimen/margin_action_bar_bellow_text"-->
 
-                    android:gravity="center"
+                    <!--android:gravity="center"-->
 
-                    android:text="@string/confirm_payment"
-                    android:textColor="@color/text_color_default"
-                    android:textSize="@dimen/text_size_large"
-                    android:visibility="visible" />
+                    <!--android:text="@string/confirm_payment"-->
+                    <!--android:textColor="@color/text_color_default"-->
+                    <!--android:textSize="@dimen/text_size_large"-->
+                    <!--android:visibility="visible" />-->
 
-                <include
-                    android:id="@+id/a_pt_view_filter"
-                    style="@style/filter_container"
-                    layout="@layout/include_bucket_filter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/a_pt_action_bar"
-                    android:visibility="gone" />
+                <!--<include-->
+                    <!--android:id="@+id/a_pt_view_filter"-->
+                    <!--style="@style/filter_container"-->
+                    <!--layout="@layout/include_bucket_filter"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/a_pt_action_bar"-->
+                    <!--android:visibility="gone" />-->
 
-            </RelativeLayout>
+            <!--</RelativeLayout>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
-        <RelativeLayout
-            android:id="@+id/a_pt_relative_content_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="10dp">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/a_pt_relative_content_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:padding="10dp">-->
 
-            <TextView
-                android:id="@+id/a_pt_text_confirm_payment"
-                style="@style/text_pay_type_normal"
-                android:textSize="24sp"
-                android:text="@string/failed_payment"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true" />
+            <!--<TextView-->
+                <!--android:id="@+id/a_pt_text_confirm_payment"-->
+                <!--style="@style/text_pay_type_normal"-->
+                <!--android:textSize="24sp"-->
+                <!--android:text="@string/failed_payment"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:layout_centerVertical="true" />-->
 
-            <TextView
-                android:id="@+id/a_pt_text_confirm_payment_hint"
-                style="@style/text_pay_type_small"
-                android:text="@string/confirm_payment_hint"
-                android:layout_marginTop="40dp"
-                android:layout_alignTop="@+id/a_pt_text_confirm_payment"
-                android:layout_centerHorizontal="true"
-                android:gravity="center" />
+            <!--<TextView-->
+                <!--android:id="@+id/a_pt_text_confirm_payment_hint"-->
+                <!--style="@style/text_pay_type_small"-->
+                <!--android:text="@string/confirm_payment_hint"-->
+                <!--android:layout_marginTop="40dp"-->
+                <!--android:layout_alignTop="@+id/a_pt_text_confirm_payment"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:gravity="center" />-->
 
-            <Button
-                android:id="@+id/a_pt_button_try_pay_again"
-                style="@style/button_default"
-                android:text="@string/try_pay_again"
-                android:textSize="@dimen/text_size_normal"
-                android:layout_alignParentBottom="true" />
+            <!--<Button-->
+                <!--android:id="@+id/a_pt_button_try_pay_again"-->
+                <!--style="@style/button_default"-->
+                <!--android:text="@string/try_pay_again"-->
+                <!--android:textSize="@dimen/text_size_normal"-->
+                <!--android:layout_alignParentBottom="true" />-->
 
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
         <!--
         <RelativeLayout

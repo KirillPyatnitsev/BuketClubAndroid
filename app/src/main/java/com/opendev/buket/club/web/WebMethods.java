@@ -2,7 +2,6 @@ package com.opendev.buket.club.web;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.ImageView;
 
 import com.octo.android.robospice.SpiceManager;
 import com.octo.android.robospice.persistence.exception.SpiceException;
@@ -10,9 +9,6 @@ import com.octo.android.robospice.request.SpiceRequest;
 import com.octo.android.robospice.request.listener.RequestListener;
 import com.octo.android.robospice.retry.DefaultRetryPolicy;
 import com.octo.android.robospice.retry.RetryPolicy;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
-
 import com.opendev.buket.club.BuildConfig;
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
@@ -21,6 +17,7 @@ import com.opendev.buket.club.model.Order;
 import com.opendev.buket.club.model.Profile;
 import com.opendev.buket.club.view.activity.BaseActivity;
 import com.opendev.buket.club.web.request.AddressGetRequest;
+import com.opendev.buket.club.web.request.AlphaPayRequest;
 import com.opendev.buket.club.web.request.BouquetsGetRequest;
 import com.opendev.buket.club.web.request.DictionaryGetRequest;
 import com.opendev.buket.club.web.request.GenerateTypePriceRequest;
@@ -39,6 +36,7 @@ import com.opendev.buket.club.web.request.ReviewRequest;
 import com.opendev.buket.club.web.request.SessionCreateRequest;
 import com.opendev.buket.club.web.request.SessionUpdateRequest;
 import com.opendev.buket.club.web.request.ShopsAllGetRequest;
+import com.opendev.buket.club.web.response.AlphaPayResponse;
 import com.opendev.buket.club.web.response.BouquetsResponse;
 import com.opendev.buket.club.web.response.DefaultResponse;
 import com.opendev.buket.club.web.response.DictionaryResponse;
@@ -84,8 +82,8 @@ public class WebMethods {
         this.mSpiceManager = mSpiceManager;
     }
 
-    public void createSession(String uuid, String deviceToken, RequestListener<SessionResponse> listener) {
-        execute(new SessionCreateRequest(uuid, deviceToken), listener);
+    public void createSession(String uuid, String deviceToken, int projectId, RequestListener<SessionResponse> listener) {
+        execute(new SessionCreateRequest(uuid, deviceToken, projectId), listener);
     }
 
     public void loadBouquets(int flowerTypeId,
@@ -105,6 +103,11 @@ public class WebMethods {
 
     public void getDictionary(String dictionaryType, RequestListener<DictionaryResponse> listener) {
         execute(new DictionaryGetRequest(dictionaryType), listener);
+    }
+
+    public void alphaPayRequest(String username, String password, String orderNumber, String amount, String returnUrl, String failUrl,
+                                RequestListener<AlphaPayResponse> listener) {
+        execute(new AlphaPayRequest(username, password, orderNumber, amount, returnUrl, failUrl), listener);
     }
 
     public void sendOrder(Order order, RequestListener<OrderResponse> listener) {

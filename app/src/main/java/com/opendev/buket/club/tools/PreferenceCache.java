@@ -90,4 +90,15 @@ public final class PreferenceCache {
         T object = objectMapper.readValue(json, clazz);
         return object;
     }
+
+    public static boolean putInt(Context context, String key, int value) {
+        SharedPreferences.Editor editor = getEditor(context);
+        editor.putInt(key, value);
+        return editor.commit();
+    }
+
+    public static int getInt(Context context, String key) {
+        SharedPreferences sharedPref = getSharedPreferences(context);
+        return sharedPref.getInt(key, 2);
+    }
 }

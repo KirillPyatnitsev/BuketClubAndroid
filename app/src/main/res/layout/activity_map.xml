@@ -10,16 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/a_m_blur_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"/>
+        <!--<ImageView-->
+            <!--android:id="@+id/a_m_blur_image"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="gone"/>-->
 
-        <RelativeLayout
-            android:id="@+id/a_m_relative_content_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/a_m_relative_content_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
 
             <fragment
                 android:id="@+id/map"
@@ -27,59 +27,59 @@
                 android:layout_height="match_parent"
                 android:name="com.google.android.gms.maps.SupportMapFragment"/>
 
-            <Button
-                android:id="@+id/a_m_button_next"
-                style="@style/button_default"
-                android:text="@string/text_continue"
-                android:textSize="@dimen/text_size_normal"
-                android:layout_alignParentBottom="true"/>
+            <!--<Button-->
+                <!--android:id="@+id/a_m_button_next"-->
+                <!--style="@style/button_default"-->
+                <!--android:text="@string/text_continue"-->
+                <!--android:textSize="@dimen/text_size_normal"-->
+                <!--android:layout_alignParentBottom="true"/>-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
-        <RelativeLayout
-            android:id="@+id/a_m_relative_action_bar_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/a_m_relative_action_bar_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-            <ImageView
-                android:id="@+id/a_m_image_action_bar_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
-                android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_m_close"
-                android:src="@drawable/round_action_bar" />
+            <!--<ImageView-->
+                <!--android:id="@+id/a_m_image_action_bar_background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginRight="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginTop="@dimen/margin_top_action_bar_a_m_close"-->
+                <!--android:src="@drawable/round_action_bar" />-->
 
 
-            <include
-                android:id="@+id/a_m_action_bar"
-                layout="@layout/include_action_bar" />
+            <!--<include-->
+                <!--android:id="@+id/a_m_action_bar"-->
+                <!--layout="@layout/include_action_bar" />-->
 
-            <TextView
-                android:id="@+id/a_m_text_action_bar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/a_m_action_bar"
-                android:layout_centerHorizontal="true"
+            <!--<TextView-->
+                <!--android:id="@+id/a_m_text_action_bar_title"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/a_m_action_bar"-->
+                <!--android:layout_centerHorizontal="true"-->
 
-                android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
+                <!--android:layout_marginTop="@dimen/margin_action_bar_bellow_text"-->
 
-                android:text="@string/text_chose_address_delivery"
-                android:textColor="@color/text_color_default"
-                android:gravity="center"
-                android:textSize="@dimen/text_size_large"
-                android:visibility="visible" />
+                <!--android:text="@string/text_chose_address_delivery"-->
+                <!--android:textColor="@color/text_color_default"-->
+                <!--android:gravity="center"-->
+                <!--android:textSize="@dimen/text_size_large"-->
+                <!--android:visibility="visible" />-->
 
-            <include
-                android:id="@+id/a_m_view_filter"
-                style="@style/filter_container"
-                layout="@layout/include_map_filter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/a_m_action_bar"
-                android:visibility="gone" />
+            <!--<include-->
+                <!--android:id="@+id/a_m_view_filter"-->
+                <!--style="@style/filter_container"-->
+                <!--layout="@layout/include_map_filter"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@id/a_m_action_bar"-->
+                <!--android:visibility="gone" />-->
 
-        </RelativeLayout>
+        <!--</RelativeLayout>-->
 
         <include layout="@layout/include_progress"/>
 

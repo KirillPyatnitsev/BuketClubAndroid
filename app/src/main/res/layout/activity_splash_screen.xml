@@ -1,67 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:custom_edit="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/a_ss_coordinator_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color_primary">
+    android:background="@color/white">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/a_ss_image_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/logo_splash" />
 
-            <LinearLayout
-                android:id="@+id/a_ss_linear_buttons_container"
+
+
+            <!--<ImageView-->
+                <!--android:id="@+id/a_ss_image_logo"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:src="@drawable/logo_splash" />-->
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/a_ss_image_logo"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/margin_larger"
                 android:orientation="vertical"
+                android:id="@+id/logo_layout"
+                android:layout_marginTop="@dimen/margin_larger">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/splash_circle"
+                android:src="@drawable/splash_circle"
                 android:layout_marginLeft="@dimen/margin_larger"
-                android:layout_marginRight="@dimen/margin_larger">
+                android:layout_centerVertical="true"/>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+        </RelativeLayout>
 
+
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/splash_name_edit"
+                        android:layout_below="@id/logo_layout"
+                        android:layout_marginTop="85dp"
+                        android:layout_marginLeft="@dimen/margin_super_large"
+                        android:layout_gravity="center_horizontal">
                     <EditText
                         android:id="@+id/a_ss_edit_name"
                         style="@style/text_view_normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/your_name"
-                        android:textColorHint="@color/black"
-                        android:layout_gravity="center_horizontal"
+                        android:inputType="textCapSentences"
                         android:visibility="gone"
-                        android:singleLine="true"
-                        android:layout_marginBottom="@dimen/margin_small"/>
+                        android:singleLine="true"/>
+                    </android.support.design.widget.TextInputLayout>
 
-                    <com.opendev.buket.club.view.custom.maskededittext.MaskedEditText
+
+                    <!--<com.wrapp.floatlabelededittext.FloatLabeledEditText-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/a_ss_edit_phone_label"-->
+                        <!--android:layout_marginLeft="@dimen/margin_super_large"-->
+                        <!--android:layout_below="@id/splash_name_edit">-->
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/a_ss_edit_phone_label"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_marginLeft="@dimen/margin_super_large"
+                        android:layout_below="@id/splash_name_edit">
+                    <com.github.pinball83.maskededittext.MaskedEditText
                         android:id="@+id/a_ss_edit_phone"
-                        style="@style/text_view_normal"
+                        android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         android:inputType="number"
-                        custom_edit:mask="@string/phone_mask"
+                        app:mask="7 (***) *** **-**"
+                        app:notMaskedSymbol="*"
+                        android:hint="Телефон"
                         android:visibility="gone"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/margin_small"/>
+                        android:layout_gravity="center_horizontal"/>
+                    </android.support.design.widget.TextInputLayout>
+                    <!--</com.wrapp.floatlabelededittext.FloatLabeledEditText>-->
 
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/a_ss_edit_code_label"
+                        android:layout_marginLeft="@dimen/margin_super_large"
+                        android:layout_marginTop="@dimen/margin_large"
+                        android:layout_below="@id/a_ss_edit_phone_label">
                     <EditText
                         android:id="@+id/a_ss_edit_code"
                         style="@style/text_view_normal"
@@ -72,17 +110,10 @@
                         android:visibility="gone"
                         android:maxLength="4"
                         android:inputType="numberDecimal"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginBottom="@dimen/margin_small"/>
+                        android:layout_gravity="center_horizontal"/>
+                    </android.support.design.widget.TextInputLayout>
 
-                    <Button
-                        android:id="@+id/a_ss_button_enter"
-                        style="@style/button_default"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Регистрация"
-                        android:visibility="gone"
-                        android:layout_marginBottom="@dimen/margin_small"/>
+
 
                     <TextView
                         android:id="@+id/a_ss_text_resend"
@@ -90,40 +121,40 @@
                         android:textSize="@dimen/text_size_small"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
                         android:text="Отправить код еще раз"
+                        android:layout_below="@id/a_ss_edit_code_label"
                         android:visibility="gone"
                         android:layout_gravity="center_horizontal"
                         android:textStyle="bold"/>
 
 
-                </LinearLayout>
 
 
 
-                <Button
-                    android:id="@+id/a_ss_button_fix"
-                    style="@style/button_default.white"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Фиксированная цена"
-                    android:visibility="gone"/>
-
-                <Button
-                    android:id="@+id/a_ss_button_flex"
-                    style="@style/button_default.white"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Гибкая цена"
-                    android:visibility="gone"/>
 
 
-            </LinearLayout>
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/a_ss_button_enter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/details_btn_selector"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/white"
+                android:textAllCaps="false"
+                android:textSize="18sp"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:layout_marginLeft="@dimen/margin_small"
+                android:layout_marginRight="@dimen/margin_small"
+                android:text="Зарегистрироваться"
+                android:visibility="gone"/>
+
+
 
 
     </RelativeLayout>
-
-    <include layout="@layout/include_progress" />
-
 </android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/include_progress"/>
+</RelativeLayout>

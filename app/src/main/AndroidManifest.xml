@@ -7,16 +7,21 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-    <permission android:name="com.opendev.buket.club.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.opendev.buket.club.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.opendev.buket.club.permission.C2D_MESSAGE" />
+
     <!--
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     -->
-
     <application
         android:name=".BuketClubApplication"
         android:allowBackup="false"
@@ -31,18 +36,12 @@
 
         <activity
             android:name=".view.activity.SplashScreenActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.BucketsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.BucketDetalisActivity"
-            android:launchMode = "singleInstance"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.activity.MapActivity"
@@ -70,11 +69,20 @@
         <activity
             android:name=".view.activity.ReviewActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".view.activity.OrdersActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.activity.ChoseShopActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.activity.OrdersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.ChoseShopActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.FilterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent" />
+        <activity
+            android:name=".view.activity.SocialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Translucent" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -83,6 +91,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="com.opendev.buket.club" />
             </intent-filter>
         </receiver>
@@ -91,7 +100,6 @@
             android:name="com.octo.android.robospice.Jackson2GoogleHttpClientSpiceService"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <service
             android:name=".gcm.MyGcmListenerService"
             android:exported="false">
@@ -106,13 +114,27 @@
                 <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
-
         <service
             android:name=".gcm.RegistrationIntentService"
-            android:exported="false"/>
+            android:exported="false" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="1205a117324ab06d7e9c0b1d01cd696ed0ed9522" />
+
+        <activity
+            android:name=".view.activity.AlphaPayActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".view.activity.SplashSliderActivity"
+            android:screenOrientation="portrait"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

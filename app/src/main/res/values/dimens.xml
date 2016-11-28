@@ -67,4 +67,7 @@
     <dimen name="image_order_details_artist_icon_height">40dp</dimen>
 
     <dimen name="image_bouquet">20dp</dimen>
+    <dimen name="dots_height">30dp</dimen>
+    <dimen name="dots_margin_bottom">10dp</dimen>
+    <dimen name="options_icon_size">36dp</dimen>
 </resources>

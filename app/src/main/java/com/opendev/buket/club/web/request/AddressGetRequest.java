@@ -3,16 +3,13 @@ package com.opendev.buket.club.web.request;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 
 import com.octo.android.robospice.request.SpiceRequest;
 
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by mifkamaz on 19/02/16.
- */
+
 public class AddressGetRequest extends SpiceRequest<String> {
     private double latitude;
     private double longitude;

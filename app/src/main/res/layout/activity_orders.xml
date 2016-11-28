@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:rsb="http://schemas.android.com/apk/res-auto"
@@ -17,62 +21,68 @@
             android:layout_height="match_parent"
             android:visibility="gone"/>
 
-
-        <RelativeLayout
-            android:id="@+id/a_o_relative_action_bar_container"
+        <include
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:id="@+id/orders_toolbar"
+            layout="@layout/toolbar"/>
 
-            <ImageView
-                android:id="@+id/a_o_image_action_bar_background"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_left_right_action_bar"
-                android:layout_marginRight="@dimen/margin_left_right_action_bar"
-                android:layout_marginTop="@dimen/margin_top_action_bar_a_o_close"
-                android:src="@drawable/round_action_bar" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <include
-                    android:id="@+id/a_o_action_bar"
-                    layout="@layout/include_action_bar" />
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/a_o_relative_action_bar_container"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                <TextView
-                    android:id="@+id/a_o_text_action_bar_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/a_o_action_bar"
-                    android:layout_centerHorizontal="true"
+            <!--<ImageView-->
+                <!--android:id="@+id/a_o_image_action_bar_background"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginRight="@dimen/margin_left_right_action_bar"-->
+                <!--android:layout_marginTop="@dimen/margin_top_action_bar_a_o_close"-->
+                <!--android:src="@drawable/round_action_bar" />-->
 
-                    android:layout_marginTop="@dimen/margin_action_bar_bellow_text"
-                    android:gravity="center"
-                    android:text="@string/text_my_orders"
-                    android:textColor="@color/text_color_default"
-                    android:textSize="@dimen/text_size_large"
-                    android:visibility="visible" />
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-                <include
-                    android:id="@+id/a_o_view_filter"
-                    style="@style/filter_container"
-                    layout="@layout/include_artists_bouquet_filter"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/a_o_action_bar"
-                    android:visibility="gone" />
+                <!--<include-->
+                    <!--android:id="@+id/a_o_action_bar"-->
+                    <!--layout="@layout/include_action_bar" />-->
 
-            </RelativeLayout>
+                <!--<TextView-->
+                    <!--android:id="@+id/a_o_text_action_bar_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/a_o_action_bar"-->
+                    <!--android:layout_centerHorizontal="true"-->
 
-        </RelativeLayout>
+                    <!--android:layout_marginTop="@dimen/margin_action_bar_bellow_text"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/text_my_orders"-->
+                    <!--android:textColor="@color/text_color_default"-->
+                    <!--android:textSize="@dimen/text_size_large"-->
+                    <!--android:visibility="visible" />-->
+
+                <!--<include-->
+                    <!--android:id="@+id/a_o_view_filter"-->
+                    <!--style="@style/filter_container"-->
+                    <!--layout="@layout/include_artists_bouquet_filter"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@id/a_o_action_bar"-->
+                    <!--android:visibility="gone" />-->
+
+            <!--</RelativeLayout>-->
+
+        <!--</RelativeLayout>-->
 
         <RelativeLayout
             android:id="@+id/a_o_relative_content_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-20dp"
-            android:layout_below="@id/a_o_relative_action_bar_container">
+            android:layout_below="@id/orders_toolbar">
 
             <android.support.v4.widget.SwipeRefreshLayout
                 android:id="@+id/a_o_swipe_refresh"
@@ -82,14 +92,15 @@
                 <ListView
                     android:id="@+id/a_o_list_view_orders"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"/>
 
             </android.support.v4.widget.SwipeRefreshLayout>
 
         </RelativeLayout>
 
-        <include layout="@layout/include_progress"/>
 
     </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/include_progress"/>
+</RelativeLayout>

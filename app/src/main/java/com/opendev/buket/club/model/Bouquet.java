@@ -1,10 +1,12 @@
 package com.opendev.buket.club.model;
 
+import com.opendev.buket.club.consts.Fields;
+
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import com.opendev.buket.club.consts.Fields;
+import java.util.List;
 
 /**
  * Created by mifkamaz on 07/12/15.
@@ -61,6 +63,39 @@ public class Bouquet {
 
     @JsonProperty(Fields.UPDATED_AT)
     private String upadtedAt;
+
+    @JsonProperty(Fields.IMAGE_SMALL_URLS)
+    private List<String> imageSmallUrls;
+
+    @JsonProperty(Fields.IMAGE_MEDIUM_URLS)
+    private List<String> imageMediumUrls;
+
+    @JsonProperty(Fields.IMAGE_LARGE_URLS)
+    private List<String> imageLargeUrls;
+
+    public List<String> getImageSmallUrls() {
+        return imageSmallUrls;
+    }
+
+    public void setImageSmallUrls(List<String> imageSmallUrls) {
+        this.imageSmallUrls = imageSmallUrls;
+    }
+
+    public List<String> getImageMediumUrls() {
+        return imageMediumUrls;
+    }
+
+    public void setImageMediumUrls(List<String> imageMediumUrls) {
+        this.imageMediumUrls = imageMediumUrls;
+    }
+
+    public List<String> getImageLargeUrls() {
+        return imageLargeUrls;
+    }
+
+    public void setImageLargeUrls(List<String> imageLargeUrls) {
+        this.imageLargeUrls = imageLargeUrls;
+    }
 
     public int getId() {
         return id;
@@ -223,6 +258,19 @@ public class Bouquet {
                 return SIZE_GREAT_DESC;
             default:
                 return "";
+        }
+    }
+
+    public List<String> getImagesBySize(int sizeId) {
+        switch (sizeId) {
+            case SIZE_LITTLE:
+                return imageSmallUrls;
+            case SIZE_MEDIUM:
+                return imageMediumUrls;
+            case SIZE_GREAT:
+                return imageLargeUrls;
+            default:
+                return null;
         }
     }
 

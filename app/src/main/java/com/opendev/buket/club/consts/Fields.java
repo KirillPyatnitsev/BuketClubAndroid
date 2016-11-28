@@ -33,6 +33,10 @@ public class Fields {
     public static final String TRANSACTION_TIME = "transaction_time";
     public static final String PAID = "paid";
 
+    public static final String IMAGE_SMALL_URLS = "image_small_urls";
+    public static final String IMAGE_MEDIUM_URLS = "image_medium_urls";
+    public static final String IMAGE_LARGE_URLS = "image_large_urls";
+
     public static final String MASTER_ID = "master_id";
     public static final String CLIENT_ID = "client_id";
     public static final String REVIEW_TEXT = "review_text";

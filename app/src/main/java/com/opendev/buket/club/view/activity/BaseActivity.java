@@ -36,13 +36,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: " + this.getClass().getSimpleName());
 
-        if (DataController.getInstance().getSession() == null) {
-            if (!this.getClass().getSimpleName().equals("SplashScreenActivity")) {
+        /*if (DataController.getInstance().getSession() == null) {
+            if (!this.getClass().getSimpleName().equals("SplashSliderActivity") && !this.getClass().getSimpleName().equals("SplashScreenActivity") ) {
                 isFinishWithCreateNewActivity = true;
                 finish();
                 return;
             }
-        }
+        }*/
 
         DataController.getInstance().setBaseActivity(this);
 
@@ -55,7 +55,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected final void onDestroy() {
         if (isFinishWithCreateNewActivity) {
-            Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
+            Intent intent = new Intent(getApplicationContext(), SplashSliderActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         }
@@ -114,7 +114,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected final void startLoading() {
         if (runningProcessCount == 0) {
+            getCoordinatorLayout().setVisibility(View.INVISIBLE);
             getRelativeLoading().setVisibility(View.VISIBLE);
+
         }
         runningProcessCount++;
     }
@@ -124,6 +126,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             runningProcessCount--;
         }
         if (runningProcessCount == 0) {
+            getCoordinatorLayout().setVisibility(View.VISIBLE);
             getRelativeLoading().setVisibility(View.GONE);
             allProcessDone();
         }

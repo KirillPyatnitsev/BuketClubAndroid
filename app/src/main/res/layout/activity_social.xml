@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/social_coord_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/share_source_image"
+        android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.73"
+        android:background="#bb000000">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/share_then_button"
+            android:text="@string/share_then_text"
+            android:layout_centerInParent="true"
+            android:background="@drawable/register_border"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingTop="0dp"
+            android:paddingBottom="0dp"
+            android:paddingRight="@dimen/margin_large"/>
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/social_bottom_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.33"
+        android:background="@color/list_bouquet_color">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/share_image"
+            android:layout_marginTop="@dimen/margin_normal"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/margin_normal">
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+
+                android:id="@+id/social_share_icon"
+                android:background="@drawable/white_round_drawable"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="@dimen/margin_large"
+                android:src="@drawable/ic_share_blue"
+                />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/social_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_toRightOf="@id/social_share_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_marginLeft="@dimen/margin_normal"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
+    </RelativeLayout>

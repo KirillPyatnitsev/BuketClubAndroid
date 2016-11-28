@@ -1,17 +1,13 @@
 package com.opendev.buket.club.view.activity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,15 +18,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.transitionseverywhere.TransitionManager;
-
-import java.io.IOException;
-import java.util.List;
-
 import com.opendev.buket.club.AppException;
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
 import com.opendev.buket.club.model.Order;
+import com.transitionseverywhere.TransitionManager;
+
+import java.io.IOException;
+import java.util.List;
 
 public class MapActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
@@ -38,19 +33,32 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     private LatLng latLng;
     private MarkerOptions markerOptions;
 
-    private View viewActonBarFilter;
-    private ImageView imageBack;
-    private ImageView imageOpenFilter;
-    private ImageView imageCloseFilter;
-    private ImageView imageActionBarBackground;
+    private static final String[] INITIAL_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_CONTACTS
+    };
 
-    private EditText editAddress;
+    private static final String[] LOCATION_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private static final int INITIAL_REQUEST=1337;
+    private static final int CAMERA_REQUEST=INITIAL_REQUEST+1;
+    private static final int CONTACTS_REQUEST=INITIAL_REQUEST+2;
+    private static final int LOCATION_REQUEST=INITIAL_REQUEST+3;
+
+//    private View viewActonBarFilter;
+//    private ImageView imageBack;
+//    private ImageView imageOpenFilter;
+//    private ImageView imageCloseFilter;
+//    private ImageView imageActionBarBackground;
+//
+//    private EditText editAddress;
     private String address = null;
-
-    private Button buttonNext;
-
-    private TextView textActionBar;
-
+//
+//    private Button buttonNext;
+//
+//    private TextView textActionBar;
+//
     private LatLng currentLatLng = null;
     private GeocoderTask geocoderTask = new GeocoderTask();
 
@@ -63,8 +71,10 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
         mapFragment.getMapAsync(this);
 
         assignView();
-        initView();
-        assignListener();
+
+
+       // initView();
+       // assignListener();
     }
 
     @Override
@@ -73,69 +83,68 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     }
 
     private void assignView() {
-        imageBack = getViewById(R.id.i_ab_image_back);
-        imageOpenFilter = getViewById(R.id.i_ab_image_settings_open);
-        imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
-        imageActionBarBackground = getViewById(R.id.a_m_image_action_bar_background);
-        viewActonBarFilter = getViewById(R.id.a_m_view_filter);
-        textActionBar = getViewById(R.id.a_m_text_action_bar_title);
-        buttonNext = getViewById(R.id.a_m_button_next);
-        editAddress = getViewById(R.id.i_mf_edit_address);
+//        imageBack = getViewById(R.id.i_ab_image_back);
+//        imageOpenFilter = getViewById(R.id.i_ab_image_settings_open);
+//        imageCloseFilter = getViewById(R.id.i_ab_image_settings_close);
+//        imageActionBarBackground = getViewById(R.id.a_m_image_action_bar_background);
+//        viewActonBarFilter = getViewById(R.id.a_m_view_filter);
+//        textActionBar = getViewById(R.id.a_m_text_action_bar_title);
+//        buttonNext = getViewById(R.id.a_m_button_next);
+//        editAddress = getViewById(R.id.i_mf_edit_address);
     }
 
-    private void assignListener() {
-        imageOpenFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFilter();
-                editAddress.setText(address);
-            }
-        });
+//    private void assignListener() {
+//        imageOpenFilter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openFilter();
+//                editAddress.setText(address);
+//            }
+//        });
+//
+//        imageCloseFilter.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                closeFilter();
+//                String newAddress = editAddress.getText().toString();
+//                if (newAddress != null && !newAddress.isEmpty() && !newAddress.equals(address)) {
+//                    address = newAddress;
+//                    geocoderTask.execute(address);
+//                }
+//            }
+//        });
+//
+//        imageBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
+//
+//        buttonNext.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (address != null) {
+//                    appendOrderInfo();
+//                    goToDeliveryInfoFillingAct();
+//                } else {
+//                    showSnackBar("Сначала выберите адрес доставки");
+//                }
+//            }
+//        });
+//    }
 
-        imageCloseFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeFilter();
-                String newAddress = editAddress.getText().toString();
-                if (newAddress != null && !newAddress.isEmpty() && !newAddress.equals(address)) {
-                    address = newAddress;
-                    geocoderTask.execute(address);
-                }
-            }
-        });
+//    private void initView() {
+////        imageBack.setVisibility(View.VISIBLE);
+////        imageOpenFilter.setVisibility(View.VISIBLE);
+//    }
 
-        imageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-
-        buttonNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (address != null) {
-                    appendOrderInfo();
-                    goToDeliveryInfoFillingAct();
-                } else {
-                    showSnackBar("Сначала выберите адрес доставки");
-                }
-            }
-        });
-    }
-
-    private void initView() {
-        imageBack.setVisibility(View.VISIBLE);
-        imageOpenFilter.setVisibility(View.VISIBLE);
-    }
-
-    @Override
+   @Override
     public void onMapClick(LatLng latLng) {
         mMap.clear();
         address = getAddressFromLatLng(latLng);
-        textActionBar.setText(address);
+//        textActionBar.setText(address);
         currentLatLng = latLng;
-
         MarkerOptions options = new MarkerOptions().position(latLng);
         options.title(address);
         options.icon(BitmapDescriptorFactory.defaultMarker());
@@ -145,10 +154,9 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     @Override
     public boolean onMarkerClick(Marker marker) {
         marker.showInfoWindow();
-        address = getAddressFromLatLng(marker.getPosition());
-        textActionBar.setText(address);
-        currentLatLng = marker.getPosition();
-        Log.d("Logging", "Lat: " + currentLatLng.latitude + " lng: " + currentLatLng.longitude);
+//        address = getAddressFromLatLng(marker.getPosition());
+//        textActionBar.setText(address);
+//        currentLatLng = marker.getPosition();
         return true;
     }
 
@@ -179,11 +187,11 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_b_open), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
-        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
-
-        viewActonBarFilter.setVisibility(View.VISIBLE);
-        imageOpenFilter.setVisibility(View.GONE);
-        imageCloseFilter.setVisibility(View.VISIBLE);
+//        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
+//
+//        viewActonBarFilter.setVisibility(View.VISIBLE);
+//        imageOpenFilter.setVisibility(View.GONE);
+//        imageCloseFilter.setVisibility(View.VISIBLE);
     }
 
     private void closeFilter() {
@@ -193,22 +201,22 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
                 new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         backgroundImageLayoutParams.setMargins(getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), getResources().getDimensionPixelOffset(R.dimen.margin_top_action_bar_a_m_close), getResources().getDimensionPixelOffset(R.dimen.margin_left_right_action_bar), 0);
 
-        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
-
-        viewActonBarFilter.setVisibility(View.GONE);
-        imageOpenFilter.setVisibility(View.VISIBLE);
-        imageCloseFilter.setVisibility(View.GONE);
+//        imageActionBarBackground.setLayoutParams(backgroundImageLayoutParams);
+//
+//        viewActonBarFilter.setVisibility(View.GONE);
+//        imageOpenFilter.setVisibility(View.VISIBLE);
+//        imageCloseFilter.setVisibility(View.GONE);
     }
 
-    @Override
-    protected final int getContentContainerId() {
-        return R.id.a_m_relative_content_container;
-    }
+   // @Override
+    //protected final int getContentContainerId() {
+    //    return R.id.a_m_relative_content_container;
+   // }
 
-    @Override
-    protected final int getImageBlurId() {
-        return R.id.a_m_blur_image;
-    }
+   // @Override
+   // protected final int getImageBlurId() {
+  //      return R.id.a_m_blur_image;
+  //  }
 
     /**
      * Manipulates the map once available.
@@ -222,13 +230,20 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+
+
+        Order order = DataController.getInstance().getOrder();
         mMap.setMyLocationEnabled(true);
         mMap.setOnMapClickListener(this);
         mMap.setOnMarkerClickListener(this);
+        if (order.getAddressLat() == null) {
+            Log.d("qweqwe", "qwwwww");
+        }
+        LatLng moscow = new LatLng(order.getAddressLat(), order.getAddressLng());
         // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(moscow, 17));
+        mMap.addMarker(new MarkerOptions().position(moscow));
     }
 
     private void appendOrderInfo() {
@@ -245,6 +260,8 @@ public class MapActivity extends BaseActivity implements OnMapReadyCallback, Goo
     private void goToDeliveryInfoFillingAct() {
         startActivity(new Intent(this, DeliveryInfoFillingActivity.class));
     }
+
+
 
     private class GeocoderTask extends AsyncTask<String, Void, List> {
 

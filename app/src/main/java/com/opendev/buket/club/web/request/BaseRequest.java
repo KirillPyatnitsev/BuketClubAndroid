@@ -11,14 +11,6 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.api.client.http.HttpStatusCodes;
 import com.octo.android.robospice.request.googlehttpclient.GoogleHttpClientSpiceRequest;
-
-import org.codehaus.jackson.map.ObjectMapper;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.consts.Rest;
 import com.opendev.buket.club.consts.ServerConfig;
@@ -26,6 +18,13 @@ import com.opendev.buket.club.model.Error;
 import com.opendev.buket.club.model.Session;
 import com.opendev.buket.club.tools.Stopwatch;
 import com.opendev.buket.club.web.response.DefaultResponse;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 /**
@@ -55,8 +54,16 @@ public abstract class BaseRequest<T extends DefaultResponse> extends GoogleHttpC
         return builder;
     }
 
+    protected final Uri.Builder buildUri2() {
+        Uri.Builder builder = getUriWithServerAddress2();
+        return builder;
+    }
+
     private final Uri.Builder getUriWithServerAddress() {
         return Uri.parse(ServerConfig.SERVER_ADDRESS).buildUpon();
+    }
+    private final Uri.Builder getUriWithServerAddress2() {
+        return Uri.parse(ServerConfig.SERVER_ADDRESS2).buildUpon();
     }
 
     private final Uri.Builder addSeverConfigToUri(Uri.Builder uriBuilder) {

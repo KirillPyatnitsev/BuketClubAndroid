@@ -4,16 +4,16 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
-import com.yandex.money.api.methods.params.P2pTransferParams;
-import com.yandex.money.api.methods.params.PaymentParams;
-
-import java.math.BigDecimal;
-
 import com.opendev.buket.club.DataController;
 import com.opendev.buket.club.R;
 import com.opendev.buket.club.model.Order;
 import com.opendev.buket.club.tools.Helper;
 import com.opendev.buket.club.view.custom.maskededittext.MaskedEditText;
+import com.yandex.money.api.methods.params.P2pTransferParams;
+import com.yandex.money.api.methods.params.PaymentParams;
+
+import java.math.BigDecimal;
+
 import ru.yandex.money.android.PaymentActivity;
 
 public class CardInfoFillingActivity extends BaseActivity {

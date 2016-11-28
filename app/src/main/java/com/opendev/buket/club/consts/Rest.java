@@ -13,17 +13,31 @@ public class Rest {
     public static final String CLIENTS = "clients";
     public static final String MASTERS = "masters";
     public static final String PROFILE = "profile";
+    public static final String REGISTER_DO = "register.do";
     public static final String GENERATE_TYPE_PRICE = "generate_type_price";
     public static final String FAQS = "faqs";
     public static final String TASKS = "tasks";
 
+    public static final String PROJECT_ID = "project_id";
     public static final String UUID = "uuid";
     public static final String EMAIL = "email";
     public static final String PHONE = "phone";
 
+
+
+    public static final String USERNAME = "userName";
     public static final String PASSWORD = "password";
+    public static final String ORDER_NUMBER = "orderNumber";
+    public static final String AMOUNT = "amount";
+    public static final String RETURN_URL = "returnUrl";
+    public static final String FAIL_URL = "failUrl";
+    public static final String PAGE_VIEW = "pageView";
     public static final String DEVICE_TOKEN = "device_token";
     public static final String DEVICE_TYPE = "device_type";
+    public static final String ERROR_CODE = "errorCode";
+    public static final String FORM_URL = "formUrl";
+    public static final String ERROR_MESSAGE = "errorMessage";
+    public static final String ORDER_ID = "orderId";
 
     public static final String PAGE = "page";
     public static final String PER_PAGE = "per_page";

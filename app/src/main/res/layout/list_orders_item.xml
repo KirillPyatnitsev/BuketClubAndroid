@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/list_orders_layout"
+    android:background="@color/white"
+    android:paddingBottom="@dimen/margin_normal">
+    <ImageView
+        android:id="@+id/list_orders_image"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/margin_normal"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginRight="@dimen/margin_large"
+        android:paddingLeft="@dimen/margin_normal"
+        android:paddingRight="@dimen/margin_smaller"
+        />
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/list_orders_title_layout"
+        android:layout_weight="1"
+        android:layout_below="@id/list_orders_image"
+        android:layout_marginTop="@dimen/margin_smaller">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/order_options_layout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_orders_number"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="Заказ "
+            android:layout_marginTop="@dimen/margin_smaller"
+            android:textSize="12sp"
+            android:textColor="@color/gray_text"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_orders_number2"
+            android:layout_toRightOf="@id/list_orders_number"
+            android:layout_centerVertical="true"
+            android:textStyle="bold"
+            android:layout_marginLeft="2dp"
+            android:text="3578"
+
+            android:layout_marginTop="@dimen/margin_smaller"
+            android:textSize="12sp"
+            android:textColor="@color/gray_text"/>
+            <RelativeLayout
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:id="@+id/list_orders_options_layout"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/selector_options_layout"
+                android:layout_marginRight="@dimen/margin_smaller">
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:id="@+id/list_orders_options"
+            android:src="@drawable/ic_bullets_white"
+            android:layout_centerInParent="true"
+            android:tint="@color/gray_text"/>
+                </RelativeLayout>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_orders_title"
+            android:text="Букет из нежных француских роз"
+            android:layout_marginRight="@dimen/margin_small"
+            android:gravity="left"
+            android:textColor="@color/gray_text"
+            android:layout_below="@id/order_options_layout"
+            android:layout_marginTop="@dimen/margin_large"/>
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_orders_price"
+            android:layout_below="@id/list_orders_title"
+            android:textColor="@color/list_price_color"
+            android:text="5550 руб."
+            android:layout_marginTop="@dimen/margin_smaller"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/list_orders_shop"
+            android:layout_marginTop="@dimen/margin_large"
+            android:textColor="@color/gray_text"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_below="@id/list_orders_price"/>
+
+
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

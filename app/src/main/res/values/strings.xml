@@ -67,9 +67,9 @@
     <string name="text_CVV">CVV</string>
     <string name="text_pay">Оплатить</string>
 
-    <string name="text_successful_pay_exc">Успешная оплата!</string>
+    <string name="text_successful_pay_exc">Спасибо за покупку!</string>
     <string name="text_thank_exc">Спасибо!</string>
-    <string name="text_invite_friend_and_exc">Пригласи друга\nи получите по 500 руб. на следующий букет!</string>
+    <string name="text_invite_friend_and_exc">Расскажи друзьям о нашем сервисе и получи скидку 500 р. на следующий заказ.</string>
 
 
     <string name="text_your_order">Ваш заказ</string>
@@ -139,8 +139,9 @@
     <string name="phone_verification_error">Ошибка подтверждения телефона</string>
 
     <string name="oops_error">Оопс, что-то пошло не так.</string>
-    <string name="your_name">Ваше имя</string>
+    <string name="your_name">Имя</string>
     <string name="enter_code">Введите код</string>
+    <string name="splash_title">Buket.club</string>
 
     <string name="phone_not_entered">Телефон не введен</string>
     <string name="name_not_entered">Имя не введено</string>
@@ -176,11 +177,50 @@
     <string name="failed_payment">Платеж не удался</string>
     <string name="confirm_payment_hint">Попробуйте повторить платеж. При наличии технической проблемы, пожалуйста, свяжитесь по телефону: +7 (495) 640-89-42</string>
     <string name="try_pay_again">Попробовать снова</string>
-    <string name="comment_hint">Ваш комментарий к заказу…</string>
+    <string name="comment_hint">Комментарий</string>
+    <string name="name_hint">Имя получателя</string>
 
     <string name="engineer_menu">Инженерное меню</string>
     <string name="engineer_title_token">Ваш токен:</string>
     <string name="engineer_close">Закрыть</string>
     <string name="engineer_push">Отправить пуш</string>
 
+    <string name="text_registration">Регистрация</string>
+
+    <string name="slider1_title">Устроить сюрприз очень просто</string>
+    <string name="slider1_subtitle">Воспользуйтесь нашим бесплатным приложением, чтобы доставить радость своим друзьям и близким</string>
+    <string name="slider2_title">Выберите цветы и подпишите открытку</string>
+    <string name="slider2_subtitle">Передадим с букетами ваши теплые пожелания и искренние поздравления.</string>
+    <string name="slider3_title">Поздравить близких без забот</string>
+    <string name="slider3_subtitle">Выберите букет, укажите время доставки, сообщите контакты получателя, все остальное мы сделаем сами.</string>
+    <string name="slider_agreement">Регистрируясь, вы принимаете условия, указанные в положении об использовании buket.club. Подробнее…</string>
+    <string name="slider_no_thanks">НЕТ, СПАСИБО</string>
+
+    <string name="slider_copyright">\u00a9 Copyright Buket.club</string>
+
+    <string name="test_description">Хризантема - 2 шт; Роза - 8 шт;\nГортензия - 2 шт; Гербера мини - 5 шт;\nАнтирринум - 5 шт; Аммарилис - 1шт;\nАстильба - 7 шт; Писташ; Амбрелла.\n</string>
+    <string name="text_bouquet_size">Размер букета:</string>
+    <string name="details_comp_title">Состав:</string>
+    <string name="details_desc_title">Описание:</string>
+    <string name="details_copyright">\u00a9 Copyright 2016</string>
+    <string name="details_buket_club">Buket.club</string>
+    <string name="text_facebook">facebook</string>
+    <string name="text_twitter">twiiter</string>
+    <string name="text_instagram">instagram</string>
+    <string name="text_google_plus">google+</string>
+
+    <string name="order_text">Заказ:</string>
+    <string name="delivery_title_text">Адрес самовывоза:</string>
+    <string name="cancel_order_text">Отменить заказ</string>
+    <string name="delete_label_text">Удалить запись</string>
+    <string name="shop_map_text">Магазин на карте</string>
+    <string name="more_text">Подробнее о букете</string>
+    <string name="buy_text">Купить</string>
+    <string name="share_text">Поделиться с друзьями</string>
+    <string name="favorites_text">В избранное</string>
+    <string name="apply_text">Применить</string>
+    <string name="share_then_text">Расскажу позже</string>
+    <string name="cancel_filter_text">Сбросить фильтр</string>
+    <string name="options_filter_text">Уточните интересующие Вас параметры</string>
+    <string name="social_text">Коснитесь, чтобы рассказать своим друзьям об этом букете в соцсетях</string>
 </resources>

@@ -1,12 +1,12 @@
 package com.opendev.buket.club.model;
 
+import com.opendev.buket.club.R;
+import com.opendev.buket.club.consts.Fields;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import com.opendev.buket.club.R;
-import com.opendev.buket.club.consts.Fields;
 
 /**
  * Created by mifkamaz on 13/12/15.
@@ -432,5 +432,15 @@ public class Order {
     @JsonIgnore
     public final boolean isDelivered() {
         return getStatusIndex() == Order.STATUS_DELIVERED_INDEX;
+    }
+
+    @JsonIgnore
+    public final boolean isProcess() {
+        return getStatusIndex() == Order.STATUS_IN_PROCESS_INDEX;
+    }
+
+    @JsonIgnore
+    public final boolean isDone() {
+        return getStatusIndex() == Order.STATUS_DONE_INDEX;
     }
 }

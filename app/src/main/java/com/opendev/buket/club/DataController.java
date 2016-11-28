@@ -16,6 +16,8 @@ import com.opendev.buket.club.view.activity.BaseActivity;
 public class DataController {
 
     private static final String TAG = ServerConfig.TAG_PREFIX + "DataController";
+    public static final int CATALOGUE_LIST = 0;
+    public static final int CATALOGUE_GRID = 1;
 
     private static final DataController ourInstance = new DataController();
 
@@ -32,6 +34,26 @@ public class DataController {
     private PriceRange priceRange;
     private Bouquet bouquet;
     private Order order;
+    private String phone;
+    private String name;
+    private int size;
+    private int catalogueState = CATALOGUE_LIST;
+
+    public int getCatalogueState() {
+        return catalogueState;
+    }
+
+    public void setCatalogueState(int catalogueState) {
+        this.catalogueState = catalogueState;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     private BaseActivity baseActivity;
 
@@ -98,6 +120,22 @@ public class DataController {
 
     public void setBouquet(Bouquet bouquet) {
         this.bouquet = bouquet;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
     }
 
     public Order getOrder() {

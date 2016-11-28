@@ -7,6 +7,7 @@
         android:id="@+id/li_s_text"
         style="?android:attr/spinnerItemStyle"
         android:textSize="@dimen/text_size_normal"
+        android:textColor="@color/gray_text"
         android:singleLine="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

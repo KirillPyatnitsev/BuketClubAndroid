@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_catalogue"
+        android:icon="@drawable/ic_catalogue"
+        app:showAsAction="always"
+        android:title="Filter"/>
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@drawable/ic_filter"
+        app:showAsAction="always"
+        android:title="Catalogue"/>
+    <item
+        android:id="@+id/action_bullets"
+        android:icon="@drawable/ic_bullets"
+        app:showAsAction="always"
+        android:title="Bullets"/>
+</menu>

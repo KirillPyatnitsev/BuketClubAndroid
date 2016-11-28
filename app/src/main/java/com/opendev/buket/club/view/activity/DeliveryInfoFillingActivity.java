@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -20,13 +23,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.jjobes.slidedatetimepicker.SlideDateTimeListener;
 import com.github.jjobes.slidedatetimepicker.SlideDateTimePicker;
+import com.github.pinball83.maskededittext.MaskedEditText;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -35,7 +39,19 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
+import com.opendev.buket.club.AlphaApiInterface;
+import com.opendev.buket.club.DataController;
+import com.opendev.buket.club.R;
+import com.opendev.buket.club.consts.ServerConfig;
+import com.opendev.buket.club.model.Order;
+import com.opendev.buket.club.model.Profile;
+import com.opendev.buket.club.model.lists.ListString;
 import com.opendev.buket.club.tools.Helper;
+import com.opendev.buket.club.tools.PreferenceCache;
+import com.opendev.buket.club.web.WebMethods;
+import com.opendev.buket.club.web.response.AlphaPayResponse;
+import com.opendev.buket.club.web.response.OrderResponse;
+import com.opendev.buket.club.web.response.PhoneCodeResponse;
 import com.seatgeek.placesautocomplete.OnPlaceSelectedListener;
 import com.seatgeek.placesautocomplete.PlacesAutocompleteTextView;
 import com.seatgeek.placesautocomplete.model.Place;
@@ -43,22 +59,31 @@ import com.transitionseverywhere.TransitionManager;
 
 import org.codehaus.jackson.map.util.ISO8601Utils;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
-import fr.ganfra.materialspinner.MaterialSpinner;
-import com.opendev.buket.club.DataController;
-import com.opendev.buket.club.R;
-import com.opendev.buket.club.consts.ServerConfig;
-import com.opendev.buket.club.model.Order;
-import com.opendev.buket.club.model.Profile;
-import com.opendev.buket.club.model.lists.ListString;
-import com.opendev.buket.club.tools.PreferenceCache;
-import com.opendev.buket.club.web.WebMethods;
-import com.opendev.buket.club.web.response.OrderResponse;
-import com.opendev.buket.club.web.response.PhoneCodeResponse;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import okhttp3.ConnectionSpec;
+import okhttp3.OkHttpClient;
+import okhttp3.TlsVersion;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
+
 
 public class DeliveryInfoFillingActivity extends BaseActivity implements
         GoogleApiClient.OnConnectionFailedListener,
@@ -66,15 +91,16 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private static final String TAG = ServerConfig.TAG_PREFIX + "DlvInfoFillAct";
 
-    private ImageView imageBack;
-    private ImageView imageLogo;
+//    private ImageView imageBack;
+//    private ImageView imageLogo;
 
-    private MaterialSpinner spinnerDeliveryTime;
-    private MaterialSpinner spinnerDeliveryType;
-    private EditText editPhoneNumber;
+    private Spinner spinnerDeliveryTime;
+    private Spinner spinnerDeliveryType;
+    private MaskedEditText editPhoneNumber;
+    private EditText editName;
     private EditText editComment;
     private PlacesAutocompleteTextView editAddress;
-    private TextView textAddress;
+   // private TextView textAddress;
     private RelativeLayout relativeAddressContainer;
     private ImageButton buttonMyLocation;
 
@@ -105,6 +131,10 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
     private String lastUserSelectedAddress;
 
+    private Toolbar toolbar;
+    private TextView deliveryTypeTitle;
+    private TextView deliveryTimeTitle;
+
     private LocationManager mLocationManager;
     private long LOCATION_REFRESH_TIME = 10000;
     private float LOCATION_REFRESH_DISTANCE = 10;
@@ -122,7 +152,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                 && !profile.getPhone().isEmpty()) {
             String phone = profile.getPhone().replaceAll("[^\\d.]", "");
             phone = phone.substring(1);
-            editPhoneNumber.setText(phone);
+            editPhoneNumber.setMaskedText(phone);
+        }
+
+        if (profile != null && profile.getFillName() != null
+                && !profile.getFillName().isEmpty()){
+            editName.setText(profile.getFillName());
         }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -182,25 +217,38 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     }
 
     private void assignView() {
-        imageBack = getViewById(R.id.i_ab_image_back);
-        imageLogo = getViewById(R.id.i_ab_image_icon);
+        //imageBack = getViewById(R.id.i_ab_image_back);
+        //imageLogo = getViewById(R.id.i_ab_image_icon);
+
+        toolbar = getViewById(R.id.delivery_toolbar);
 
         spinnerDeliveryTime = getViewById(R.id.a_dif_spinner_delivery_type_time);
         spinnerDeliveryType = getViewById(R.id.a_dif_spinner_delivery_type_place);
         editPhoneNumber = getViewById(R.id.a_dif_edit_phone);
+        editName = getViewById(R.id.delivery_name_input);
         editComment = getViewById(R.id.a_dif_edit_comment);
         editAddress = getViewById(R.id.a_dif_edit_delivery_address);
-        textAddress = getViewById(R.id.a_dif_text_delivery_address);
+       // textAddress = getViewById(R.id.a_dif_text_delivery_address);
         buttonNext = getViewById(R.id.a_dif_button_next);
+        deliveryTimeTitle = getViewById(R.id.a_dif_spinner_delivery_type_time_text);
+        deliveryTypeTitle = getViewById(R.id.delivery_type_title);
+
 
         relativeAddressContainer = getViewById(R.id.a_dif_relative_address_container);
         buttonMyLocation = getViewById(R.id.a_dif_button_my_location);
     }
 
     private void assignListener() {
-        imageBack.setOnClickListener(new View.OnClickListener() {
+//        imageBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToBackActivity();
+//            }
+//        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 goToBackActivity();
             }
         });
@@ -219,7 +267,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
                 if (dataIsDone) {
                     if (deliveryPickup || myLocation || editLocation) {
-                        sendOrder();
+                        goToNextActivity();
                     } else {
                         showSnackBar(R.string.delivery_info_address_error);
                     }
@@ -237,12 +285,12 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                     case 0:
                         currentShippingType = Order.DELIVERY_TYPE_PICKUP;
                         relativeAddressContainer.setVisibility(View.GONE);
-                        textAddress.setVisibility(View.GONE);
+             //           textAddress.setVisibility(View.GONE);
                         break;
                     case 1:
                         currentShippingType = Order.DELIVERY_TYPE_ADDRESS;
                         relativeAddressContainer.setVisibility(View.VISIBLE);
-                        textAddress.setVisibility(View.VISIBLE);
+                  //      textAddress.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -287,7 +335,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                                 .setInitialDate(new Date())
                                 .setIs24HourTime(true)
                                 .setMinDate(new Date())
-                                .setIndicatorColor(getResources().getColor(R.color.yellow))
                                 .build()
                                 .show();
                     }
@@ -315,6 +362,13 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         editComment.setOnEditorActionListener(this);
         editComment.setImeActionLabel("Ok", EditorInfo.IME_ACTION_DONE);
 
+
+
+    }
+
+    @Override
+    protected void allProcessDone() {
+
     }
 
     @Override
@@ -332,7 +386,6 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 
         @Override
         public void onDateTimeSet(Date date) {
-            reselection = true;
             currentDate = date;
             deliveryTime.set(1, formatter.format(currentDate));
             deliveryTimeAdapter.notifyDataSetChanged();
@@ -347,8 +400,16 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     };
 
     private void initView() {
-        imageBack.setVisibility(View.VISIBLE);
-        imageLogo.setVisibility(View.INVISIBLE);
+//        imageBack.setVisibility(View.VISIBLE);
+//        imageLogo.setVisibility(View.INVISIBLE);
+
+
+        setSupportActionBar(toolbar);
+        setTitle("Доставка");
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.ic_arrow_back));
 
         deliveryTime.add(getString(R.string.text_time_soon));
 
@@ -361,6 +422,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         }
 
         deliveryTimeAdapter = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, deliveryTime);
+        deliveryTimeAdapter.setDropDownViewResource(R.layout.list_item_spiner2);
 
         spinnerDeliveryTime.setAdapter(deliveryTimeAdapter);
 
@@ -371,8 +433,31 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
         shippingTypes.add(getString(R.string.pickup));
         shippingTypes.add(getString(R.string.delivery));
 
+        String phone = DataController.getInstance().getPhone();
+        String name = DataController.getInstance().getPhone();
+
+        //editPhoneNumber.setMaskedText(phone);
+        //editName.setText(name);
+
         shippingTypeAdapter = new ArrayAdapter<>(this, R.layout.list_item_spiner, R.id.li_s_text, shippingTypes);
+        shippingTypeAdapter.setDropDownViewResource(R.layout.list_item_spiner2);
         spinnerDeliveryType.setAdapter(shippingTypeAdapter);
+        spinnerDeliveryType.setSelection(1);
+
+
+        editAddress.getBackground().setColorFilter(ContextCompat.getColor(this, R.color.black),
+                PorterDuff.Mode.SRC_ATOP);
+
+
+
+        /*TransitionManager.beginDelayedTransition(getCoordinatorLayout());
+        deliveryTypeTitle.setVisibility(View.VISIBLE);
+        spinnerDeliveryType.setVisibility(View.VISIBLE);
+        deliveryTimeTitle.setVisibility(View.VISIBLE);
+        spinnerDeliveryTime.setVisibility(View.VISIBLE);*/
+
+
+
     }
 
     private boolean addDataToOrder() {
@@ -394,12 +479,163 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
     private void goToNextActivity() {
         switch (DataController.getInstance().getSession().getAppMode()) {
             case Profile.TYPE_PRICE_FIX:
-                startActivity(new Intent(this, PaymentTypeActivity.class));
+                /*startActivity(new Intent(this, PaymentTypeActivity.class));*/
+                //alphaPayRequest("buketfinder-api", "buketfinder", String.valueOf(8), "10000", "http://google.com", "http://yandex.ru");
+
+
+                SSLContext sc = null;
+                try {
+                    sc = SSLContext.getInstance("TLSv1.2");
+                    sc.init(null, null, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+                ConnectionSpec cs = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                        .tlsVersions(TlsVersion.TLS_1_2)
+                        .build();
+
+                List specs = new ArrayList<>();
+                specs.add(cs);
+                specs.add(ConnectionSpec.COMPATIBLE_TLS);
+                specs.add(ConnectionSpec.CLEARTEXT);
+
+                OkHttpClient client1;
+
+
+
+
+                    client1 = new OkHttpClient.Builder()
+                            .sslSocketFactory(new Tls12SocketFactory(sc.getSocketFactory()))
+                            .connectionSpecs(specs)
+                            .followRedirects(true)
+                            .followSslRedirects(true)
+                            .build();
+
+
+                Retrofit client;
+                if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22) {
+                    client = new Retrofit.Builder()
+                            .baseUrl("https://test.paymentgate.ru/testpayment/rest/")
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .client(client1)
+                            .build();
+                } else {
+                    client = new Retrofit.Builder()
+                            .baseUrl("https://test.paymentgate.ru/testpayment/rest/")
+                            .addConverterFactory(ScalarsConverterFactory.create())
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+                }
+
+
+                AlphaApiInterface service = client.create(AlphaApiInterface.class);
+                Random rand = new Random();
+                Call<AlphaPayResponse> call = service.pay("buketfinder-api", "buketfinder", String.valueOf(rand.nextInt(100) + 350),
+                        "100000", "http://5.101.120.246/uxsystem/return_url.html", "http://5.101.120.246/uxsystem/fail_url.html", "MOBILE");
+                startLoading();
+                call.enqueue(new Callback<AlphaPayResponse>() {
+                    @Override
+                    public void onResponse(Call<AlphaPayResponse> call, Response<AlphaPayResponse> response) {
+                        Log.d("AlphaDebug", response.body().toString());
+                        if (response.isSuccessful()){
+                            if (response.body().getErrorCode() == null){
+                                stopLoading();
+                                Intent intent = new Intent(getBaseContext(), AlphaPayActivity.class);
+                                intent.putExtra("url", response.body().getFormUrl());
+                                startActivity(intent);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<AlphaPayResponse> call, Throwable t) {
+                        Log.d("AlphaDebugErr", t.getLocalizedMessage());
+                        stopLoading();
+                    }
+                });
+
+
+
+
                 break;
             case Profile.TYPE_PRICE_FLEXIBLE:
                 startActivity(new Intent(this, ChoseShopActivity.class));
                 break;
         }
+    }
+
+
+
+
+    public class Tls12SocketFactory extends SSLSocketFactory {
+        private final String[] TLS_V12_ONLY = {"TLSv1.2"};
+
+        final SSLSocketFactory delegate;
+
+        public Tls12SocketFactory(SSLSocketFactory base) {
+            this.delegate = base;
+        }
+
+        @Override
+        public String[] getDefaultCipherSuites() {
+            return delegate.getDefaultCipherSuites();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return delegate.getSupportedCipherSuites();
+        }
+
+        @Override
+        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
+            return patch(delegate.createSocket(s, host, port, autoClose));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException, UnknownHostException {
+            return patch(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+            return patch(delegate.createSocket(host, port, localHost, localPort));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return patch(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return patch(delegate.createSocket(address, port, localAddress, localPort));
+        }
+
+        private Socket patch(Socket s) {
+            if (s instanceof SSLSocket) {
+                ((SSLSocket) s).setEnabledProtocols(TLS_V12_ONLY);
+            }
+            return s;
+        }
+    }
+
+
+
+    private void alphaPayRequest(String username, String password, String orderNumber, String amount, String returnUrl, String failUrl){
+        WebMethods.getInstance().alphaPayRequest(username, password, orderNumber, amount, returnUrl, failUrl, new RequestListener<AlphaPayResponse>() {
+            @Override
+            public void onRequestFailure(SpiceException spiceException) {
+                Log.d("AlphaDebugErr", spiceException.getLocalizedMessage());
+            }
+
+            @Override
+            public void onRequestSuccess(AlphaPayResponse alphaPayResponse) {
+                Log.d("AlphaDebug", alphaPayResponse.getFormUrl());
+            }
+        });
     }
 
     private void addressGetRequest(double latitude, double longitude) {
@@ -426,7 +662,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
 //            phoneVerificationStartPostRequest(phone);
 //        }
 
-        phoneVerificationStartPostRequest(phone);
+       // phoneVerificationStartPostRequest(phone);
 
     }
 
@@ -441,7 +677,7 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                     @Override
                     public void onRequestSuccess(PhoneCodeResponse phoneCodeResponse) {
                         if (phoneCodeResponse.getPhoneVerification() == null) {
-                            showEnterCodeDialog(phone);
+                          //  showEnterCodeDialog(phone);
                         } else {
                             sendOrder(phone, phoneCodeResponse.getPhoneVerification().getCode(), null, null);
                         }
@@ -522,36 +758,17 @@ public class DeliveryInfoFillingActivity extends BaseActivity implements
                         orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
                         DataController.getInstance().setOrder(orderResponse.getOrder());
                         savePhone(phone);
-                        goToNextActivity();
                     }
                 });
     }
 
-    private void sendOrder() {
-        startLoading();
 
-        final Order order = DataController.getInstance().getOrder();
-        final Order serverOrder = order.getOrderForServer();
-        Log.d(TAG, "Sending new order2: " + serverOrder);
-
-        WebMethods.getInstance().sendOrder(serverOrder,
-                new RequestListener<OrderResponse>() {
-                    @Override
-                    public void onRequestFailure(SpiceException spiceException) {
-                        stopLoading();
-                    }
-
-                    @Override
-                    public void onRequestSuccess(OrderResponse orderResponse) {
-                        stopLoading();
-                        orderResponse.getOrder().setBouquetItemId(orderResponse.getOrder().getBouquetItem().getId());
-                        DataController.getInstance().setOrder(orderResponse.getOrder());
-                        goToNextActivity();
-                    }
-                });
-    }
 
     private void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+
+
+
 }
