@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="#bb000000"
+     >
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/filter_coord_layout"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+<LinearLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.47">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/apply_filter_button"
+            android:text="@string/apply_text"
+            android:background="@drawable/register_border"
+            android:paddingLeft="@dimen/margin_large"
+            android:paddingTop="@dimen/margin_smaller"
+            android:paddingBottom="@dimen/margin_smaller"
+            android:paddingRight="@dimen/margin_large"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/cancel_filter_text"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:layout_below="@id/apply_filter_button"
+            android:layout_marginTop="@dimen/margin_normal"
+            android:layout_centerHorizontal="true"
+            android:text="@string/cancel_filter_text"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.12"
+        android:background="@color/list_bouquet_color">
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/filter_options_icon"
+            android:background="@drawable/white_round_drawable"
+            android:src="@drawable/ic_filter_blue"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/margin_normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/options_filter_text"
+            android:layout_centerVertical="true"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginLeft="@dimen/margin_normal"
+            android:layout_marginRight="@dimen/margin_normal"
+            android:layout_toRightOf="@id/filter_options_icon"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.41"
+        android:background="@color/white">
+
+        <Spinner
+            style="@style/spinner"
+            android:id="@+id/filter_color_spinner"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/margin_large"/>
+        <TextView
+            style="@style/small_text.text_black"
+            android:text="Тип цветов"
+            android:id="@+id/delivery_type_title"
+            android:textColor="@color/gray_text"
+            android:layout_alignLeft="@id/filter_color_spinner"
+            android:layout_above="@id/filter_color_spinner"/>
+
+        <Spinner
+            android:id="@+id/filter_type_spinner"
+            style="@style/spinner"
+            android:layout_above="@id/delivery_type_title"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"/>
+
+
+
+
+
+        <TextView
+            style="@style/small_text.text_black"
+            android:text="Цвет цветов"
+            android:textColor="@color/gray_text"
+            android:layout_alignLeft="@id/filter_type_spinner"
+            android:layout_above="@id/filter_type_spinner"/>
+
+        <TextView
+            style="@style/small_text.text_black"
+            android:id="@+id/event_title_text"
+            android:text="Событие"
+            android:textColor="@color/gray_text"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_alignLeft="@id/filter_color_spinner"
+            android:layout_below="@id/filter_color_spinner"/>
+
+
+        <Spinner
+            android:id="@+id/filter_event_spinner"
+            style="@style/spinner"
+            android:layout_below="@id/event_title_text"
+            android:layout_marginLeft="@dimen/margin_large"
+            android:layout_marginRight="@dimen/margin_large"/>
+    </RelativeLayout>
+
+</LinearLayout>
+
+
+
+</android.support.design.widget.CoordinatorLayout>
+    <include layout="@layout/include_progress"/>
+    </RelativeLayout>
